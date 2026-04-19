@@ -131,4 +131,4 @@ Issue templates are available for bug reports, feature requests, and new third-p
 
 ## License
 
-MIT — see [`LICENSE`](./LICENSE).
+MIT, see [`LICENSE`](./LICENSE).

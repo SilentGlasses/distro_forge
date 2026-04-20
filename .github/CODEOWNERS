@@ -1,0 +1,26 @@
+# Code ownership rules for distro_forge
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# GitHub workflows and automation
+.github/workflows/   @SilentGlasses
+
+# Deployment configuration
+.github/environments/ @SilentGlasses
+.nojekyll             @SilentGlasses
+
+# Data files and refresh scripts (require review before merge)
+assets/data/          @SilentGlasses
+data/third-party/     @SilentGlasses
+scripts/              @SilentGlasses
+
+# Release/deployment critical files
+package.json          @SilentGlasses
+.nvmrc                @SilentGlasses
+
+# Security and governance
+SECURITY.md           @SilentGlasses
+CODE_OF_CONDUCT.md    @SilentGlasses
+
+# Documentation changes still welcome
+README.md
+CONTRIBUTING.md

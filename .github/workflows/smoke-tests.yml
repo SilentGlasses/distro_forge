@@ -1,0 +1,179 @@
+name: Smoke tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "assets/**"
+      - "index.html"
+      - "help/**"
+      - "third-party/**"
+      - "variants/**"
+      - ".github/workflows/smoke-tests.yml"
+  pull_request:
+    paths:
+      - "assets/**"
+      - "index.html"
+      - "help/**"
+      - "third-party/**"
+      - "variants/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: smoke-tests
+  cancel-in-progress: false
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Verify Node version
+        run: node -v | grep -E "^v24\."
+
+      - name: Check HTML validity
+        run: |
+          # Basic HTML structure checks for all pages
+          for file in index.html help/index.html third-party/index.html variants/index.html; do
+            echo "Checking $file..."
+            # Verify DOCTYPE
+            grep -q "<!doctype html>" "$file" || { echo "Missing DOCTYPE in $file"; exit 1; }
+            # Verify lang attribute
+            grep -q 'lang="en"' "$file" || { echo "Missing lang attribute in $file"; exit 1; }
+            # Verify closing body tag
+            grep -q "</body>" "$file" || { echo "Missing closing body tag in $file"; exit 1; }
+          done
+          echo "✓ HTML structure checks passed"
+
+      - name: Check CSS file exists and is non-empty
+        run: |
+          test -s assets/styles.css || { echo "CSS file missing or empty"; exit 1; }
+          echo "✓ CSS file OK ($(wc -c < assets/styles.css) bytes)"
+
+      - name: Validate JavaScript syntax
+        run: |
+          for file in assets/app.js assets/lib/*.js third-party/app.js variants/app.js; do
+            if [ -f "$file" ]; then
+              node --check "$file" || { echo "Syntax error in $file"; exit 1; }
+              echo "✓ $file syntax OK"
+            fi
+          done
+
+      - name: Validate data files
+        run: |
+          # Check releases data can be imported
+          node -e "import('./assets/data/releases.js').catch(e => { console.error(e); process.exit(1); })" || exit 1
+          echo "✓ releases.js imports successfully"
+          
+          # Check mirrors list can be imported
+          node -e "import('./assets/data/mirrors-list.js').catch(e => { console.error(e); process.exit(1); })" || exit 1
+          echo "✓ mirrors-list.js imports successfully"
+          
+          # Check variants data can be imported
+          node -e "import('./assets/data/variants.js').catch(e => { console.error(e); process.exit(1); })" || exit 1
+          echo "✓ variants.js imports successfully"
+
+      - name: Validate JSON structure
+        run: |
+          # Validate third-party repos.json
+          node -e "const f = require('fs'); JSON.parse(f.readFileSync('./data/third-party/repos.json', 'utf8'))" || { echo "repos.json is invalid JSON"; exit 1; }
+          echo "✓ repos.json is valid JSON"
+          
+          # Validate index.txt format (one ID per line, no invalid chars)
+          if grep -E "^[a-z0-9_-]+$|^$|^#" data/third-party/index.txt | wc -l | grep -q "$(wc -l < data/third-party/index.txt)"; then
+            echo "✓ index.txt format OK"
+          else
+            echo "✗ index.txt contains invalid entries"
+            exit 1
+          fi
+
+      - name: Check required files exist
+        run: |
+          required_files=(
+            "index.html"
+            "help/index.html"
+            "third-party/index.html"
+            "third-party/app.js"
+            "variants/index.html"
+            "variants/app.js"
+            "assets/styles.css"
+            "assets/app.js"
+            "assets/lib/generate.js"
+            "assets/lib/third-party.js"
+            "assets/lib/variant.js"
+            "assets/lib/ui.js"
+            "assets/data/releases.js"
+            "assets/data/mirrors-list.js"
+            "assets/data/variants.js"
+            "data/third-party/repos.json"
+            "data/third-party/index.txt"
+            ".nojekyll"
+          )
+          
+          for file in "${required_files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "✗ Missing required file: $file"
+              exit 1
+            fi
+          done
+          echo "✓ All required files present"
+
+      - name: Verify data consistency
+        run: |
+          # Verify all enabled third-party IDs exist in repos.json
+          node -e "
+            const fs = require('fs');
+            const repos = JSON.parse(fs.readFileSync('./data/third-party/repos.json', 'utf8'));
+            const index = fs.readFileSync('./data/third-party/index.txt', 'utf8')
+              .split(/\r?\n/)
+              .map(l => l.trim())
+              .filter(l => l && !l.startsWith('#'));
+            const repoIds = new Set(repos.map(r => r.id));
+            
+            for (const id of index) {
+              if (!repoIds.has(id)) {
+                console.error('Enabled ID not in repos.json:', id);
+                process.exit(1);
+              }
+            }
+            console.log('✓ All enabled repo IDs exist');
+          " || exit 1
+
+      - name: Verify release data structure
+        run: |
+          node -e "
+            import('./assets/data/releases.js').then(m => {
+              const { distros } = m;
+              if (!distros.debian || !distros.ubuntu) {
+                throw new Error('Missing distros');
+              }
+              if (!Array.isArray(distros.debian.releases) || !Array.isArray(distros.ubuntu.releases)) {
+                throw new Error('releases must be arrays');
+              }
+              console.log('✓ Release data structure OK');
+            }).catch(e => {
+              console.error(e);
+              process.exit(1);
+            });
+          " || exit 1
+
+      - name: Report test results
+        if: success()
+        run: echo "✓ All smoke tests passed"
+
+      - name: Create check failure
+        if: failure()
+        run: |
+          echo "::error::Smoke tests failed. Check output above for details."
+          exit 1

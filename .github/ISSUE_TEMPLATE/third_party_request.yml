@@ -1,0 +1,103 @@
+name: Third-party repo request
+description: Request that a third-party apt repo be added to the /third-party/ builder.
+title: "[Third-party]: "
+labels: ["third-party-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Third-party apt repos run code as root, so we need to be careful about
+        what we curate. Please link to upstream install docs so reviewers can
+        verify the GPG key, keyring path, suite, and components.
+
+  - type: input
+    id: name
+    attributes:
+      label: Repo name
+      placeholder: "Docker CE, NodeSource, HashiCorp, ..."
+    validations:
+      required: true
+
+  - type: input
+    id: homepage
+    attributes:
+      label: Upstream install docs URL
+      placeholder: "https://docs.docker.com/engine/install/debian/"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Dev tools
+        - Browsers
+        - Databases
+        - Media
+        - Security / privacy
+        - System / infra
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: gpg-url
+    attributes:
+      label: GPG key URL
+      placeholder: "https://download.docker.com/linux/debian/gpg"
+    validations:
+      required: true
+
+  - type: input
+    id: gpg-fingerprint
+    attributes:
+      label: GPG long fingerprint
+      description: 40 hex chars, no spaces. Verify this against the upstream docs yourself.
+      placeholder: "9DC858229FC7DD38854AE2D88D81803C0EBFCD88"
+    validations:
+      required: true
+
+  - type: input
+    id: archive-uri
+    attributes:
+      label: Archive URI
+      description: "Use {distro} / {codename} placeholders if the URI depends on them."
+      placeholder: "https://download.docker.com/linux/{distro}"
+    validations:
+      required: true
+
+  - type: input
+    id: suite
+    attributes:
+      label: Suite
+      placeholder: "{codename}, stable, main, ..."
+    validations:
+      required: true
+
+  - type: input
+    id: components
+    attributes:
+      label: Components (comma-separated)
+      placeholder: "stable"
+    validations:
+      required: true
+
+  - type: textarea
+    id: supports
+    attributes:
+      label: Supported distros / codenames
+      description: "List which Debian and Ubuntu releases this repo publishes packages for."
+      placeholder: "Debian: bookworm, trixie\nUbuntu: noble, jammy"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Confirm
+      options:
+        - label: I've verified the GPG fingerprint against the upstream vendor's docs.
+          required: true
+        - label: I've searched existing issues and the repos.json for duplicates.
+          required: true

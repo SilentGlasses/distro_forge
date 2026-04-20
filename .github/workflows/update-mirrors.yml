@@ -1,0 +1,43 @@
+name: Prune unreachable mirrors
+
+on:
+  # Weekly on Wednesday 06:00 UTC (different day than releases updater).
+  schedule:
+    - cron: "0 6 * * 3"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: update-mirrors
+  cancel-in-progress: false
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run mirror health check
+        id: check
+        run: node scripts/update-mirrors.mjs | tee /tmp/mirror-report.txt
+
+      - name: Open PR if any mirrors were pruned
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: automation/prune-mirrors
+          base: main
+          title: "chore(mirrors): prune unreachable entries"
+          commit-message: "chore(mirrors): prune unreachable entries"
+          body-path: /tmp/mirror-report.txt
+          labels: mirror-data
+          add-paths: assets/data/mirrors-list.js
+          delete-branch: true

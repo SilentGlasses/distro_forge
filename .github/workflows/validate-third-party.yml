@@ -1,0 +1,93 @@
+name: Validate third-party repos
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/third-party/**"
+      - "scripts/validate-third-party.mjs"
+      - ".github/workflows/validate-third-party.yml"
+  pull_request:
+    paths:
+      - "data/third-party/**"
+      - "scripts/validate-third-party.mjs"
+      - ".github/workflows/validate-third-party.yml"
+  schedule:
+    - cron: "0 6 * * 4"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: validate-third-party
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run validator
+        id: validate
+        # Fail the step on push/PR so regressions gate merges.
+        # Continue on schedule so we can open a tracking issue instead.
+        continue-on-error: ${{ github.event_name == 'schedule' }}
+        run: node scripts/validate-third-party.mjs
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: third-party-report
+          path: .third-party-report.txt
+          if-no-files-found: ignore
+
+      - name: Open / update tracking issue on scheduled failure
+        if: github.event_name == 'schedule' && steps.validate.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+            const body = [
+              "Automated weekly validation of `data/third-party/repos.json` found problems.",
+              "Review the report below and either:",
+              "- update the entry (e.g., bump a rotated GPG fingerprint), or",
+              "- remove the entry from `data/third-party/index.txt` to hide it in the UI.",
+              "",
+              "```",
+              fs.readFileSync(".third-party-report.txt", "utf8"),
+              "```",
+            ].join("\n");
+
+            const title = "Third-party repo validation failing";
+            const { data: open } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              labels: "third-party-validation",
+            });
+            if (open.length) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: open[0].number,
+                body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ["third-party-validation"],
+              });
+            }

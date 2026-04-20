@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Third-party repos — APT sources generator</title>
+    <meta name="description" content="Build DEB822 apt sources for common third-party repositories (Docker, Node.js, VS Code, HashiCorp, PostgreSQL, ...)." />
+    <link rel="stylesheet" href="../assets/styles.css" />
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          if (t === "light" || t === "dark") {
+            document.documentElement.setAttribute("data-theme", t);
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-top">
+        <div class="brand">
+          <svg class="app-logo" viewBox="0 0 48 48" width="40" height="40"
+               xmlns="http://www.w3.org/2000/svg" role="img"
+               aria-label="APT sources generator logo">
+            <defs>
+              <linearGradient id="logo-bg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="currentColor" stop-opacity="0.14"/>
+                <stop offset="100%" stop-color="currentColor" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <rect x="3" y="6" width="42" height="36" rx="7"
+                  fill="url(#logo-bg)" stroke="currentColor" stroke-width="2.25"/>
+            <line x1="3.5" y1="14" x2="44.5" y2="14"
+                  stroke="currentColor" stroke-width="1.75" opacity="0.55"/>
+            <circle cx="8.5"  cy="10" r="1.25" fill="currentColor" opacity="0.9"/>
+            <circle cx="13"   cy="10" r="1.25" fill="currentColor" opacity="0.9"/>
+            <circle cx="17.5" cy="10" r="1.25" fill="currentColor" opacity="0.9"/>
+            <rect x="9"  y="20.5" width="22" height="2.6" rx="1.3"
+                  fill="currentColor" opacity="0.95"/>
+            <rect x="9"  y="26.5" width="30" height="2.6" rx="1.3"
+                  fill="currentColor" opacity="0.75"/>
+            <rect x="9"  y="32.5" width="16" height="2.6" rx="1.3"
+                  fill="currentColor" opacity="0.55"/>
+            <circle cx="36" cy="33.8" r="2.3" fill="currentColor"/>
+          </svg>
+          <h1>Third-party repos</h1>
+        </div>
+        <button type="button" id="theme-toggle" class="theme-toggle"
+                aria-label="Toggle light/dark theme" aria-pressed="false">
+          <span class="theme-toggle-icon" aria-hidden="true">☽</span>
+          <span class="theme-toggle-label">Dark</span>
+        </button>
+      </div>
+      <p class="tagline">DEB822 sources for curated third-party apt repos.</p>
+    </header>
+
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        <li><a href="../">Generator</a></li>
+        <li><a href="./">Third-party repos</a></li>
+        <li><a href="../variants/">Variants</a></li>
+        <li><a href="../help/">Help</a></li>
+      </ul>
+    </nav>
+
+    <main class="app-stack">
+      <section class="panel">
+        <p class="warning-banner">
+          <strong>Heads up.</strong> Third-party apt repos install software
+          that runs on your system as root. Only add repos you trust, and
+          <strong>always verify the GPG fingerprint shown here against the
+          vendor's official install page</strong> before running the key
+          install commands.
+        </p>
+
+        <form id="tp-form">
+          <div class="options-row-simple">
+            <div class="field">
+              <label for="tp-distro">Distribution</label>
+              <select id="tp-distro" name="distro">
+                <option value="" disabled selected hidden>Select…</option>
+                <option value="debian">Debian</option>
+                <option value="ubuntu">Ubuntu</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="tp-release">Release</label>
+              <select id="tp-release" name="release" disabled>
+                <option value="" disabled selected hidden>—</option>
+              </select>
+            </div>
+            <div class="field field-grow">
+              <label for="tp-search">Filter</label>
+              <div class="search-row">
+                <input type="search" id="tp-search" placeholder="Search name, description, category…" />
+              </div>
+            </div>
+          </div>
+
+          <div id="tp-list" aria-live="polite">
+            <p class="check-empty">Loading repositories…</p>
+          </div>
+
+          <div class="actions-row">
+            <button type="button" id="tp-reset" class="secondary">Reset</button>
+            <button type="submit" id="tp-generate" class="primary" disabled>Generate</button>
+          </div>
+          <p id="tp-error" class="error" role="alert" hidden></p>
+        </form>
+      </section>
+
+      <section id="tp-output-panel" class="panel output-panel">
+        <div class="output-header">
+          <h2>Generated <span id="tp-output-filename">third-party.sources</span></h2>
+          <button type="button" id="tp-copy-sources" class="primary" disabled>Copy sources</button>
+        </div>
+        <pre id="tp-output-sources" class="empty">Pick a distribution and release, select one or more repos, then click Generate.</pre>
+
+        <h3>Key install</h3>
+        <pre id="tp-output-keys" class="empty">Shell commands to install the signing keys will appear here.</pre>
+        <div class="output-header">
+          <span></span>
+          <button type="button" id="tp-copy-keys" class="secondary" disabled>Copy key install</button>
+        </div>
+
+        <h3>Install instructions</h3>
+        <pre id="tp-output-install" class="empty">Short guidance to drop the sources in place will appear here.</pre>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

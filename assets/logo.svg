@@ -1,0 +1,17 @@
+<svg class="app-logo" viewBox="0 0 48 48" width="40" height="40" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="APT sources generator logo">
+  <defs>
+    <linearGradient id="logo-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="currentColor" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="currentColor" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="3" y="6" width="42" height="36" rx="7" fill="url(#logo-bg)" stroke="currentColor" stroke-width="2.25"/>
+  <line x1="3.5" y1="14" x2="44.5" y2="14" stroke="currentColor" stroke-width="1.75" opacity="0.55"/>
+  <circle cx="8.5"  cy="10" r="1.25" fill="currentColor" opacity="0.9"/>
+  <circle cx="13"   cy="10" r="1.25" fill="currentColor" opacity="0.9"/>
+  <circle cx="17.5" cy="10" r="1.25" fill="currentColor" opacity="0.9"/>
+  <rect x="9"  y="20.5" width="22" height="2.6" rx="1.3" fill="currentColor" opacity="0.95"/>
+  <rect x="9"  y="26.5" width="30" height="2.6" rx="1.3" fill="currentColor" opacity="0.75"/>
+  <rect x="9"  y="32.5" width="16" height="2.6" rx="1.3" fill="currentColor" opacity="0.55"/>
+  <circle cx="36" cy="33.8" r="2.3" fill="currentColor"/>
+</svg>

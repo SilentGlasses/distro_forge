@@ -1,0 +1,73 @@
+name: Bug report
+description: Report something that isn't working on the site or in the generator.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear and concise description of the problem.
+      placeholder: "When I picked Debian bookworm and clicked Generate, ..."
+    validations:
+      required: true
+
+  - type: input
+    id: page
+    attributes:
+      label: Which page?
+      placeholder: "/, /third-party/, /variants/, /help/"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: distro
+    attributes:
+      label: Distribution selected
+      options:
+        - "N/A"
+        - Debian
+        - Ubuntu
+        - Variant (Raspberry Pi OS / Kali / Proxmox VE / Linux Mint / Pop!_OS / elementary OS)
+    validations:
+      required: false
+
+  - type: input
+    id: release
+    attributes:
+      label: Release / codename selected
+      placeholder: "bookworm, noble, focal, ..."
+
+  - type: dropdown
+    id: format
+    attributes:
+      label: Format selected
+      options:
+        - "N/A"
+        - One-line (sources.list)
+        - DEB822 (.sources)
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect instead?
+
+  - type: textarea
+    id: console
+    attributes:
+      label: Browser console output (if any)
+      render: text
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser + version
+      placeholder: "Firefox 123, Chromium 120, Safari 17, ..."
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Confirm
+      options:
+        - label: I searched existing issues before filing this one.
+          required: true

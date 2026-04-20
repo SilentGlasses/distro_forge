@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Variants — APT sources generator</title>
+    <meta name="description" content="Build apt sources for Debian- and Ubuntu-derived Linux variants (Raspberry Pi OS, Kali, Proxmox VE, Linux Mint, Pop!_OS, elementary OS)." />
+    <link rel="stylesheet" href="../assets/styles.css" />
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          if (t === "light" || t === "dark") {
+            document.documentElement.setAttribute("data-theme", t);
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-top">
+        <div class="brand">
+          <svg class="app-logo" viewBox="0 0 48 48" width="40" height="40"
+               xmlns="http://www.w3.org/2000/svg" role="img"
+               aria-label="APT sources generator logo">
+            <defs>
+              <linearGradient id="logo-bg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="currentColor" stop-opacity="0.14"/>
+                <stop offset="100%" stop-color="currentColor" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <rect x="3" y="6" width="42" height="36" rx="7"
+                  fill="url(#logo-bg)" stroke="currentColor" stroke-width="2.25"/>
+            <line x1="3.5" y1="14" x2="44.5" y2="14"
+                  stroke="currentColor" stroke-width="1.75" opacity="0.55"/>
+            <circle cx="8.5"  cy="10" r="1.25" fill="currentColor" opacity="0.9"/>
+            <circle cx="13"   cy="10" r="1.25" fill="currentColor" opacity="0.9"/>
+            <circle cx="17.5" cy="10" r="1.25" fill="currentColor" opacity="0.9"/>
+            <rect x="9"  y="20.5" width="22" height="2.6" rx="1.3"
+                  fill="currentColor" opacity="0.95"/>
+            <rect x="9"  y="26.5" width="30" height="2.6" rx="1.3"
+                  fill="currentColor" opacity="0.75"/>
+            <rect x="9"  y="32.5" width="16" height="2.6" rx="1.3"
+                  fill="currentColor" opacity="0.55"/>
+            <circle cx="36" cy="33.8" r="2.3" fill="currentColor"/>
+          </svg>
+          <h1>Variants</h1>
+        </div>
+        <button type="button" id="theme-toggle" class="theme-toggle"
+                aria-label="Toggle light/dark theme" aria-pressed="false">
+          <span class="theme-toggle-icon" aria-hidden="true">☽</span>
+          <span class="theme-toggle-label">Dark</span>
+        </button>
+      </div>
+      <p class="tagline">apt sources for Debian- and Ubuntu-derived distros.</p>
+    </header>
+
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        <li><a href="../">Generator</a></li>
+        <li><a href="../third-party/">Third-party repos</a></li>
+        <li><a href="./">Variants</a></li>
+        <li><a href="../help/">Help</a></li>
+      </ul>
+    </nav>
+
+    <main class="app-stack">
+      <section class="panel">
+        <p class="page-intro">
+          These are separate distros built on Debian or Ubuntu. Pick one,
+          pick a release, click Generate. The output is a DEB822
+          <code>.sources</code> file with every repo the variant needs
+          (including its Ubuntu / Debian base, where applicable).
+        </p>
+
+        <form id="v-form">
+          <div class="options-row-simple">
+            <div class="field">
+              <label for="v-variant">Variant</label>
+              <select id="v-variant" name="variant">
+                <option value="" disabled selected hidden>Select…</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="v-release">Release</label>
+              <select id="v-release" name="release" disabled>
+                <option value="" disabled selected hidden>—</option>
+              </select>
+            </div>
+          </div>
+
+          <p id="v-info" class="hint" hidden></p>
+
+          <div class="actions-row">
+            <button type="button" id="v-reset" class="secondary">Reset</button>
+            <button type="submit" id="v-generate" class="primary" disabled>Generate</button>
+          </div>
+          <p id="v-error" class="error" role="alert" hidden></p>
+        </form>
+      </section>
+
+      <section id="v-output-panel" class="panel output-panel">
+        <div class="output-header">
+          <h2>Generated <span id="v-output-filename">variant.sources</span></h2>
+          <button type="button" id="v-copy" class="primary" disabled>Copy</button>
+        </div>
+        <pre id="v-output" class="empty">Pick a variant and release, then click Generate.</pre>
+
+        <h3>Install instructions</h3>
+        <pre id="v-install" class="empty">Installation steps will appear here after generation.</pre>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,792 @@
+/* ---------------------------------------------------------------
+   Palette — gunmetal with a powdery range of soft steel tints.
+   --------------------------------------------------------------- */
+
+:root {
+  --bg:            #eef1f5;
+  --bg-raised:     #ffffff;
+  --panel-bg:      #ffffff;
+  --panel-border:  #cfd6de;
+  --panel-shadow:  0 1px 2px rgba(42, 52, 64, 0.05),
+                   0 6px 22px rgba(42, 52, 64, 0.08);
+  --fieldset-bg:   #f5f7fa;
+  --fieldset-border: #dce2e8;
+
+  --text:          #2a3440;
+  --text-muted:    #5c6b79;
+  --text-subtle:   #8591a0;
+
+  --accent:        #556b7b;
+  --accent-hover:  #3f5565;
+  --accent-contrast:#ffffff;
+  --accent-soft:   #dbe3eb;
+
+  --debian:        #a04a5a;
+  --ubuntu:        #c96a3e;
+
+  --code-bg:       #242c36;
+  --code-fg:       #dde3eb;
+  --code-muted:    #8591a0;
+
+  --error:         #b0465a;
+  --error-bg:      #f4dde2;
+
+  --focus-ring:    0 0 0 3px rgba(85, 107, 123, 0.32);
+
+  --radius:        10px;
+  --radius-sm:     6px;
+  --gap:           1rem;
+}
+
+:root[data-theme="dark"] {
+  --bg:            #1b212a;
+  --bg-raised:     #252d38;
+  --panel-bg:      #242c37;
+  --panel-border:  #3a4450;
+  --panel-shadow:  0 1px 2px rgba(0, 0, 0, 0.4),
+                   0 8px 28px rgba(0, 0, 0, 0.4);
+  --fieldset-bg:   #1f2630;
+  --fieldset-border: #2f3844;
+
+  --text:          #dde4ec;
+  --text-muted:    #9ba7b5;
+  --text-subtle:   #6d7886;
+
+  --accent:        #89a4b6;
+  --accent-hover:  #a2bac9;
+  --accent-contrast:#1a2028;
+  --accent-soft:   #2c3946;
+
+  --debian:        #d07f8c;
+  --ubuntu:        #e08b61;
+
+  --code-bg:       #131922;
+  --code-fg:       #dde3eb;
+  --code-muted:    #7e8a98;
+
+  --error:         #e98fa1;
+  --error-bg:      #3a222a;
+
+  --focus-ring:    0 0 0 3px rgba(137, 164, 182, 0.4);
+}
+
+/* Fall back to prefers-color-scheme only when the user hasn't chosen. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg:            #1b212a;
+    --bg-raised:     #252d38;
+    --panel-bg:      #242c37;
+    --panel-border:  #3a4450;
+    --panel-shadow:  0 1px 2px rgba(0, 0, 0, 0.4),
+                     0 8px 28px rgba(0, 0, 0, 0.4);
+    --fieldset-bg:   #1f2630;
+    --fieldset-border: #2f3844;
+
+    --text:          #dde4ec;
+    --text-muted:    #9ba7b5;
+    --text-subtle:   #6d7886;
+
+    --accent:        #89a4b6;
+    --accent-hover:  #a2bac9;
+    --accent-contrast:#1a2028;
+    --accent-soft:   #2c3946;
+
+    --debian:        #d07f8c;
+    --ubuntu:        #e08b61;
+
+    --code-bg:       #131922;
+    --code-fg:       #dde3eb;
+    --code-muted:    #7e8a98;
+
+    --error:         #e98fa1;
+    --error-bg:      #3a222a;
+
+    --focus-ring:    0 0 0 3px rgba(137, 164, 182, 0.4);
+  }
+}
+
+/* Distro tinting. */
+body[data-distro="debian"] { --accent-distro: var(--debian); }
+body[data-distro="ubuntu"] { --accent-distro: var(--ubuntu); }
+
+/* ---------------------------------------------------------------
+   Base
+   --------------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background:
+    radial-gradient(1200px 600px at 15% -10%, var(--accent-soft), transparent 60%),
+    var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+a { color: var(--accent); }
+a:hover { color: var(--accent-hover); }
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.92em;
+  background: var(--accent-soft);
+  color: var(--text);
+  padding: 0.08em 0.38em;
+  border-radius: 4px;
+}
+
+pre {
+  background: var(--code-bg);
+  color: var(--code-fg);
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  margin: 0;
+}
+
+pre.empty {
+  color: var(--code-muted);
+  font-style: italic;
+  background: color-mix(in srgb, var(--code-bg) 85%, transparent);
+}
+
+/* ---------------------------------------------------------------
+   Header
+   --------------------------------------------------------------- */
+
+.site-header {
+  padding: 2rem 1.5rem 1.25rem;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+.app-logo {
+  color: var(--accent);
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 2px rgba(42, 52, 64, 0.18));
+}
+
+:root[data-theme="dark"] .app-logo {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.45));
+}
+
+.site-header h1 {
+  margin: 0;
+  font-size: 1.85rem;
+  letter-spacing: -0.01em;
+}
+
+.tagline {
+  color: var(--text-muted);
+  margin: 0;
+  max-width: none;
+}
+
+/* Theme toggle */
+
+.theme-toggle {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid var(--panel-border);
+  background: var(--bg-raised);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  box-shadow: var(--panel-shadow);
+  transition: transform 0.1s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.theme-toggle:hover { background: var(--accent-soft); }
+.theme-toggle:active { transform: translateY(1px); }
+.theme-toggle:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+.theme-toggle-icon {
+  display: inline-block;
+  width: 1em;
+  text-align: center;
+  transition: transform 0.25s ease;
+}
+
+:root[data-theme="dark"] .theme-toggle-icon { transform: rotate(180deg); }
+
+/* ---------------------------------------------------------------
+   Site navigation (horizontal navbar shared across all pages)
+   --------------------------------------------------------------- */
+
+.site-nav {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0.25rem 1.5rem 0;
+}
+
+.site-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.site-nav a {
+  display: inline-block;
+  padding: 0.45rem 0.9rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.site-nav a:hover {
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+.site-nav a[aria-current="page"] {
+  color: var(--accent);
+  background: var(--accent-soft);
+  font-weight: 600;
+}
+
+.site-nav a:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* ---------------------------------------------------------------
+   Shared page-level helpers (FAQ, repo cards, warning banners)
+   --------------------------------------------------------------- */
+
+.page-intro {
+  color: var(--text-muted);
+  margin: 0 0 1rem;
+}
+
+.warning-banner {
+  border: 1px solid color-mix(in srgb, var(--debian) 45%, transparent);
+  background: color-mix(in srgb, var(--debian) 12%, var(--panel-bg));
+  color: var(--text);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  margin: 0 0 1.25rem;
+  font-size: 0.92rem;
+}
+
+.warning-banner strong { color: var(--debian); }
+
+/* <details>/<summary> FAQ accordion. */
+.faq > details {
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  padding: 0;
+  margin: 0 0 0.6rem;
+  background: var(--fieldset-bg);
+  overflow: hidden;
+}
+
+.faq > details[open] {
+  background: var(--panel-bg);
+  box-shadow: var(--panel-shadow);
+}
+
+.faq > details > summary {
+  cursor: pointer;
+  padding: 0.85rem 1rem;
+  font-weight: 600;
+  color: var(--text);
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.faq > details > summary::-webkit-details-marker { display: none; }
+.faq > details > summary::after {
+  content: "+";
+  font-weight: 400;
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+}
+
+.faq > details[open] > summary::after {
+  content: "\2013";
+  transform: none;
+}
+
+.faq > details > :not(summary) {
+  padding: 0 1rem 1rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.faq > details > :not(summary):first-of-type { padding-top: 0.25rem; }
+
+/* Repo card (used on /third-party/ and /variants/). */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.9rem;
+}
+
+.repo-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  background: var(--fieldset-bg);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.repo-card:has(input:checked) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.repo-card header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.repo-card h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.repo-card p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.repo-card .meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text-subtle);
+  margin-top: 0.15rem;
+}
+
+.repo-card .meta code { font-size: 0.78rem; }
+
+.repo-card label.check {
+  margin-top: 0.25rem;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.category-heading {
+  margin: 1.25rem 0 0.5rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.category-heading:first-of-type { margin-top: 0; }
+
+.search-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+}
+
+.search-row input[type="search"] {
+  flex: 1;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-raised);
+  color: var(--text);
+  font: inherit;
+}
+
+.search-row input[type="search"]:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--focus-ring);
+}
+
+.empty-hits {
+  color: var(--text-subtle);
+  font-style: italic;
+  margin: 1rem 0;
+}
+
+/* Simpler horizontal form row used by secondary pages (third-party, variants).
+   Wraps on narrow viewports; .field-grow expands to fill remaining space. */
+.options-row-simple {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.25rem;
+  align-items: flex-end;
+  margin: 0 0 1rem;
+}
+
+.options-row-simple .field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 180px;
+  flex: 0 0 auto;
+}
+
+.options-row-simple .field-grow { flex: 1 1 260px; min-width: 220px; }
+
+.options-row-simple .field > label,
+.options-row-simple .field .field-label {
+  font-weight: 600;
+  font-size: 0.88rem;
+}
+
+.options-row-simple .search-row { margin: 0; }
+
+/* Action row: Reset + Generate aligned bottom-right like the main form. */
+.actions-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1rem 0 0;
+}
+
+.actions-row .primary { padding: 0.65rem 1.9rem; font-weight: 600; }
+
+/* ---------------------------------------------------------------
+   Layout
+   --------------------------------------------------------------- */
+
+main.app-stack {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Options grid: 3 progressive rows that collapse on narrow viewports.
+   Row A (dropdowns):  Distribution | Release | Format | Mirror | Architecture
+   Row B (checklists): Components (×3) | Suites (×2)
+   Row C (action): Generate (right) */
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1.25rem 1.5rem;
+  align-items: start;
+}
+
+.options-grid .field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.options-grid .field > label,
+.options-grid .field .field-label {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--text);
+  letter-spacing: 0.01em;
+}
+
+.options-grid .field-components { grid-column: 1 / span 3; }
+.options-grid .field-suites     { grid-column: 4 / span 2; }
+
+.options-grid .field-action {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.6rem;
+  padding-top: 0.25rem;
+}
+
+.options-grid .field-action .primary {
+  padding: 0.65rem 1.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Responsive: 2 columns at medium widths, 1 at narrow. */
+@media (max-width: 900px) {
+  .options-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .options-grid .field-components,
+  .options-grid .field-suites {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 560px) {
+  .options-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .options-grid .field-components,
+  .options-grid .field-suites,
+  .options-grid .field-action {
+    grid-column: auto;
+  }
+}
+
+/* Vertical checkbox stack (Components + Suites). */
+.check-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-height: 2rem;
+}
+
+.check-empty {
+  color: var(--text-subtle);
+  font-style: italic;
+  font-size: 0.88rem;
+  margin: 0.15rem 0 0;
+}
+
+/* Suite codename chip: hidden when a release hasn't been chosen. */
+.suite-code {
+  font-size: 0.82em;
+  padding: 0.05em 0.4em;
+  margin-left: 0.25em;
+}
+
+.suite-code:empty { display: none; }
+
+/* Tone down disabled inputs so it's obvious they're waiting on a prior choice. */
+select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+label.check input:disabled ~ span {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+label.check:has(input:disabled) {
+  cursor: not-allowed;
+}
+
+/* ---------------------------------------------------------------
+   Panels & form
+   --------------------------------------------------------------- */
+
+.panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--panel-shadow);
+}
+
+
+label {
+  display: block;
+  margin: 0.25rem 0;
+  color: var(--text);
+}
+
+label.radio,
+label.check {
+  display: flex;
+  gap: 0.55rem;
+  align-items: flex-start;
+  cursor: pointer;
+  padding: 0.15rem 0;
+}
+
+label.radio input,
+label.check input {
+  margin-top: 0.3rem;
+  flex-shrink: 0;
+  accent-color: var(--accent);
+}
+
+select,
+input[type="url"],
+input[type="text"] {
+  width: 100%;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-raised);
+  color: var(--text);
+  font: inherit;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+select:hover,
+input[type="url"]:hover,
+input[type="text"]:hover {
+  border-color: var(--accent);
+}
+
+select:focus-visible,
+input[type="url"]:focus-visible,
+input[type="text"]:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--focus-ring);
+}
+
+.hint {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  margin: 0.35rem 0 0.6rem;
+}
+
+/* ---------------------------------------------------------------
+   Buttons
+   --------------------------------------------------------------- */
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+button {
+  font: inherit;
+  padding: 0.6rem 1.15rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--panel-border);
+  cursor: pointer;
+  background: var(--bg-raised);
+  color: var(--text);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.08s ease;
+}
+
+button:hover { border-color: var(--accent); }
+button:active { transform: translateY(1px); }
+
+button:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-color: var(--accent);
+}
+
+button.primary {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+button.primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+button.primary:disabled,
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+button.secondary { color: var(--text-muted); }
+
+/* ---------------------------------------------------------------
+   Output panel
+   --------------------------------------------------------------- */
+
+.output-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin: -0.25rem 0 0.85rem;
+}
+
+.output-header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  letter-spacing: -0.005em;
+}
+
+.output-header h2 #output-filename {
+  color: var(--accent);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.95rem;
+}
+
+.output-panel h3 {
+  margin: 1.25rem 0 0.5rem;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ---------------------------------------------------------------
+   Feedback
+   --------------------------------------------------------------- */
+
+.error {
+  color: var(--error);
+  background: var(--error-bg);
+  border: 1px solid color-mix(in srgb, var(--error) 45%, transparent);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.75rem;
+  margin: 0.75rem 0 0;
+  font-weight: 500;
+}
+
+/* ---------------------------------------------------------------
+   Footer
+   --------------------------------------------------------------- */
+
+footer {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 2.5rem;
+  color: var(--text-subtle);
+  font-size: 0.85rem;
+}
+
+footer a { color: inherit; text-decoration: underline; text-decoration-color: var(--panel-border); }
+footer a:hover { text-decoration-color: var(--accent); }

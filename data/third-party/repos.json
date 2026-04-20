@@ -1,0 +1,158 @@
+[
+  {
+    "id": "docker-ce",
+    "name": "Docker CE",
+    "category": "Dev tools",
+    "homepage": "https://docs.docker.com/engine/install/",
+    "description": "Docker Community Edition \u2014 container runtime, CLI, and compose plugin.",
+    "supports": {
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
+    },
+    "uri": "https://download.docker.com/linux/{distro}",
+    "suite": "{codename}",
+    "components": ["stable"],
+    "architectures": ["amd64", "arm64", "armhf"],
+    "gpg": {
+      "url": "https://download.docker.com/linux/{distro}/gpg",
+      "fingerprint": "9DC858229FC7DD38854AE2D88D81803C0EBFCD88",
+      "keyring": "/etc/apt/keyrings/docker.asc"
+    }
+  },
+  {
+    "id": "nodesource-node-lts",
+    "name": "NodeSource Node.js (LTS)",
+    "category": "Dev tools",
+    "homepage": "https://github.com/nodesource/distributions",
+    "description": "Official Node.js LTS builds for Debian & Ubuntu from NodeSource.",
+    "supports": {
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
+    },
+    "uri": "https://deb.nodesource.com/node_lts.x",
+    "suite": "nodistro",
+    "components": ["main"],
+    "gpg": {
+      "url": "https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key",
+      "fingerprint": "9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280",
+      "keyring": "/etc/apt/keyrings/nodesource.asc"
+    }
+  },
+  {
+    "id": "microsoft-vscode",
+    "name": "Microsoft VS Code",
+    "category": "Dev tools",
+    "homepage": "https://code.visualstudio.com/docs/setup/linux",
+    "description": "Microsoft Visual Studio Code editor.",
+    "supports": {
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
+    },
+    "uri": "https://packages.microsoft.com/repos/code",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64", "arm64", "armhf"],
+    "gpg": {
+      "url": "https://packages.microsoft.com/keys/microsoft.asc",
+      "fingerprint": "BC528686B50D79E339D3721CEB3E94ADBE1229CF",
+      "keyring": "/etc/apt/keyrings/packages.microsoft.gpg"
+    }
+  },
+  {
+    "id": "github-cli",
+    "name": "GitHub CLI (gh)",
+    "category": "Dev tools",
+    "homepage": "https://github.com/cli/cli/blob/trunk/docs/install_linux.md",
+    "description": "Official GitHub command-line client.",
+    "supports": {
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
+    },
+    "uri": "https://cli.github.com/packages",
+    "suite": "stable",
+    "components": ["main"],
+    "gpg": {
+      "url": "https://cli.github.com/packages/githubcli-archive-keyring.gpg",
+      "fingerprint": "2C6106201985B60E6C7AC87323F3D4EA75716059",
+      "keyring": "/etc/apt/keyrings/githubcli.gpg"
+    }
+  },
+  {
+    "id": "hashicorp",
+    "name": "HashiCorp",
+    "category": "Dev tools",
+    "homepage": "https://developer.hashicorp.com/well-architected/infrastructure/install",
+    "description": "Terraform, Vault, Consul, Nomad, Packer, Vagrant, Boundary, Waypoint.",
+    "supports": {
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
+    },
+    "uri": "https://apt.releases.hashicorp.com",
+    "suite": "{codename}",
+    "components": ["main"],
+    "gpg": {
+      "url": "https://apt.releases.hashicorp.com/gpg",
+      "fingerprint": "798AEC654E5C15428C8E42EEAA16FCBCA621E701",
+      "keyring": "/etc/apt/keyrings/hashicorp.asc"
+    }
+  },
+  {
+    "id": "postgresql-pgdg",
+    "name": "PostgreSQL (PGDG)",
+    "category": "Databases",
+    "homepage": "https://wiki.postgresql.org/wiki/Apt",
+    "description": "PostgreSQL Global Development Group's official apt repository.",
+    "supports": {
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
+    },
+    "uri": "https://apt.postgresql.org/pub/repos/apt",
+    "suite": "{codename}-pgdg",
+    "components": ["main"],
+    "gpg": {
+      "url": "https://www.postgresql.org/media/keys/ACCC4CF8.asc",
+      "fingerprint": "B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8",
+      "keyring": "/etc/apt/keyrings/postgresql.asc"
+    }
+  },
+  {
+    "id": "google-chrome",
+    "name": "Google Chrome",
+    "category": "Browsers",
+    "homepage": "https://www.google.com/linuxrepositories/",
+    "description": "Google Chrome browser, stable channel.",
+    "supports": {
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
+    },
+    "uri": "https://dl.google.com/linux/chrome/deb/",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64"],
+    "gpg": {
+      "url": "https://dl.google.com/linux/linux_signing_key.pub",
+      "fingerprint": "EB4C1BFD4F042F6DDDCCEC917721F63BD38B4796",
+      "keyring": "/etc/apt/keyrings/google-chrome.gpg"
+    }
+  },
+  {
+    "id": "signal-desktop",
+    "name": "Signal Desktop",
+    "category": "Security / privacy",
+    "homepage": "https://signal.org/download/linux/",
+    "description": "Signal private-messaging desktop client.",
+    "supports": {
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
+    },
+    "uri": "https://updates.signal.org/desktop/apt",
+    "suite": "xenial",
+    "components": ["main"],
+    "architectures": ["amd64"],
+    "gpg": {
+      "url": "https://updates.signal.org/desktop/apt/keys.asc",
+      "fingerprint": "DBA36B5181D0C816F630E889D980A17457F6FB06",
+      "keyring": "/etc/apt/keyrings/signal-desktop.asc"
+    }
+  }
+]

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Help / FAQ
+    url: https://silentglasses.github.io/deb-sources/help/
+    about: Common questions about apt sources, formats, keys, and how this site works.
+  - name: Request a third-party repo
+    url: https://github.com/SilentGlasses/deb-sources/issues/new?template=third_party_request.yml
+    about: Have an apt repo you'd like added to the /third-party/ builder?

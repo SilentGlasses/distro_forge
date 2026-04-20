@@ -6,3 +6,4 @@ hashicorp
 postgresql-pgdg
 google-chrome
 signal-desktop
+gimp-ppa

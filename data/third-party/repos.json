@@ -4,7 +4,7 @@
     "name": "Docker CE",
     "category": "Dev tools",
     "homepage": "https://docs.docker.com/engine/install/",
-    "description": "Docker Community Edition \u2014 container runtime, CLI, and compose plugin.",
+    "description": "Docker Community Edition — container runtime, CLI, and compose plugin.",
     "supports": {
       "debian": ["trixie", "bookworm", "bullseye"],
       "ubuntu": ["noble", "jammy", "focal"]
@@ -16,7 +16,7 @@
     "gpg": {
       "url": "https://download.docker.com/linux/{distro}/gpg",
       "fingerprint": "9DC858229FC7DD38854AE2D88D81803C0EBFCD88",
-      "keyring": "/etc/apt/keyrings/docker.asc"
+      "keyring": "/etc/apt/keyrings/docker.gpg"
     }
   },
   {
@@ -29,13 +29,14 @@
       "debian": ["trixie", "bookworm", "bullseye"],
       "ubuntu": ["noble", "jammy", "focal"]
     },
-    "uri": "https://deb.nodesource.com/node_lts.x",
+    "uri": "https://deb.nodesource.com",
     "suite": "nodistro",
     "components": ["main"],
+    "architectures": ["amd64", "arm64"],
     "gpg": {
       "url": "https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key",
-      "fingerprint": "9FD3B784BC1C6FC31A8A0A1C1655A0AB68576280",
-      "keyring": "/etc/apt/keyrings/nodesource.asc"
+      "fingerprint": "6F71F525282841EEDAF851B42F59B5F99B1BE0B4",
+      "keyring": "/etc/apt/keyrings/nodesource.gpg"
     }
   },
   {
@@ -68,9 +69,10 @@
       "debian": ["trixie", "bookworm", "bullseye"],
       "ubuntu": ["noble", "jammy", "focal"]
     },
-    "uri": "https://cli.github.com/packages",
+    "uri": "https://cli.github.com/packages/",
     "suite": "stable",
     "components": ["main"],
+    "architectures": ["amd64", "arm64"],
     "gpg": {
       "url": "https://cli.github.com/packages/githubcli-archive-keyring.gpg",
       "fingerprint": "2C6106201985B60E6C7AC87323F3D4EA75716059",
@@ -81,7 +83,7 @@
     "id": "hashicorp",
     "name": "HashiCorp",
     "category": "Dev tools",
-    "homepage": "https://developer.hashicorp.com/well-architected/infrastructure/install",
+    "homepage": "https://developer.hashicorp.com/terraform/downloads",
     "description": "Terraform, Vault, Consul, Nomad, Packer, Vagrant, Boundary, Waypoint.",
     "supports": {
       "debian": ["trixie", "bookworm", "bullseye"],
@@ -90,10 +92,11 @@
     "uri": "https://apt.releases.hashicorp.com",
     "suite": "{codename}",
     "components": ["main"],
+    "architectures": ["amd64", "arm64"],
     "gpg": {
       "url": "https://apt.releases.hashicorp.com/gpg",
       "fingerprint": "798AEC654E5C15428C8E42EEAA16FCBCA621E701",
-      "keyring": "/etc/apt/keyrings/hashicorp.asc"
+      "keyring": "/etc/apt/keyrings/hashicorp.gpg"
     }
   },
   {
@@ -112,7 +115,7 @@
     "gpg": {
       "url": "https://www.postgresql.org/media/keys/ACCC4CF8.asc",
       "fingerprint": "B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8",
-      "keyring": "/etc/apt/keyrings/postgresql.asc"
+      "keyring": "/etc/apt/keyrings/postgresql.gpg"
     }
   },
   {
@@ -125,7 +128,7 @@
       "debian": ["trixie", "bookworm", "bullseye"],
       "ubuntu": ["noble", "jammy", "focal"]
     },
-    "uri": "https://dl.google.com/linux/chrome/deb/",
+    "uri": "https://dl.google.com/linux/chrome/deb",
     "suite": "stable",
     "components": ["main"],
     "architectures": ["amd64"],
@@ -145,14 +148,32 @@
       "debian": ["trixie", "bookworm", "bullseye"],
       "ubuntu": ["noble", "jammy", "focal"]
     },
-    "uri": "https://updates.signal.org/desktop/apt",
+    "uri": "https://updates.signal.org/desktop/apt/",
     "suite": "xenial",
     "components": ["main"],
     "architectures": ["amd64"],
     "gpg": {
       "url": "https://updates.signal.org/desktop/apt/keys.asc",
       "fingerprint": "DBA36B5181D0C816F630E889D980A17457F6FB06",
-      "keyring": "/etc/apt/keyrings/signal-desktop.asc"
+      "keyring": "/etc/apt/keyrings/signal-desktop.gpg"
+    }
+  },
+  {
+    "id": "gimp-ppa",
+    "name": "GIMP (PPA)",
+    "category": "Graphics",
+    "homepage": "https://launchpad.net/~otto-kesselgulasch/+archive/gimp",
+    "description": "Latest GIMP builds via Ubuntu PPA.",
+    "supports": {
+      "ubuntu": ["noble", "jammy", "focal"]
+    },
+    "uri": "http://ppa.launchpad.net/otto-kesselgulasch/gimp/ubuntu",
+    "suite": "{codename}",
+    "components": ["main"],
+    "gpg": {
+      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x4AE55E93",
+      "fingerprint": "4AE55E93",
+      "keyring": "/etc/apt/keyrings/gimp-ppa.gpg"
     }
   }
 ]

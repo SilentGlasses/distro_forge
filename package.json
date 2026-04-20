@@ -1,0 +1,40 @@
+{
+  "name": "deb-sources",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Static web app for generating Debian & Ubuntu apt sources (one-line or DEB822), curated third-party repos, and derived-distro variants \u2014 all in the browser.",
+  "keywords": [
+    "debian",
+    "ubuntu",
+    "apt",
+    "sources.list",
+    "deb822",
+    "third-party-repos",
+    "raspberry-pi-os",
+    "kali",
+    "proxmox",
+    "linux-mint",
+    "static-site",
+    "github-pages"
+  ],
+  "homepage": "https://silentglasses.github.io/deb-sources/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SilentGlasses/deb-sources.git"
+  },
+  "bugs": {
+    "url": "https://github.com/SilentGlasses/deb-sources/issues"
+  },
+  "author": "SilentGlasses",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "serve": "python3 -m http.server 8080",
+    "update:releases": "node scripts/update-releases.mjs",
+    "update:mirrors": "node scripts/update-mirrors.mjs",
+    "validate:third-party": "node scripts/validate-third-party.mjs"
+  }
+}

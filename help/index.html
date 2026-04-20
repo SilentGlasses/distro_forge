@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Help — APT sources generator</title>
+    <meta name="description" content="Answers to common questions about APT sources, DEB822, security suites, and how the generator works." />
+    <link rel="stylesheet" href="../assets/styles.css" />
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem("theme");
+          if (t === "light" || t === "dark") {
+            document.documentElement.setAttribute("data-theme", t);
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-top">
+        <div class="brand">
+          <svg class="app-logo" viewBox="0 0 48 48" width="40" height="40"
+               xmlns="http://www.w3.org/2000/svg" role="img"
+               aria-label="APT sources generator logo">
+            <defs>
+              <linearGradient id="logo-bg" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="currentColor" stop-opacity="0.14"/>
+                <stop offset="100%" stop-color="currentColor" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <rect x="3" y="6" width="42" height="36" rx="7"
+                  fill="url(#logo-bg)" stroke="currentColor" stroke-width="2.25"/>
+            <line x1="3.5" y1="14" x2="44.5" y2="14"
+                  stroke="currentColor" stroke-width="1.75" opacity="0.55"/>
+            <circle cx="8.5"  cy="10" r="1.25" fill="currentColor" opacity="0.9"/>
+            <circle cx="13"   cy="10" r="1.25" fill="currentColor" opacity="0.9"/>
+            <circle cx="17.5" cy="10" r="1.25" fill="currentColor" opacity="0.9"/>
+            <rect x="9"  y="20.5" width="22" height="2.6" rx="1.3"
+                  fill="currentColor" opacity="0.95"/>
+            <rect x="9"  y="26.5" width="30" height="2.6" rx="1.3"
+                  fill="currentColor" opacity="0.75"/>
+            <rect x="9"  y="32.5" width="16" height="2.6" rx="1.3"
+                  fill="currentColor" opacity="0.55"/>
+            <circle cx="36" cy="33.8" r="2.3" fill="currentColor"/>
+          </svg>
+          <h1>Help</h1>
+        </div>
+        <button type="button" id="theme-toggle" class="theme-toggle"
+                aria-label="Toggle light/dark theme" aria-pressed="false">
+          <span class="theme-toggle-icon" aria-hidden="true">☽</span>
+          <span class="theme-toggle-label">Dark</span>
+        </button>
+      </div>
+      <p class="tagline">FAQ and troubleshooting for apt sources.</p>
+    </header>
+
+    <nav class="site-nav" aria-label="Primary">
+      <ul>
+        <li><a href="../">Generator</a></li>
+        <li><a href="../third-party/">Third-party repos</a></li>
+        <li><a href="../variants/">Variants</a></li>
+        <li><a href="./">Help</a></li>
+      </ul>
+    </nav>
+
+    <main class="app-stack">
+      <section class="panel">
+        <p class="page-intro">
+          Common questions about the format of
+          <code>/etc/apt/sources.list</code>, the difference between DEB822
+          and the legacy one-line style, and how this site is kept in sync
+          with Debian and Ubuntu release data.
+        </p>
+
+        <div class="faq">
+          <details>
+            <summary>What's the difference between one-line and DEB822?</summary>
+            <p>
+              The <strong>one-line</strong> format is the classic
+              <code>deb http://… suite components</code> syntax that has
+              shipped since the very first apt releases. It lives in
+              <code>/etc/apt/sources.list</code> and in
+              <code>.list</code> files under
+              <code>/etc/apt/sources.list.d/</code>.
+            </p>
+            <p>
+              <strong>DEB822</strong> (named after RFC 822-style key/value
+              fields) is the modern format used in
+              <code>.sources</code> files under
+              <code>/etc/apt/sources.list.d/</code>. One stanza can cover
+              several suites and multiple URIs at once, and a
+              <code>Signed-By:</code> field pins the stanza to a specific
+              keyring. Debian 12+ and Ubuntu 24.04+ use DEB822 by default.
+            </p>
+          </details>
+
+          <details>
+            <summary>Why did Debian move security to codename-security?</summary>
+            <p>
+              Prior to Debian 11, security updates used the suite name
+              <code>&lt;codename&gt;/updates</code> on
+              <code>security.debian.org</code>. Debian 11 switched to the
+              current
+              <code>&lt;codename&gt;-security</code> convention to match the
+              rest of the suite naming and avoid the slash/subdirectory
+              confusion. The generator always emits the modern form for
+              any supported release.
+            </p>
+          </details>
+
+          <details>
+            <summary>Why does Ubuntu on arm64 use ports.ubuntu.com?</summary>
+            <p>
+              Canonical only mirrors
+              <code>amd64</code> and <code>i386</code> packages on
+              <code>archive.ubuntu.com</code>. Every other architecture
+              (<code>arm64</code>, <code>armhf</code>, <code>ppc64el</code>,
+              <code>riscv64</code>, <code>s390x</code>) lives on
+              <code>ports.ubuntu.com/ubuntu-ports</code>, including the
+              security suite. Picking one of those architectures in the
+              generator switches both primary and security URIs
+              automatically.
+            </p>
+          </details>
+
+          <details>
+            <summary>Should I enable backports?</summary>
+            <p>
+              <strong>Only if you need a newer version of a specific
+              package</strong> than the one in stable. Backports are opt-in
+              per-package (you install with
+              <code>apt install -t bookworm-backports &lt;pkg&gt;</code>)
+              and come with looser testing than the main archive. Leave
+              them disabled unless you have a concrete reason.
+            </p>
+          </details>
+
+          <details>
+            <summary>How do I verify a third-party GPG key?</summary>
+            <p>
+              Compare the key's full fingerprint (40 hex characters)
+              against the vendor's official install documentation. Never
+              trust a key that only appears on a fan-made tutorial or a
+              copy-paste gist.
+            </p>
+            <p>
+              After downloading the key, you can print its fingerprint
+              with:
+            </p>
+            <pre>gpg --show-keys --with-fingerprint /tmp/their-key.gpg</pre>
+            <p>
+              Install it into <code>/etc/apt/keyrings/</code> (not
+              <code>/usr/share/keyrings/</code>, which is reserved for
+              distro-shipped keyrings) and reference it from your
+              <code>.sources</code> file via <code>Signed-By:</code>.
+            </p>
+          </details>
+
+          <details>
+            <summary>My apt update complains about Signed-By, what now?</summary>
+            <p>
+              Modern apt refuses to use a repository unless it can verify
+              the signature against an explicit keyring. If you're seeing
+              a <em>"The following signatures couldn't be verified…"</em>
+              or <em>"Repository is not signed"</em> error:
+            </p>
+            <ul>
+              <li>Check that the keyring file exists at the path in your
+                  <code>Signed-By:</code> field and is world-readable.</li>
+              <li>Verify that the key inside it hasn't expired.</li>
+              <li>If you used <code>apt-key add</code> in the past, replace
+                  it with a keyring file — <code>apt-key</code> is
+                  deprecated and removed on recent releases.</li>
+            </ul>
+          </details>
+
+          <details>
+            <summary>Can I mix one-line and DEB822 on the same system?</summary>
+            <p>
+              Yes. apt reads every <code>.list</code> and
+              <code>.sources</code> file under
+              <code>/etc/apt/sources.list.d/</code> in addition to the
+              legacy <code>/etc/apt/sources.list</code>. Just avoid
+              defining the same suite in two places — you'll see
+              duplicate-sources warnings.
+            </p>
+          </details>
+
+          <details>
+            <summary>How are the supported releases kept up to date?</summary>
+            <p>
+              The generator's release list is auto-generated from the
+              canonical
+              <a href="https://salsa.debian.org/debian/distro-info-data"
+                 rel="noopener">distro-info-data</a>
+              CSVs that Debian publishes for itself and Ubuntu. A weekly
+              GitHub Actions workflow runs
+              <code>scripts/update-releases.mjs</code>, diffs the result,
+              and opens a pull request when a release changes state.
+            </p>
+          </details>
+
+          <details>
+            <summary>Where does this site come from?</summary>
+            <p>
+              It's a small static site on
+              <a href="https://github.com/SilentGlasses/deb-sources"
+                 rel="noopener">GitHub</a>, served via GitHub Pages. All
+              generation happens in your browser — nothing is sent to a
+              server.
+            </p>
+          </details>
+        </div>
+      </section>
+    </main>
+
+    <script type="module">
+      import { initUi } from "../assets/lib/ui.js";
+      initUi();
+    </script>
+  </body>
+</html>

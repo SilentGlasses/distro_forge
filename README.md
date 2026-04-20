@@ -2,11 +2,9 @@
 
 <img align="left" width="100" alt="distro_forge" src="https://github.com/user-attachments/assets/83264b45-cc10-406d-91f1-5146ceadaa99" />
 
-A small static site for building Debian & Ubuntu `apt` sources, curated third-party repos, and derived-distro sources, all in the browser.
+A small static site for building Debian & Ubuntu `apt` sources, curated third-party repos, and derived-distro sources, all in the browser. No backend, no tracking. One HTML/CSS/JS tree served via GitHub Pages.
 
 **Live site:** https://silentglasses.github.io/distro_forge/
-
-No backend, no tracking. One HTML/CSS/JS tree served via GitHub Pages.
 
 ## Pages
 
@@ -44,21 +42,20 @@ Three datasets are tracked in the repo and refreshed automatically via scheduled
 
 ### Supported releases, `assets/data/releases.js`
 
-- Source: the canonical
-  [`distro-info-data`](https://salsa.debian.org/debian/distro-info-data) CSVs for Debian and Ubuntu.
+- Source: the canonical `distro-info-data` CSVs for [Debian](https://salsa.debian.org/debian/distro-info-data/-/raw/main/debian.csv) and [Ubuntu](https://salsa.debian.org/debian/distro-info-data/-/raw/main/ubuntu.csv).
 - Script: `scripts/update-releases.mjs` regenerates the file and writes a human-readable diff to `.release-notes.md` (added / removed / status-changed releases).
 - Workflow: `.github/workflows/update-releases.yml` runs every Monday at 06:00 UTC and via `workflow_dispatch`; opens a PR labelled `release-data` with the diff as the body.
 
 ### Mirror list, `assets/data/mirrors-list.js`
 
 - Script: `scripts/update-mirrors.mjs` HEADs every mirror URL and drops any that fail within 8 s.
-- Workflow: `.github/workflows/update-mirrors.yml` runs every Wednesday at 06:00 UTC; opens a PR labelled `mirror-data` with the pruned list and the list of dropped mirrors.
+- Workflow: `.github/workflows/update-mirrors.yml` runs every Wednesday at 06:00 UTC; opens a PR labeled `mirror-data` with the pruned list and the list of dropped mirrors.
 - Adding a new mirror is a manual PR edit, the pruner only removes.
 
 ### Third-party repos, `data/third-party/repos.json` + `index.txt`
 
 - Script: `scripts/validate-third-party.mjs` checks schema, HEADs `homepage` / `uri` / `gpg.url`, and verifies the declared GPG fingerprint against the actual key (requires `gpg`; Actions runners have it).
-- Workflow: `.github/workflows/validate-third-party.yml` runs on every push/PR touching third-party data and weekly on Thursdays. Push/PR runs fail the build on any validation error; scheduled runs open or update an issue labelled `third-party-validation` instead.
+- Workflow: `.github/workflows/validate-third-party.yml` runs on every push/PR touching third-party data and weekly on Thursdays. Push/PR runs fail the build on any validation error; scheduled runs open or update an issue labeled `third-party-validation` instead.
 
 ## Manual regeneration
 

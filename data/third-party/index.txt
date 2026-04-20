@@ -1,0 +1,8 @@
+docker-ce
+nodesource-node-lts
+microsoft-vscode
+github-cli
+hashicorp
+postgresql-pgdg
+google-chrome
+signal-desktop

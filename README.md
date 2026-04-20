@@ -31,7 +31,7 @@ No backend, no tracking. One HTML/CSS/JS tree served via GitHub Pages.
 Pure static site with ES modules, testing locally:
 
 ```bash
-cd deb-sources
+cd distro_forge
 python3 -m http.server 8080
 # open http://localhost:8080
 ```
@@ -43,17 +43,20 @@ Don't open `index.html` via `file://`, browsers block ES-module imports from tha
 Three datasets are tracked in the repo and refreshed automatically via scheduled GitHub Actions workflows. Every workflow opens a **pull request** rather than committing straight to `main`, so changes are reviewable.
 
 ### Supported releases, `assets/data/releases.js`
+
 - Source: the canonical
   [`distro-info-data`](https://salsa.debian.org/debian/distro-info-data) CSVs for Debian and Ubuntu.
 - Script: `scripts/update-releases.mjs` regenerates the file and writes a human-readable diff to `.release-notes.md` (added / removed / status-changed releases).
 - Workflow: `.github/workflows/update-releases.yml` runs every Monday at 06:00 UTC and via `workflow_dispatch`; opens a PR labelled `release-data` with the diff as the body.
 
 ### Mirror list, `assets/data/mirrors-list.js`
+
 - Script: `scripts/update-mirrors.mjs` HEADs every mirror URL and drops any that fail within 8 s.
 - Workflow: `.github/workflows/update-mirrors.yml` runs every Wednesday at 06:00 UTC; opens a PR labelled `mirror-data` with the pruned list and the list of dropped mirrors.
 - Adding a new mirror is a manual PR edit, the pruner only removes.
 
 ### Third-party repos, `data/third-party/repos.json` + `index.txt`
+
 - Script: `scripts/validate-third-party.mjs` checks schema, HEADs `homepage` / `uri` / `gpg.url`, and verifies the declared GPG fingerprint against the actual key (requires `gpg`; Actions runners have it).
 - Workflow: `.github/workflows/validate-third-party.yml` runs on every push/PR touching third-party data and weekly on Thursdays. Push/PR runs fail the build on any validation error; scheduled runs open or update an issue labelled `third-party-validation` instead.
 

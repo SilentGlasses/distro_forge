@@ -5,5 +5,5 @@ github-cli
 hashicorp
 postgresql-pgdg
 google-chrome
-signal-desktop
+#signal-desktop
 gimp-ppa

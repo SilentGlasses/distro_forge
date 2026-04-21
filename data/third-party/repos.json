@@ -172,7 +172,7 @@
     "components": ["main"],
     "gpg": {
       "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x4AE55E93",
-      "fingerprint": "4AE55E93",
+      "fingerprint": "EAF1C276A747E9ED86210CBAC3126D3B4AE55E93",
       "keyring": "/etc/apt/keyrings/gimp-ppa.gpg"
     }
   }

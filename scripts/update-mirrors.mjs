@@ -17,6 +17,25 @@ import {
 const HERE = dirname(fileURLToPath(import.meta.url));
 const OUT_PATH = join(HERE, "..", "assets", "data", "mirrors-list.js");
 const TIMEOUT_MS = 8000;
+const MAX_RETRIES = 2;
+const INITIAL_RETRY_DELAY_MS = 1000;
+
+// Exponential backoff retry helper for transient network failures
+async function withRetry(fn, context = "", maxRetries = MAX_RETRIES) {
+  let lastError;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastError = err;
+      if (attempt < maxRetries) {
+        const delay = INITIAL_RETRY_DELAY_MS * Math.pow(2, attempt);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+  }
+  throw lastError;
+}
 
 async function alive(url) {
   try {
@@ -32,7 +51,16 @@ async function alive(url) {
     }
     clearTimeout(timer);
     return !!(res && (res.ok || (res.status >= 200 && res.status < 400)));
-  } catch {
+  } catch (err) {
+    // Retry on transient network errors (timeout, ECONNREFUSED, etc)
+    // but not on 4xx/5xx HTTP errors (those are permanent)
+    const isTransient = err.name === "AbortError" || 
+                       err.code === "ECONNREFUSED" || 
+                       err.code === "ECONNRESET" ||
+                       err.code === "ETIMEDOUT";
+    if (isTransient) {
+      return withRetry(() => alive(url), url, 1);
+    }
     return false;
   }
 }

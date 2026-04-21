@@ -10,7 +10,7 @@
 //
 // Exit status is 0 on full success, 1 if any validation failed.
 
-import { readFile, mkdtemp, writeFile } from "node:fs/promises";
+import { readFile, mkdtemp, writeFile, unlink } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -19,6 +19,25 @@ import { tmpdir } from "node:os";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, "..");
 const TIMEOUT_MS = 10000;
+const MAX_RETRIES = 2;
+const INITIAL_RETRY_DELAY_MS = 1000;
+
+// Exponential backoff retry helper for transient network failures
+async function withRetry(fn, context = "", maxRetries = MAX_RETRIES) {
+  let lastError;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastError = err;
+      if (attempt < maxRetries) {
+        const delay = INITIAL_RETRY_DELAY_MS * Math.pow(2, attempt);
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+  }
+  throw lastError;
+}
 
 const REQUIRED_TOP = ["id", "name", "category", "homepage", "description",
                       "supports", "uri", "suite", "components", "gpg"];
@@ -38,21 +57,42 @@ async function checkUrl(url, method = "HEAD") {
     if (!res.ok && method === "HEAD") return checkUrl(url, "GET");
     return { ok: res.ok, status: res.status };
   } catch (err) {
+    // Retry on transient network errors but not on 4xx/5xx (permanent)
+    const isTransient = err.name === "AbortError" || 
+                       err.code === "ECONNREFUSED" || 
+                       err.code === "ECONNRESET" ||
+                       err.code === "ETIMEDOUT";
+    if (isTransient) {
+      return withRetry(() => checkUrl(url, method), url, 1);
+    }
     return { ok: false, status: 0, error: err.message || String(err) };
   }
 }
 
 async function fetchKeyBody(url) {
-  const ac = new AbortController();
-  const timer = setTimeout(() => ac.abort(), TIMEOUT_MS);
-  const res = await fetch(url, { redirect: "follow", signal: ac.signal });
-  clearTimeout(timer);
-  if (!res.ok) throw new Error(`HTTP ${res.status} for key ${url}`);
-  const buf = Buffer.from(await res.arrayBuffer());
-  return buf;
+  try {
+    const ac = new AbortController();
+    const timer = setTimeout(() => ac.abort(), TIMEOUT_MS);
+    const res = await fetch(url, { redirect: "follow", signal: ac.signal });
+    clearTimeout(timer);
+    if (!res.ok) throw new Error(`HTTP ${res.status} for key ${url}`);
+    const buf = Buffer.from(await res.arrayBuffer());
+    return buf;
+  } catch (err) {
+    // Retry on transient network errors but not on 4xx/5xx (permanent)
+    const isTransient = err.name === "AbortError" || 
+                       err.code === "ECONNREFUSED" || 
+                       err.code === "ECONNRESET" ||
+                       err.code === "ETIMEDOUT" ||
+                       !err.message.match(/HTTP \d{3}/); // Not a 4xx/5xx error
+    if (isTransient) {
+      return withRetry(() => fetchKeyBody(url), url, 1);
+    }
+    throw err;
+  }
 }
 
-function gpgFingerprints(keyBuf) {
+async function gpgFingerprints(keyBuf) {
   let gpgAvailable = true;
   try { execFileSync("gpg", ["--version"], { stdio: "ignore" }); }
   catch { gpgAvailable = false; }
@@ -61,7 +101,8 @@ function gpgFingerprints(keyBuf) {
   }
   const tmpKey = join(tmpdir(), `tp-key-${Date.now()}-${Math.random().toString(36).slice(2)}`);
   try {
-    execFileSync("sh", ["-c", `umask 077; cat > ${JSON.stringify(tmpKey)}`], { input: keyBuf });
+    // Write key to temporary file using Node.js fs API with restrictive permissions
+    await writeFile(tmpKey, keyBuf, { mode: 0o600 });
     const out = execFileSync("gpg", [
       "--with-colons", "--show-keys", "--with-fingerprint", tmpKey,
     ], { encoding: "utf8" });
@@ -71,7 +112,7 @@ function gpgFingerprints(keyBuf) {
       .filter(Boolean);
     return { skipped: false, fingerprints: fps };
   } finally {
-    try { execFileSync("rm", ["-f", tmpKey]); } catch {}
+    try { await unlink(tmpKey); } catch {}
   }
 }
 
@@ -142,7 +183,7 @@ async function main() {
       const distro = Object.keys(repo.supports || {})[0];
       const keyUrl = substitute(repo.gpg.url, { distro, codename: "_" });
       const buf = await fetchKeyBody(keyUrl);
-      const { skipped, fingerprints } = gpgFingerprints(buf);
+      const { skipped, fingerprints } = await gpgFingerprints(buf);
       if (skipped) {
         warnings.push({ id, detail: "gpg binary not available; skipped fingerprint check" });
       } else if (!fingerprints.includes(repo.gpg.fingerprint.toUpperCase())) {

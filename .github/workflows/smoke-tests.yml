@@ -37,7 +37,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
-          cache: npm
+          #cache: npm
 
       - name: Verify Node version
         run: node -v | grep -E "^v24\."
@@ -75,11 +75,11 @@ jobs:
           # Check releases data can be imported
           node -e "import('./assets/data/releases.js').catch(e => { console.error(e); process.exit(1); })" || exit 1
           echo "✓ releases.js imports successfully"
-          
+
           # Check mirrors list can be imported
           node -e "import('./assets/data/mirrors-list.js').catch(e => { console.error(e); process.exit(1); })" || exit 1
           echo "✓ mirrors-list.js imports successfully"
-          
+
           # Check variants data can be imported
           node -e "import('./assets/data/variants.js').catch(e => { console.error(e); process.exit(1); })" || exit 1
           echo "✓ variants.js imports successfully"
@@ -89,7 +89,7 @@ jobs:
           # Validate third-party repos.json
           node -e "const f = require('fs'); JSON.parse(f.readFileSync('./data/third-party/repos.json', 'utf8'))" || { echo "repos.json is invalid JSON"; exit 1; }
           echo "✓ repos.json is valid JSON"
-          
+
           # Validate index.txt format (one ID per line, no invalid chars)
           if grep -E "^[a-z0-9_-]+$|^$|^#" data/third-party/index.txt | wc -l | grep -q "$(wc -l < data/third-party/index.txt)"; then
             echo "✓ index.txt format OK"
@@ -120,7 +120,7 @@ jobs:
             "data/third-party/index.txt"
             ".nojekyll"
           )
-          
+
           for file in "${required_files[@]}"; do
             if [ ! -f "$file" ]; then
               echo "✗ Missing required file: $file"
@@ -140,7 +140,7 @@ jobs:
               .map(l => l.trim())
               .filter(l => l && !l.startsWith('#'));
             const repoIds = new Set(repos.map(r => r.id));
-            
+
             for (const id of index) {
               if (!repoIds.has(id)) {
                 console.error('Enabled ID not in repos.json:', id);

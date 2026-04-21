@@ -1,9 +1,9 @@
-docker-ce
-nodesource-node-lts
-microsoft-vscode
-github-cli
-hashicorp
-postgresql-pgdg
-google-chrome
+#docker-ce
+#nodesource-node-lts
+#microsoft-vscode
+#github-cli
+#hashicorp
+#postgresql-pgdg
+#google-chrome
 #signal-desktop
-gimp-ppa
+#gimp-ppa

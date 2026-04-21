@@ -20,6 +20,8 @@ export const variants = [
     description: "Debian-derived OS optimised for Raspberry Pi hardware.",
     homepage: "https://www.raspberrypi.com/software/",
     releases: [
+      { codename: "forky", version: "14", label: "Forky (14)" },
+      { codename: "trixie", version: "13", label: "Trixie (13)" },
       { codename: "bookworm", version: "12", label: "Bookworm (12)" },
       { codename: "bullseye", version: "11", label: "Bullseye (11)" },
     ],
@@ -47,6 +49,9 @@ export const variants = [
     description: "Debian-based distribution for penetration testing and security research.",
     homepage: "https://www.kali.org/",
     releases: [
+      { codename: "kali-bleeding-edge", version: "bleeding", label: "Bleeding Edge" },
+      { codename: "kali-dev", version: "dev", label: "Development" },
+      { codename: "kali-experimental", version: "experimental", label: "Experimental" },
       { codename: "kali-rolling", version: "rolling", label: "Rolling" },
     ],
     sources: [
@@ -66,6 +71,7 @@ export const variants = [
     description: "Virtualisation platform built on Debian; emits the no-subscription repository by default.",
     homepage: "https://pve.proxmox.com/wiki/Package_Repositories",
     releases: [
+      { codename: "trixie", version: "9", label: "Proxmox VE 9 (Debian 13)" },
       { codename: "bookworm", version: "8", label: "Proxmox VE 8 (Debian 12)" },
       { codename: "bullseye", version: "7", label: "Proxmox VE 7 (Debian 11)" },
     ],

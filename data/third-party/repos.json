@@ -29,7 +29,7 @@
       "debian": ["trixie", "bookworm", "bullseye"],
       "ubuntu": ["noble", "jammy", "focal"]
     },
-    "uri": "https://deb.nodesource.com/node_lts.x",
+    "uri": "https://deb.nodesource.com",
     "suite": "nodistro",
     "components": ["main"],
     "architectures": ["amd64", "arm64"],
@@ -173,8 +173,8 @@
     "components": ["main"],
     "architectures": ["amd64", "arm64", "armhf"],
     "gpg": {
-      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x7BBD7C69A2F90672BB8BDBC8FF0B2D48893F3D4E",
-      "fingerprint": "7BBD7C69A2F90672BB8BDBC8FF0B2D48893F3D4E",
+      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF4E48910A020E77056748B745738AE8480447DDF",
+      "fingerprint": "F4E48910A020E77056748B745738AE8480447DDF",
       "keyring": "/etc/apt/keyrings/gimp-ppa.gpg"
     }
   },
@@ -214,7 +214,7 @@
     "architectures": ["amd64", "arm64"],
     "gpg": {
       "url": "https://packages.cloud.google.com/apt/doc/apt-key.gpg",
-      "fingerprint": "BA07F4FB0A42B23A2B5C9C37303C5B43B5E5F0A4",
+      "fingerprint": "35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3",
       "keyring": "/etc/apt/keyrings/google-cloud.gpg"
     }
   },
@@ -234,7 +234,7 @@
     "architectures": ["amd64", "arm64"],
     "gpg": {
       "url": "https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key",
-      "fingerprint": "",
+      "fingerprint": "DE15B14486CD377B9E876E1A234654DA9A296436",
       "keyring": "/etc/apt/keyrings/kubernetes-apt-keyring.gpg"
     },
     "notes": "Change v1.32 in both uri and gpg.url to the desired minor version channel."
@@ -274,7 +274,7 @@
     "architectures": ["amd64"],
     "gpg": {
       "url": "https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg",
-      "fingerprint": "D558B93F83B7B618B8BF400A0B79A0B2C3A8F13F",
+      "fingerprint": "DBF1A116C220B8C7164F98230686B78420038257",
       "keyring": "/etc/apt/keyrings/brave-browser-archive-keyring.gpg"
     }
   },
@@ -334,7 +334,7 @@
     "components": ["main"],
     "architectures": ["amd64", "arm64", "armhf"],
     "gpg": {
-      "url": "https://pkgs.tailscale.com/stable/{distro}/{codename}.noarmor.gpg",
+      "url": "https://pkgs.tailscale.com/stable/debian/bookworm.noarmor.gpg",
       "fingerprint": "2596A99EAAB33821893C0A79458CA832957F5868",
       "keyring": "/etc/apt/keyrings/tailscale.gpg"
     }
@@ -355,7 +355,7 @@
     "architectures": ["amd64", "arm64", "armhf"],
     "gpg": {
       "url": "https://apt.grafana.com/gpg.key",
-      "fingerprint": "963FA27710458545BE8E7C4F4A0CF052D6A9C5C2",
+      "fingerprint": "B53AE77BADB630A683046005963FA27710458545",
       "keyring": "/etc/apt/keyrings/grafana.gpg"
     }
   },

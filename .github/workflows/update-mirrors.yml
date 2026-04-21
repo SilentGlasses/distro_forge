@@ -38,7 +38,7 @@ jobs:
         run: node scripts/update-mirrors.mjs | tee /tmp/mirror-report.txt
 
       - name: Open PR if any mirrors were pruned
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           branch: automation/prune-mirrors
           base: main

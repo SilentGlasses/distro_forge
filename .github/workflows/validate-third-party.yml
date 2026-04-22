@@ -58,8 +58,21 @@ jobs:
           node-version-file: .nvmrc
           #cache: npm
 
-      # ── 3. Assert exact major version (hard gate) ──────────────────────────
+      # ── 3. Install unbuffer (forces Node stdout to flush per-line) ────────────
+      # stdbuf has no effect on Node.js because Node manages its own I/O
+      # buffering independently of the C library. unbuffer allocates a real
+      # pseudo-TTY so Node believes it is writing to a terminal and flushes
+      # stdout after every line — making every repo visible in the log stream
+      # the instant it is processed.
+      - name: "📦 Install unbuffer (line-flush tool)"
+        run: |
+          echo "$LOG_TAG Installing expect (provides unbuffer)..."
+          sudo apt-get install -y -q expect 2>&1 | tail -3
+          echo "$LOG_TAG unbuffer version: $(unbuffer -h 2>&1 | head -1 || echo 'installed')"
+
+      # ── 4. Assert exact major version (hard gate) ──────────────────────────
       - name: "🔎 Assert Node version (must be v24.x)"
+
         run: |
           echo "$LOG_TAG Checking Node version..."
           NODE_VERSION=$(node -v)
@@ -70,7 +83,7 @@ jobs:
           fi
           echo "$LOG_TAG ✅ Node version assertion passed: $NODE_VERSION"
 
-      # ── 4. Confirm version in summary (kept for human readability) ──────────
+      # ── 5. Confirm version in summary (kept for human readability) ──────────
       - name: "📋 Report Node version"
         run: |
           NODE_VERSION=$(node -v)
@@ -83,7 +96,7 @@ jobs:
           echo "| Ref | \`${{ github.ref }}\` |" >> "$GITHUB_STEP_SUMMARY"
           echo "| SHA | \`${{ github.sha }}\` |" >> "$GITHUB_STEP_SUMMARY"
 
-      # ── 5. Pre-flight: confirm the script and data files exist ──────────────
+      # ── 6. Pre-flight: confirm the script and data files exist ──────────────
       - name: "🔍 Pre-flight checks"
         run: |
           echo "$LOG_TAG ===== PRE-FLIGHT ====="
@@ -111,36 +124,41 @@ jobs:
           echo "REPO_COUNT=$REPO_COUNT" >> "$GITHUB_ENV"
           echo "| Repos in index | \`$REPO_COUNT\` |" >> "$GITHUB_STEP_SUMMARY"
 
-      # ── 6. Run validator ────────────────────────────────────────────────────
-      - name: "Run validator"
+      # ── 7. Run validator ────────────────────────────────────────────────────
+      - name: "🚀 Run validator"
         id: validate
         # Fail on push/PR so regressions gate merges.
         # Continue on schedule so we can open a tracking issue instead.
         continue-on-error: ${{ github.event_name == 'schedule' }}
         env:
-          # Propagate a hint to the script so it can annotate per-repo output
           CI_LOG_TAG: "[validate-third-party]"
-          # Force unbuffered output so progress is visible in the stream immediately
           NODE_OPTIONS: "--max-old-space-size=2048"
         run: |
+          # pipefail: if node exits non-zero the whole pipeline fails immediately,
+          # no need to manually capture and re-exit with PIPESTATUS.
+          set -o pipefail
+
           echo "$LOG_TAG ===== VALIDATOR START ====="
           echo "$LOG_TAG timestamp: $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
 
-          # stdbuf -oL forces line-buffered stdout so every repo line appears
-          # in the log stream as soon as it is written — hangs are immediately visible.
-          stdbuf -oL node scripts/validate-third-party.mjs 2>&1 | \
+          # WHY unbuffer instead of stdbuf:
+          #   stdbuf controls C-library stdio buffering. Node.js bypasses that
+          #   entirely and manages its own I/O via libuv. When stdout is not a
+          #   TTY (e.g. a pipe), Node switches to full-block buffering and nothing
+          #   appears until the process exits or its internal buffer fills (~64 KB).
+          #
+          #   unbuffer allocates a real pseudo-TTY and attaches Node to it, so
+          #   Node's TTY-detection returns true and it line-flushes automatically.
+          #   Every repo line appears in the log stream the instant it is written.
+          unbuffer -p node scripts/validate-third-party.mjs 2>&1 | \
             while IFS= read -r line; do
-              # Re-emit with a timestamp prefix so every output line is traceable
               echo "$(date -u '+%H:%M:%SZ') $LOG_TAG $line"
             done
 
-          # Capture the exit code from the pipeline's first element (node)
-          EXIT_CODE=${PIPESTATUS[0]}
-          echo "$LOG_TAG ===== VALIDATOR END (exit $EXIT_CODE) ====="
+          echo "$LOG_TAG ===== VALIDATOR END ====="
           echo "$LOG_TAG timestamp: $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
-          exit $EXIT_CODE
 
-      # ── 7. Context dump on failure ──────────────────────────────────────────
+      # ── 8. Context dump on failure ──────────────────────────────────────────
       - name: "🩺 Failure context dump"
         if: failure() || (steps.validate.outcome == 'failure')
         run: |
@@ -173,7 +191,7 @@ jobs:
           Active repo: $ACTIVE_REPO. \
           See 'Failure context dump' step and the uploaded report artifact for details."
 
-      # ── 8. Upload report artifact ───────────────────────────────────────────
+      # ── 9. Upload report artifact ───────────────────────────────────────────
       - name: "📤 Upload validation report"
         if: always()
         uses: actions/upload-artifact@v7
@@ -182,7 +200,7 @@ jobs:
           path: .third-party-report.txt
           if-no-files-found: ignore
 
-      # ── 9. Append outcome to job summary ────────────────────────────────────
+      # ── 10. Append outcome to job summary ───────────────────────────────────
       - name: "📊 Write job summary"
         if: always()
         run: |
@@ -209,8 +227,8 @@ jobs:
             echo "</details>" >> "$GITHUB_STEP_SUMMARY"
           fi
 
-      # ── 10. Open / update tracking issue on scheduled failure ───────────────
-      - name: "Open / update tracking issue on scheduled failure"
+      # ── 11. Open / update tracking issue on scheduled failure ───────────────
+      - name: "🐛 Open / update tracking issue on scheduled failure"
         if: github.event_name == 'schedule' && steps.validate.outcome == 'failure'
         uses: actions/github-script@v9
         with:
@@ -272,7 +290,7 @@ jobs:
               });
             }
 
-      # ── 11. Trace: job end ──────────────────────────────────────────────────
+      # ── 12. Trace: job end ──────────────────────────────────────────────────
       - name: "🏁 Job end — final trace"
         if: always()
         run: |

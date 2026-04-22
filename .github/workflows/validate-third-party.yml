@@ -1,5 +1,4 @@
 name: Validate third-party repos
-
 on:
   push:
     branches: [main]
@@ -27,30 +26,155 @@ concurrency:
 jobs:
   validate:
     runs-on: ubuntu-latest
+
+    # ── Timeout guard: kill the job if it hangs beyond 30 min ──────────────────
+    timeout-minutes: 30
+
+    # ── Surface the active repo in the job summary on failure ─────────────────
+    env:
+      ACTIVE_REPO: "(none yet)"
+      LOG_TAG: "[validate-third-party]"
+
     steps:
-      - name: Checkout
+      # ── 0. Trace: job start ─────────────────────────────────────────────────
+      - name: "🟢 Job start — log context"
+        run: |
+          echo "$LOG_TAG ===== JOB STARTED ====="
+          echo "$LOG_TAG trigger      : ${{ github.event_name }}"
+          echo "$LOG_TAG ref          : ${{ github.ref }}"
+          echo "$LOG_TAG sha          : ${{ github.sha }}"
+          echo "$LOG_TAG run-id       : ${{ github.run_id }}"
+          echo "$LOG_TAG runner       : ${{ runner.os }} / ${{ runner.arch }}"
+          echo "$LOG_TAG timestamp    : $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+
+      # ── 1. Checkout ─────────────────────────────────────────────────────────
+      - name: "📥 Checkout repository"
         uses: actions/checkout@v6
 
-      - name: Set up Node.js
+      # ── 2. Node setup ───────────────────────────────────────────────────────
+      - name: "⚙️  Set up Node.js"
         uses: actions/setup-node@v6
         with:
           node-version-file: .nvmrc
           #cache: npm
 
-      - name: Assert Node version
-        run: node -v | grep -E "^v24\."
+      # ── 3. Assert exact major version (hard gate) ──────────────────────────
+      - name: "🔎 Assert Node version (must be v24.x)"
+        run: |
+          echo "$LOG_TAG Checking Node version..."
+          NODE_VERSION=$(node -v)
+          echo "$LOG_TAG Detected Node: $NODE_VERSION"
+          if ! echo "$NODE_VERSION" | grep -qE "^v24\."; then
+            echo "::error title=Wrong Node version::Expected v24.x but got $NODE_VERSION"
+            exit 1
+          fi
+          echo "$LOG_TAG ✅ Node version assertion passed: $NODE_VERSION"
 
-      - name: Verify Node version
-        run: node -v
+      # ── 4. Confirm version in summary (kept for human readability) ──────────
+      - name: "📋 Report Node version"
+        run: |
+          NODE_VERSION=$(node -v)
+          echo "$LOG_TAG Node version in use: $NODE_VERSION"
+          echo "### Runtime" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Key | Value |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| --- | ----- |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Node | \`$NODE_VERSION\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Trigger | \`${{ github.event_name }}\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Ref | \`${{ github.ref }}\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| SHA | \`${{ github.sha }}\` |" >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Run validator
+      # ── 5. Pre-flight: confirm the script and data files exist ──────────────
+      - name: "🔍 Pre-flight checks"
+        run: |
+          echo "$LOG_TAG ===== PRE-FLIGHT ====="
+
+          echo "$LOG_TAG Checking validator script..."
+          if [ ! -f "scripts/validate-third-party.mjs" ]; then
+            echo "::error title=Missing script::scripts/validate-third-party.mjs not found"
+            exit 1
+          fi
+          echo "$LOG_TAG ✅ scripts/validate-third-party.mjs present"
+
+          echo "$LOG_TAG Checking data directory..."
+          if [ ! -d "data/third-party" ]; then
+            echo "::error title=Missing data dir::data/third-party/ not found"
+            exit 1
+          fi
+          echo "$LOG_TAG ✅ data/third-party/ present"
+
+          # Count repos so we can confirm the run covered them all
+          REPO_COUNT=0
+          if [ -f "data/third-party/index.txt" ]; then
+            REPO_COUNT=$(grep -cE '\S' data/third-party/index.txt || true)
+          fi
+          echo "$LOG_TAG Repos listed in index: $REPO_COUNT"
+          echo "REPO_COUNT=$REPO_COUNT" >> "$GITHUB_ENV"
+          echo "| Repos in index | \`$REPO_COUNT\` |" >> "$GITHUB_STEP_SUMMARY"
+
+      # ── 6. Run validator ────────────────────────────────────────────────────
+      - name: "Run validator"
         id: validate
-        # Fail the step on push/PR so regressions gate merges.
+        # Fail on push/PR so regressions gate merges.
         # Continue on schedule so we can open a tracking issue instead.
         continue-on-error: ${{ github.event_name == 'schedule' }}
-        run: node scripts/validate-third-party.mjs
+        env:
+          # Propagate a hint to the script so it can annotate per-repo output
+          CI_LOG_TAG: "[validate-third-party]"
+          # Force unbuffered output so progress is visible in the stream immediately
+          NODE_OPTIONS: "--max-old-space-size=2048"
+        run: |
+          echo "$LOG_TAG ===== VALIDATOR START ====="
+          echo "$LOG_TAG timestamp: $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
 
-      - name: Upload report
+          # stdbuf -oL forces line-buffered stdout so every repo line appears
+          # in the log stream as soon as it is written — hangs are immediately visible.
+          stdbuf -oL node scripts/validate-third-party.mjs 2>&1 | \
+            while IFS= read -r line; do
+              # Re-emit with a timestamp prefix so every output line is traceable
+              echo "$(date -u '+%H:%M:%SZ') $LOG_TAG $line"
+            done
+
+          # Capture the exit code from the pipeline's first element (node)
+          EXIT_CODE=${PIPESTATUS[0]}
+          echo "$LOG_TAG ===== VALIDATOR END (exit $EXIT_CODE) ====="
+          echo "$LOG_TAG timestamp: $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+          exit $EXIT_CODE
+
+      # ── 7. Context dump on failure ──────────────────────────────────────────
+      - name: "🩺 Failure context dump"
+        if: failure() || (steps.validate.outcome == 'failure')
+        run: |
+          echo "::group::$LOG_TAG ===== FAILURE CONTEXT DUMP ====="
+          echo "$LOG_TAG outcome           : ${{ steps.validate.outcome }}"
+          echo "$LOG_TAG active repo (env) : $ACTIVE_REPO"
+          echo "$LOG_TAG event             : ${{ github.event_name }}"
+          echo "$LOG_TAG ref               : ${{ github.ref }}"
+          echo "$LOG_TAG sha               : ${{ github.sha }}"
+          echo "$LOG_TAG run id            : ${{ github.run_id }}"
+          echo "$LOG_TAG run attempt       : ${{ github.run_attempt }}"
+          echo "$LOG_TAG timestamp         : $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+          echo ""
+          echo "$LOG_TAG ── Report file (if present) ──"
+          if [ -f ".third-party-report.txt" ]; then
+            cat .third-party-report.txt
+          else
+            echo "$LOG_TAG (no report file found)"
+          fi
+          echo ""
+          echo "$LOG_TAG ── Disk usage ──"
+          df -h .
+          echo ""
+          echo "$LOG_TAG ── Recent system journal (last 20 lines) ──"
+          journalctl -n 20 --no-pager 2>/dev/null || echo "(journalctl unavailable)"
+          echo "::endgroup::"
+
+          # Annotate the run with a visible error banner
+          echo "::error title=Validation failed::Validator exited with failure. \
+          Active repo: $ACTIVE_REPO. \
+          See 'Failure context dump' step and the uploaded report artifact for details."
+
+      # ── 8. Upload report artifact ───────────────────────────────────────────
+      - name: "📤 Upload validation report"
         if: always()
         uses: actions/upload-artifact@v7
         with:
@@ -58,31 +182,79 @@ jobs:
           path: .third-party-report.txt
           if-no-files-found: ignore
 
-      - name: Open / update tracking issue on scheduled failure
+      # ── 9. Append outcome to job summary ────────────────────────────────────
+      - name: "📊 Write job summary"
+        if: always()
+        run: |
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "### Validation Result" >> "$GITHUB_STEP_SUMMARY"
+          OUTCOME="${{ steps.validate.outcome }}"
+          if [ "$OUTCOME" = "success" ]; then
+            echo "✅ **Passed** — all repos validated successfully." >> "$GITHUB_STEP_SUMMARY"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "❌ **Failed** — see report artifact and 'Failure context dump' step." >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "Last active repo: \`$ACTIVE_REPO\`" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "⚠️ **Outcome:** \`$OUTCOME\`" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if [ -f ".third-party-report.txt" ]; then
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "<details><summary>Report contents</summary>" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            cat .third-party-report.txt >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            echo "</details>" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      # ── 10. Open / update tracking issue on scheduled failure ───────────────
+      - name: "Open / update tracking issue on scheduled failure"
         if: github.event_name == 'schedule' && steps.validate.outcome == 'failure'
         uses: actions/github-script@v9
         with:
           script: |
             const fs = require("fs");
+
+            // Read report — include a clear fallback if the file is absent
+            let reportText = "(no report file was generated)";
+            try {
+              reportText = fs.readFileSync(".third-party-report.txt", "utf8");
+            } catch (_) {}
+
+            const runUrl =
+              `https://github.com/${context.repo.owner}/${context.repo.repo}` +
+              `/actions/runs/${context.runId}`;
+
             const body = [
+              "## Automated weekly validation failed",
+              "",
+              `**Run:** [${context.runId}](${runUrl})`,
+              `**Triggered:** ${new Date().toUTCString()}`,
+              `**SHA:** \`${context.sha}\``,
+              "",
               "Automated weekly validation of `data/third-party/repos.json` found problems.",
               "Review the report below and either:",
               "- update the entry (e.g., bump a rotated GPG fingerprint), or",
               "- remove the entry from `data/third-party/index.txt` to hide it in the UI.",
               "",
               "```",
-              fs.readFileSync(".third-party-report.txt", "utf8"),
+              reportText,
               "```",
             ].join("\n");
 
             const title = "Third-party repo validation failing";
+
             const { data: open } = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
               state: "open",
               labels: "third-party-validation",
             });
+
             if (open.length) {
+              console.log(`[validate-third-party] Updating existing issue #${open[0].number}`);
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -90,6 +262,7 @@ jobs:
                 body,
               });
             } else {
+              console.log("[validate-third-party] Creating new tracking issue");
               await github.rest.issues.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -98,3 +271,12 @@ jobs:
                 labels: ["third-party-validation"],
               });
             }
+
+      # ── 11. Trace: job end ──────────────────────────────────────────────────
+      - name: "🏁 Job end — final trace"
+        if: always()
+        run: |
+          echo "$LOG_TAG ===== JOB FINISHED ====="
+          echo "$LOG_TAG validate outcome : ${{ steps.validate.outcome }}"
+          echo "$LOG_TAG timestamp        : $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+          echo "$LOG_TAG run id           : ${{ github.run_id }}"

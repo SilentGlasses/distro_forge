@@ -4,15 +4,15 @@
     "name": "Docker CE",
     "category": "Dev tools",
     "homepage": "https://docs.docker.com/engine/install/",
-    "description": "Docker Community Edition — container runtime, CLI, and compose plugin.",
+    "description": "Docker Community Edition container runtime and tooling.",
     "supports": {
-      "debian": ["trixie", "bookworm", "bullseye"],
-      "ubuntu": ["noble", "jammy", "focal"]
+      "debian": ["trixie","bookworm","bullseye"],
+      "ubuntu": ["noble","jammy","focal"]
     },
     "uri": "https://download.docker.com/linux/{distro}",
     "suite": "{codename}",
     "components": ["stable"],
-    "architectures": ["amd64", "arm64", "armhf"],
+    "architectures": ["amd64","arm64","armhf"],
     "gpg": {
       "url": "https://download.docker.com/linux/{distro}/gpg",
       "fingerprint": "9DC858229FC7DD38854AE2D88D81803C0EBFCD88",
@@ -20,19 +20,19 @@
     }
   },
   {
-    "id": "nodesource-node-lts",
-    "name": "NodeSource Node.js (LTS)",
+    "id": "nodesource",
+    "name": "NodeSource Node.js",
     "category": "Dev tools",
     "homepage": "https://github.com/nodesource/distributions",
-    "description": "Official Node.js LTS builds for Debian & Ubuntu from NodeSource.",
+    "description": "Node.js LTS builds from NodeSource.",
     "supports": {
-      "debian": ["trixie", "bookworm", "bullseye"],
-      "ubuntu": ["noble", "jammy", "focal"]
+      "debian": ["trixie","bookworm","bullseye"],
+      "ubuntu": ["noble","jammy","focal"]
     },
-    "uri": "https://deb.nodesource.com",
+    "uri": "https://deb.nodesource.com/node_lts.x",
     "suite": "nodistro",
     "components": ["main"],
-    "architectures": ["amd64", "arm64"],
+    "architectures": ["amd64","arm64"],
     "gpg": {
       "url": "https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key",
       "fingerprint": "6F71F525282841EEDAF851B42F59B5F99B1BE0B4",
@@ -40,19 +40,19 @@
     }
   },
   {
-    "id": "microsoft-vscode",
+    "id": "vscode",
     "name": "Microsoft VS Code",
     "category": "Dev tools",
-    "homepage": "https://code.visualstudio.com/docs/setup/linux",
-    "description": "Microsoft Visual Studio Code editor.",
+    "homepage": "https://code.visualstudio.com/",
+    "description": "Visual Studio Code editor.",
     "supports": {
-      "debian": ["trixie", "bookworm", "bullseye"],
-      "ubuntu": ["noble", "jammy", "focal"]
+      "debian": ["trixie","bookworm","bullseye"],
+      "ubuntu": ["noble","jammy","focal"]
     },
     "uri": "https://packages.microsoft.com/repos/code",
     "suite": "stable",
     "components": ["main"],
-    "architectures": ["amd64", "arm64", "armhf"],
+    "architectures": ["amd64","arm64"],
     "gpg": {
       "url": "https://packages.microsoft.com/keys/microsoft.asc",
       "fingerprint": "BC528686B50D79E339D3721CEB3E94ADBE1229CF",
@@ -61,38 +61,38 @@
   },
   {
     "id": "github-cli",
-    "name": "GitHub CLI (gh)",
+    "name": "GitHub CLI",
     "category": "Dev tools",
-    "homepage": "https://github.com/cli/cli/blob/trunk/docs/install_linux.md",
-    "description": "Official GitHub command-line client.",
+    "homepage": "https://github.com/cli/cli",
+    "description": "GitHub command-line client.",
     "supports": {
-      "debian": ["trixie", "bookworm", "bullseye"],
-      "ubuntu": ["noble", "jammy", "focal"]
+      "debian": ["trixie","bookworm","bullseye"],
+      "ubuntu": ["noble","jammy","focal"]
     },
     "uri": "https://cli.github.com/packages",
     "suite": "stable",
     "components": ["main"],
-    "architectures": ["amd64", "arm64"],
+    "architectures": ["amd64","arm64"],
     "gpg": {
       "url": "https://cli.github.com/packages/githubcli-archive-keyring.gpg",
       "fingerprint": "2C6106201985B60E6C7AC87323F3D4EA75716059",
-      "keyring": "/etc/apt/keyrings/githubcli-archive-keyring.gpg"
+      "keyring": "/etc/apt/keyrings/githubcli.gpg"
     }
   },
   {
     "id": "hashicorp",
     "name": "HashiCorp",
     "category": "Dev tools",
-    "homepage": "https://developer.hashicorp.com/terraform/downloads",
-    "description": "Terraform, Vault, Consul, Nomad, Packer, Vagrant, Boundary, Waypoint.",
+    "homepage": "https://developer.hashicorp.com/",
+    "description": "Terraform, Vault, Consul and related tools.",
     "supports": {
-      "debian": ["trixie", "bookworm", "bullseye"],
-      "ubuntu": ["noble", "jammy", "focal"]
+      "debian": ["trixie","bookworm","bullseye"],
+      "ubuntu": ["noble","jammy","focal"]
     },
     "uri": "https://apt.releases.hashicorp.com",
     "suite": "{codename}",
     "components": ["main"],
-    "architectures": ["amd64", "arm64"],
+    "architectures": ["amd64","arm64"],
     "gpg": {
       "url": "https://apt.releases.hashicorp.com/gpg",
       "fingerprint": "798AEC654E5C15428C8E42EEAA16FCBCA621E701",
@@ -100,19 +100,19 @@
     }
   },
   {
-    "id": "postgresql-pgdg",
-    "name": "PostgreSQL (PGDG)",
+    "id": "postgresql",
+    "name": "PostgreSQL",
     "category": "Databases",
-    "homepage": "https://wiki.postgresql.org/wiki/Apt",
-    "description": "PostgreSQL Global Development Group's official apt repository.",
+    "homepage": "https://www.postgresql.org/",
+    "description": "Official PostgreSQL apt repository.",
     "supports": {
-      "debian": ["trixie", "bookworm", "bullseye"],
-      "ubuntu": ["noble", "jammy", "focal"]
+      "debian": ["trixie","bookworm","bullseye"],
+      "ubuntu": ["noble","jammy","focal"]
     },
     "uri": "https://apt.postgresql.org/pub/repos/apt",
     "suite": "{codename}-pgdg",
     "components": ["main"],
-    "architectures": ["amd64", "arm64"],
+    "architectures": ["amd64","arm64"],
     "gpg": {
       "url": "https://www.postgresql.org/media/keys/ACCC4CF8.asc",
       "fingerprint": "B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8",
@@ -123,11 +123,11 @@
     "id": "google-chrome",
     "name": "Google Chrome",
     "category": "Browsers",
-    "homepage": "https://www.google.com/linuxrepositories/",
-    "description": "Google Chrome browser, stable channel.",
+    "homepage": "https://www.google.com/chrome/",
+    "description": "Google Chrome browser.",
     "supports": {
-      "debian": ["trixie", "bookworm", "bullseye"],
-      "ubuntu": ["noble", "jammy", "focal"]
+      "debian": ["trixie","bookworm","bullseye"],
+      "ubuntu": ["noble","jammy","focal"]
     },
     "uri": "https://dl.google.com/linux/chrome/deb",
     "suite": "stable",
@@ -140,53 +140,74 @@
     }
   },
   {
-    "id": "signal-desktop",
-    "name": "Signal Desktop",
-    "category": "Security / privacy",
-    "homepage": "https://signal.org/download/linux/",
-    "description": "Signal private-messaging desktop client.",
+    "id": "brave",
+    "name": "Brave Browser",
+    "category": "Browsers",
+    "homepage": "https://brave.com/",
+    "description": "Privacy-focused web browser.",
     "supports": {
-      "debian": ["trixie", "bookworm", "bullseye"],
-      "ubuntu": ["noble", "jammy", "focal"]
+      "debian": ["trixie","bookworm","bullseye"],
+      "ubuntu": ["noble","jammy","focal"]
     },
-    "uri": "https://updates.signal.org/desktop/apt",
-    "suite": "xenial",
+    "uri": "https://brave-browser-apt-release.s3.brave.com",
+    "suite": "stable",
     "components": ["main"],
     "architectures": ["amd64"],
     "gpg": {
-      "url": "https://updates.signal.org/desktop/apt/keys.asc",
-      "fingerprint": "DBA36B5181D0C816F630E889D980A17457F6FB06",
-      "keyring": "/etc/apt/keyrings/signal-desktop.gpg"
+      "url": "https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg",
+      "fingerprint": "D558B93F83B7B618B8BF400A0B79A0B2C3A8F13F",
+      "keyring": "/etc/apt/keyrings/brave-browser.gpg"
     }
   },
   {
-    "id": "gimp-ppa",
-    "name": "GIMP (PPA – ubuntuhandbook1)",
-    "category": "Graphics",
-    "homepage": "https://launchpad.net/~ubuntuhandbook1/+archive/ubuntu/gimp",
-    "description": "Latest GIMP stable builds via Ubuntu PPA (maintained by ubuntuhandbook1; the original otto-kesselgulasch PPA is abandoned).",
+    "id": "tailscale",
+    "name": "Tailscale",
+    "category": "Networking",
+    "homepage": "https://tailscale.com/",
+    "description": "Zero-config VPN based on WireGuard.",
     "supports": {
-      "ubuntu": ["noble", "jammy", "focal"]
+      "debian": ["trixie","bookworm","bullseye"],
+      "ubuntu": ["noble","jammy","focal"]
     },
-    "uri": "https://ppa.launchpadcontent.net/ubuntuhandbook1/gimp/ubuntu",
+    "uri": "https://pkgs.tailscale.com/stable/{distro}",
     "suite": "{codename}",
     "components": ["main"],
-    "architectures": ["amd64", "arm64", "armhf"],
+    "architectures": ["amd64","arm64","armhf"],
     "gpg": {
-      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF4E48910A020E77056748B745738AE8480447DDF",
-      "fingerprint": "F4E48910A020E77056748B745738AE8480447DDF",
-      "keyring": "/etc/apt/keyrings/gimp-ppa.gpg"
+      "url": "https://pkgs.tailscale.com/stable/{distro}/{codename}.noarmor.gpg",
+      "fingerprint": "2596A99EAAB33821893C0A79458CA832957F5868",
+      "keyring": "/etc/apt/keyrings/tailscale.gpg"
+    }
+  },
+  {
+    "id": "grafana",
+    "name": "Grafana",
+    "category": "Monitoring",
+    "homepage": "https://grafana.com/",
+    "description": "Metrics dashboards and observability platform.",
+    "supports": {
+      "debian": ["trixie","bookworm","bullseye"],
+      "ubuntu": ["noble","jammy","focal"]
+    },
+    "uri": "https://apt.grafana.com",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://apt.grafana.com/gpg.key",
+      "fingerprint": "963FA27710458545BE8E7C4F4A0CF052D6A9C5C2",
+      "keyring": "/etc/apt/keyrings/grafana.gpg"
     }
   },
   {
     "id": "microsoft-edge",
     "name": "Microsoft Edge",
     "category": "Browsers",
-    "homepage": "https://www.microsoft.com/en-us/edge/",
-    "description": "Microsoft Edge browser for Linux.",
+    "homepage": "https://www.microsoft.com/edge",
+    "description": "Microsoft Edge browser.",
     "supports": {
-      "debian": ["trixie", "bookworm", "bullseye"],
-      "ubuntu": ["noble", "jammy", "focal"]
+      "debian": ["trixie","bookworm","bullseye"],
+      "ubuntu": ["noble","jammy","focal"]
     },
     "uri": "https://packages.microsoft.com/repos/edge",
     "suite": "stable",
@@ -195,124 +216,165 @@
     "gpg": {
       "url": "https://packages.microsoft.com/keys/microsoft.asc",
       "fingerprint": "BC528686B50D79E339D3721CEB3E94ADBE1229CF",
-      "keyring": "/etc/apt/keyrings/packages.microsoft.gpg"
+      "keyring": "/etc/apt/keyrings/microsoft-edge.gpg"
     }
   },
   {
-    "id": "google-cloud-sdk",
-    "name": "Google Cloud SDK",
-    "category": "Dev tools",
-    "homepage": "https://cloud.google.com/sdk/docs/install",
-    "description": "Google Cloud CLI (gcloud, gsutil, bq) and SDK components.",
-    "supports": {
-      "debian": ["trixie", "bookworm", "bullseye"],
-      "ubuntu": ["noble", "jammy", "focal"]
-    },
-    "uri": "https://packages.cloud.google.com/apt",
-    "suite": "cloud-sdk",
-    "components": ["main"],
-    "architectures": ["amd64", "arm64"],
-    "gpg": {
-      "url": "https://packages.cloud.google.com/apt/doc/apt-key.gpg",
-      "fingerprint": "35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3",
-      "keyring": "/etc/apt/keyrings/google-cloud.gpg"
-    }
-  },
-  {
-    "id": "kubernetes",
-    "name": "Kubernetes (pkgs.k8s.io)",
-    "category": "Dev tools",
-    "homepage": "https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/",
-    "description": "Official Kubernetes apt repository for kubectl, kubeadm, and kubelet (v1.32 channel).",
-    "supports": {
-      "debian": ["trixie", "bookworm", "bullseye"],
-      "ubuntu": ["noble", "jammy", "focal"]
-    },
-    "uri": "https://pkgs.k8s.io/core:/stable:/v1.32/deb",
-    "suite": "/",
-    "components": [],
-    "architectures": ["amd64", "arm64"],
-    "gpg": {
-      "url": "https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key",
-      "fingerprint": "DE15B14486CD377B9E876E1A234654DA9A296436",
-      "keyring": "/etc/apt/keyrings/kubernetes-apt-keyring.gpg"
-    },
-    "notes": "Change v1.32 in both uri and gpg.url to the desired minor version channel."
-  },
-  {
-    "id": "mozilla-team-firefox",
-    "name": "Mozilla Team Firefox (PPA)",
+    "id": "vivaldi",
+    "name": "Vivaldi Browser",
     "category": "Browsers",
-    "homepage": "https://launchpad.net/~mozillateam/+archive/ubuntu/ppa",
-    "description": "Mozilla Team PPA providing the traditional .deb Firefox (not Snap) for Ubuntu.",
+    "homepage": "https://vivaldi.com/",
+    "description": "Vivaldi web browser.",
     "supports": {
-      "ubuntu": ["noble", "jammy", "focal"]
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
     },
-    "uri": "https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu",
-    "suite": "{codename}",
-    "components": ["main"],
-    "architectures": ["amd64", "arm64"],
-    "gpg": {
-      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x0AB215679C571D1C8325275B9BDB3D89CE49EC21",
-      "fingerprint": "0AB215679C571D1C8325275B9BDB3D89CE49EC21",
-      "keyring": "/etc/apt/keyrings/mozillateam.gpg"
-    }
-  },
-  {
-    "id": "brave-browser",
-    "name": "Brave Browser",
-    "category": "Browsers",
-    "homepage": "https://brave.com/linux/",
-    "description": "Brave privacy-focused browser.",
-    "supports": {
-      "debian": ["trixie", "bookworm", "bullseye"],
-      "ubuntu": ["noble", "jammy", "focal"]
-    },
-    "uri": "https://brave-browser-apt-release.s3.brave.com",
+    "uri": "https://repo.vivaldi.com/stable/deb",
     "suite": "stable",
     "components": ["main"],
     "architectures": ["amd64"],
     "gpg": {
-      "url": "https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg",
-      "fingerprint": "DBF1A116C220B8C7164F98230686B78420038257",
-      "keyring": "/etc/apt/keyrings/brave-browser-archive-keyring.gpg"
+      "url": "https://repo.vivaldi.com/stable/linux_signing_key.pub",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/vivaldi.gpg"
     }
   },
   {
-    "id": "mysql-apt",
-    "name": "MySQL Community (Oracle)",
-    "category": "Databases",
-    "homepage": "https://dev.mysql.com/downloads/repo/apt/",
-    "description": "Oracle's official MySQL Community Server apt repository.",
+    "id": "opera",
+    "name": "Opera Browser",
+    "category": "Browsers",
+    "homepage": "https://www.opera.com/",
+    "description": "Opera web browser.",
     "supports": {
-      "debian": ["bookworm", "bullseye"],
-      "ubuntu": ["noble", "jammy", "focal"]
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
     },
-    "uri": "http://repo.mysql.com/apt/{distro}",
-    "suite": "{codename}",
-    "components": ["mysql-8.4"],
-    "architectures": ["amd64", "arm64"],
+    "uri": "https://deb.opera.com/opera-stable",
+    "suite": "stable",
+    "components": ["non-free"],
+    "architectures": ["amd64"],
     "gpg": {
-      "url": "https://repo.mysql.com/RPM-GPG-KEY-mysql-2023",
-      "fingerprint": "BCA43417C3B485DD128EC6D4B7B3B788A8D3785C",
-      "keyring": "/etc/apt/keyrings/mysql.gpg"
+      "url": "https://deb.opera.com/archive.key",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/opera.gpg"
+    }
+  },
+
+  {
+    "id": "slack",
+    "name": "Slack",
+    "category": "Desktop",
+    "homepage": "https://slack.com/",
+    "description": "Slack desktop client.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
     },
-    "notes": "Change the component to mysql-innovation or mysql-9.x as needed."
+    "uri": "https://packagecloud.io/slacktechnologies/slack/debian",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64"],
+    "gpg": {
+      "url": "https://packagecloud.io/slacktechnologies/slack/gpgkey",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/slack.gpg"
+    }
+  },
+  {
+    "id": "signal-desktop",
+    "name": "Signal Desktop",
+    "category": "Desktop",
+    "homepage": "https://signal.org/",
+    "description": "Private messaging desktop client.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://updates.signal.org/desktop/apt",
+    "suite": "xenial",
+    "components": ["main"],
+    "architectures": ["amd64"],
+    "gpg": {
+      "url": "https://updates.signal.org/desktop/apt/keys.asc",
+      "fingerprint": "DBA36B5181D0C816F630E889D980A17457F6FB06",
+      "keyring": "/etc/apt/keyrings/signal.gpg"
+    }
+  },
+  {
+    "id": "spotify",
+    "name": "Spotify",
+    "category": "Desktop",
+    "homepage": "https://www.spotify.com/",
+    "description": "Spotify music streaming client.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://repository.spotify.com",
+    "suite": "stable",
+    "components": ["non-free"],
+    "architectures": ["amd64"],
+    "gpg": {
+      "url": "https://download.spotify.com/debian/pubkey.gpg",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/spotify.gpg"
+    }
+  },
+
+  {
+    "id": "kubernetes",
+    "name": "Kubernetes",
+    "category": "Dev tools",
+    "homepage": "https://kubernetes.io/",
+    "description": "Kubernetes tools (kubectl, kubeadm, kubelet).",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://pkgs.k8s.io/core:/stable:/v1.32/deb",
+    "suite": "/",
+    "components": [],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/kubernetes.gpg"
+    }
+  },
+  {
+    "id": "helm",
+    "name": "Helm",
+    "category": "Dev tools",
+    "homepage": "https://helm.sh/",
+    "description": "Kubernetes package manager.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://baltocdn.com/helm/stable/debian",
+    "suite": "all",
+    "components": ["main"],
+    "architectures": ["amd64"],
+    "gpg": {
+      "url": "https://baltocdn.com/helm/signing.asc",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/helm.gpg"
+    }
   },
   {
     "id": "wazuh",
     "name": "Wazuh",
-    "category": "Security / privacy",
-    "homepage": "https://documentation.wazuh.com/current/installation-guide/",
-    "description": "Wazuh open-source security platform: SIEM, XDR, and endpoint protection.",
+    "category": "Security",
+    "homepage": "https://wazuh.com/",
+    "description": "Open-source SIEM and XDR platform.",
     "supports": {
-      "debian": ["trixie", "bookworm", "bullseye"],
-      "ubuntu": ["noble", "jammy", "focal"]
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
     },
     "uri": "https://packages.wazuh.com/4.x/apt",
     "suite": "stable",
     "components": ["main"],
-    "architectures": ["amd64", "arm64", "armhf"],
+    "architectures": ["amd64","arm64"],
     "gpg": {
       "url": "https://packages.wazuh.com/key/GPG-KEY-WAZUH",
       "fingerprint": "0DCFCA5547B19D2A6099506096B3EE5F29111145",
@@ -320,82 +382,319 @@
     }
   },
   {
-    "id": "tailscale",
-    "name": "Tailscale",
-    "category": "Networking",
-    "homepage": "https://tailscale.com/download/linux",
-    "description": "Tailscale zero-config WireGuard-based VPN mesh.",
+    "id": "suricata",
+    "name": "Suricata",
+    "category": "Security",
+    "homepage": "https://suricata.io/",
+    "description": "Network IDS/IPS engine.",
     "supports": {
-      "debian": ["trixie", "bookworm", "bullseye"],
-      "ubuntu": ["noble", "jammy", "focal"]
+      "ubuntu": ["jammy","focal"]
     },
-    "uri": "https://pkgs.tailscale.com/stable/{distro}",
+    "uri": "https://ppa.launchpadcontent.net/oisf/suricata-stable/ubuntu",
     "suite": "{codename}",
     "components": ["main"],
-    "architectures": ["amd64", "arm64", "armhf"],
+    "architectures": ["amd64"],
     "gpg": {
-      "url": "https://pkgs.tailscale.com/stable/debian/bookworm.noarmor.gpg",
-      "fingerprint": "2596A99EAAB33821893C0A79458CA832957F5868",
-      "keyring": "/etc/apt/keyrings/tailscale.gpg"
+      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x582E3BFF",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/suricata.gpg"
     }
   },
   {
-    "id": "grafana",
-    "name": "Grafana OSS",
-    "category": "Monitoring / observability",
-    "homepage": "https://grafana.com/docs/grafana/latest/setup-grafana/installation/debian/",
-    "description": "Grafana open-source metrics dashboard and visualisation platform.",
+    "id": "mariadb",
+    "name": "MariaDB",
+    "category": "Databases",
+    "homepage": "https://mariadb.org/",
+    "description": "MariaDB database server.",
     "supports": {
-      "debian": ["trixie", "bookworm", "bullseye"],
-      "ubuntu": ["noble", "jammy", "focal"]
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
     },
-    "uri": "https://apt.grafana.com",
-    "suite": "stable",
+    "uri": "https://mirror.mariadb.org/repo/10.11/{distro}",
+    "suite": "{codename}",
     "components": ["main"],
-    "architectures": ["amd64", "arm64", "armhf"],
+    "architectures": ["amd64","arm64"],
     "gpg": {
-      "url": "https://apt.grafana.com/gpg.key",
-      "fingerprint": "B53AE77BADB630A683046005963FA27710458545",
-      "keyring": "/etc/apt/keyrings/grafana.gpg"
+      "url": "https://mariadb.org/mariadb_release_signing_key.asc",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/mariadb.gpg"
     }
   },
   {
-    "id": "influxdb",
-    "name": "InfluxDB",
-    "category": "Monitoring / observability",
-    "homepage": "https://docs.influxdata.com/influxdb/v2/install/",
-    "description": "InfluxDB time-series database and the Telegraf metrics agent.",
+    "id": "redis",
+    "name": "Redis",
+    "category": "Databases",
+    "homepage": "https://redis.io/",
+    "description": "Redis in-memory data store.",
     "supports": {
-      "debian": ["trixie", "bookworm", "bullseye"],
-      "ubuntu": ["noble", "jammy", "focal"]
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
     },
-    "uri": "https://repos.influxdata.com/{distro}",
-    "suite": "stable",
+    "uri": "https://packages.redis.io/deb",
+    "suite": "{codename}",
     "components": ["main"],
-    "architectures": ["amd64", "arm64"],
+    "architectures": ["amd64","arm64"],
     "gpg": {
-      "url": "https://repos.influxdata.com/influxdata-archive_compat.key",
-      "fingerprint": "9D539D90D3328DC7D6C8D3B9D8FF8E1F7DF8B07E",
-      "keyring": "/etc/apt/keyrings/influxdata.gpg"
+      "url": "https://packages.redis.io/gpg",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/redis.gpg"
     }
   },
   {
-    "id": "ondrej-php",
-    "name": "PHP (ondrej/php PPA)",
+    "id": "jenkins",
+    "name": "Jenkins",
     "category": "Dev tools",
-    "homepage": "https://launchpad.net/~ondrej/+archive/ubuntu/php",
-    "description": "Ondřej Surý's widely-used PPA providing multiple PHP versions side-by-side.",
+    "homepage": "https://www.jenkins.io/",
+    "description": "CI/CD automation server.",
     "supports": {
-      "ubuntu": ["noble", "jammy", "focal"]
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
     },
-    "uri": "https://ppa.launchpadcontent.net/ondrej/php/ubuntu",
+    "uri": "https://pkg.jenkins.io/debian-stable",
+    "suite": "binary/",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/jenkins.gpg"
+    }
+  },
+  {
+    "id": "ansible",
+    "name": "Ansible PPA",
+    "category": "Dev tools",
+    "homepage": "https://launchpad.net/~ansible/+archive/ubuntu/ansible",
+    "description": "Ansible automation tools.",
+    "supports": {
+      "ubuntu": ["noble","jammy","focal"]
+    },
+    "uri": "https://ppa.launchpadcontent.net/ansible/ansible/ubuntu",
     "suite": "{codename}",
     "components": ["main"],
-    "architectures": ["amd64", "arm64"],
+    "architectures": ["amd64","arm64"],
     "gpg": {
-      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x14AA40EC0831756756D7F66C4F4EA0AAE5267A6C",
-      "fingerprint": "14AA40EC0831756756D7F66C4F4EA0AAE5267A6C",
-      "keyring": "/etc/apt/keyrings/ondrej-php.gpg"
+      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x93C4A3FD7BB9C367",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/ansible.gpg"
+    }
+  },
+  {
+    "id": "elasticsearch",
+    "name": "Elasticsearch",
+    "category": "Databases",
+    "homepage": "https://www.elastic.co/",
+    "description": "Search and analytics engine.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://artifacts.elastic.co/packages/8.x/apt",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://artifacts.elastic.co/GPG-KEY-elasticsearch",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/elastic.gpg"
+    }
+  },
+  {
+    "id": "logstash",
+    "name": "Logstash",
+    "category": "Databases",
+    "homepage": "https://www.elastic.co/logstash/",
+    "description": "Data processing pipeline for Elasticsearch.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://artifacts.elastic.co/packages/8.x/apt",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://artifacts.elastic.co/GPG-KEY-elasticsearch",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/elastic.gpg"
+    }
+  },
+  {
+    "id": "kibana",
+    "name": "Kibana",
+    "category": "Databases",
+    "homepage": "https://www.elastic.co/kibana/",
+    "description": "Visualization layer for Elasticsearch.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://artifacts.elastic.co/packages/8.x/apt",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://artifacts.elastic.co/GPG-KEY-elasticsearch",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/elastic.gpg"
+    }
+  },
+  {
+    "id": "prometheus",
+    "name": "Prometheus",
+    "category": "Monitoring",
+    "homepage": "https://prometheus.io/",
+    "description": "Monitoring and alerting toolkit.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://packages.grafana.com/oss/deb",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://packages.grafana.com/gpg.key",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/grafana-prometheus.gpg"
+    }
+  },
+  {
+    "id": "mongodb",
+    "name": "MongoDB",
+    "category": "Databases",
+    "homepage": "https://www.mongodb.com/",
+    "description": "NoSQL document database.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://repo.mongodb.org/apt/ubuntu",
+    "suite": "{codename}/mongodb-org/7.0",
+    "components": ["multiverse"],
+    "architectures": ["amd64"],
+    "gpg": {
+      "url": "https://www.mongodb.org/static/pgp/server-7.0.asc",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/mongodb.gpg"
+    }
+  },
+  {
+    "id": "couchdb",
+    "name": "Apache CouchDB",
+    "category": "Databases",
+    "homepage": "https://couchdb.apache.org/",
+    "description": "Document-oriented NoSQL database.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://apache.jfrog.io/artifactory/couchdb-deb",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://couchdb.apache.org/repo/keys.asc",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/couchdb.gpg"
+    }
+  },
+  {
+    "id": "timescaledb",
+    "name": "TimescaleDB",
+    "category": "Databases",
+    "homepage": "https://www.timescale.com/",
+    "description": "Time-series extension for PostgreSQL.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://packagecloud.io/timescale/timescaledb/debian",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://packagecloud.io/timescale/timescaledb/gpgkey",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/timescaledb.gpg"
+    }
+  },
+  {
+    "id": "wireguard",
+    "name": "WireGuard Tools",
+    "category": "Networking",
+    "homepage": "https://www.wireguard.com/",
+    "description": "Modern VPN protocol tools.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://ppa.launchpadcontent.net/wireguard/wireguard/ubuntu",
+    "suite": "{codename}",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x04EE7237B7D453EC",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/wireguard.gpg"
+    }
+  },
+  {
+    "id": "openvpn3",
+    "name": "OpenVPN 3",
+    "category": "Networking",
+    "homepage": "https://openvpn.net/",
+    "description": "Next-generation OpenVPN client.",
+    "supports": {
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://packages.openvpn.net/openvpn3/debian",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64"],
+    "gpg": {
+      "url": "https://packages.openvpn.net/packages-repo.gpg",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/openvpn3.gpg"
+    }
+  },
+  {
+    "id": "firefox-mozillateam",
+    "name": "Firefox (Mozilla Team PPA)",
+    "category": "Browsers",
+    "homepage": "https://launchpad.net/~mozillateam/+archive/ubuntu/ppa",
+    "description": "Mozilla-maintained Firefox builds for Ubuntu (non-Snap packaging).",
+    "supports": {
+      "ubuntu": ["noble","jammy","focal"]
+    },
+    "uri": "https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu",
+    "suite": "{codename}",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x0AB215679C571D1C8325275B9BDB3D89CE49EC21",
+      "fingerprint": "0AB215679C571D1C8325275B9BDB3D89CE49EC21",
+      "keyring": "/etc/apt/keyrings/firefox.gpg"
+    }
+  },
+  {
+    "id": "tor-browser",
+    "name": "Tor Browser",
+    "category": "Browsers",
+    "homepage": "https://www.torproject.org/",
+    "description": "Privacy-focused anonymizing browser.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["noble","jammy","focal"]
+    },
+    "uri": "https://deb.torproject.org/torproject.org",
+    "suite": "{codename}",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc",
+      "fingerprint": "A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89",
+      "keyring": "/etc/apt/keyrings/tor.gpg"
     }
   }
 ]

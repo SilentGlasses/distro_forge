@@ -439,5 +439,262 @@
       "fingerprint": "",
       "keyring": "/etc/apt/keyrings/redis.gpg"
     }
+  },
+  {
+    "id": "jenkins",
+    "name": "Jenkins",
+    "category": "Dev tools",
+    "homepage": "https://www.jenkins.io/",
+    "description": "CI/CD automation server.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://pkg.jenkins.io/debian-stable",
+    "suite": "binary/",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/jenkins.gpg"
+    }
+  },
+  {
+    "id": "ansible",
+    "name": "Ansible PPA",
+    "category": "Dev tools",
+    "homepage": "https://launchpad.net/~ansible/+archive/ubuntu/ansible",
+    "description": "Ansible automation tools.",
+    "supports": {
+      "ubuntu": ["noble","jammy","focal"]
+    },
+    "uri": "https://ppa.launchpadcontent.net/ansible/ansible/ubuntu",
+    "suite": "{codename}",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x93C4A3FD7BB9C367",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/ansible.gpg"
+    }
+  },
+  {
+    "id": "elasticsearch",
+    "name": "Elasticsearch",
+    "category": "Databases",
+    "homepage": "https://www.elastic.co/",
+    "description": "Search and analytics engine.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://artifacts.elastic.co/packages/8.x/apt",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://artifacts.elastic.co/GPG-KEY-elasticsearch",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/elastic.gpg"
+    }
+  },
+  {
+    "id": "logstash",
+    "name": "Logstash",
+    "category": "Databases",
+    "homepage": "https://www.elastic.co/logstash/",
+    "description": "Data processing pipeline for Elasticsearch.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://artifacts.elastic.co/packages/8.x/apt",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://artifacts.elastic.co/GPG-KEY-elasticsearch",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/elastic.gpg"
+    }
+  },
+  {
+    "id": "kibana",
+    "name": "Kibana",
+    "category": "Databases",
+    "homepage": "https://www.elastic.co/kibana/",
+    "description": "Visualization layer for Elasticsearch.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://artifacts.elastic.co/packages/8.x/apt",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://artifacts.elastic.co/GPG-KEY-elasticsearch",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/elastic.gpg"
+    }
+  },
+  {
+    "id": "prometheus",
+    "name": "Prometheus",
+    "category": "Monitoring",
+    "homepage": "https://prometheus.io/",
+    "description": "Monitoring and alerting toolkit.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://packages.grafana.com/oss/deb",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://packages.grafana.com/gpg.key",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/grafana-prometheus.gpg"
+    }
+  },
+  {
+    "id": "mongodb",
+    "name": "MongoDB",
+    "category": "Databases",
+    "homepage": "https://www.mongodb.com/",
+    "description": "NoSQL document database.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://repo.mongodb.org/apt/ubuntu",
+    "suite": "{codename}/mongodb-org/7.0",
+    "components": ["multiverse"],
+    "architectures": ["amd64"],
+    "gpg": {
+      "url": "https://www.mongodb.org/static/pgp/server-7.0.asc",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/mongodb.gpg"
+    }
+  },
+  {
+    "id": "couchdb",
+    "name": "Apache CouchDB",
+    "category": "Databases",
+    "homepage": "https://couchdb.apache.org/",
+    "description": "Document-oriented NoSQL database.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://apache.jfrog.io/artifactory/couchdb-deb",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://couchdb.apache.org/repo/keys.asc",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/couchdb.gpg"
+    }
+  },
+  {
+    "id": "timescaledb",
+    "name": "TimescaleDB",
+    "category": "Databases",
+    "homepage": "https://www.timescale.com/",
+    "description": "Time-series extension for PostgreSQL.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://packagecloud.io/timescale/timescaledb/debian",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://packagecloud.io/timescale/timescaledb/gpgkey",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/timescaledb.gpg"
+    }
+  },
+  {
+    "id": "wireguard",
+    "name": "WireGuard Tools",
+    "category": "Networking",
+    "homepage": "https://www.wireguard.com/",
+    "description": "Modern VPN protocol tools.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://ppa.launchpadcontent.net/wireguard/wireguard/ubuntu",
+    "suite": "{codename}",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x04EE7237B7D453EC",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/wireguard.gpg"
+    }
+  },
+  {
+    "id": "openvpn3",
+    "name": "OpenVPN 3",
+    "category": "Networking",
+    "homepage": "https://openvpn.net/",
+    "description": "Next-generation OpenVPN client.",
+    "supports": {
+      "ubuntu": ["jammy","focal"]
+    },
+    "uri": "https://packages.openvpn.net/openvpn3/debian",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64"],
+    "gpg": {
+      "url": "https://packages.openvpn.net/packages-repo.gpg",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/openvpn3.gpg"
+    }
+  },
+  {
+    "id": "firefox-mozillateam",
+    "name": "Firefox (Mozilla Team PPA)",
+    "category": "Browsers",
+    "homepage": "https://launchpad.net/~mozillateam/+archive/ubuntu/ppa",
+    "description": "Mozilla-maintained Firefox builds for Ubuntu (non-Snap packaging).",
+    "supports": {
+      "ubuntu": ["noble","jammy","focal"]
+    },
+    "uri": "https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu",
+    "suite": "{codename}",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x0AB215679C571D1C8325275B9BDB3D89CE49EC21",
+      "fingerprint": "0AB215679C571D1C8325275B9BDB3D89CE49EC21",
+      "keyring": "/etc/apt/keyrings/firefox.gpg"
+    }
+  },
+  {
+    "id": "tor-browser",
+    "name": "Tor Browser",
+    "category": "Browsers",
+    "homepage": "https://www.torproject.org/",
+    "description": "Privacy-focused anonymizing browser.",
+    "supports": {
+      "debian": ["bookworm","bullseye"],
+      "ubuntu": ["noble","jammy","focal"]
+    },
+    "uri": "https://deb.torproject.org/torproject.org",
+    "suite": "{codename}",
+    "components": ["main"],
+    "architectures": ["amd64","arm64"],
+    "gpg": {
+      "url": "https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc",
+      "fingerprint": "A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89",
+      "keyring": "/etc/apt/keyrings/tor.gpg"
+    }
   }
 ]

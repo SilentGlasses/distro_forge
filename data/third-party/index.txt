@@ -27,7 +27,7 @@ slack
 spotify
 suricata
 tailscale
-timescaled
+timescaledb
 tor-browser
 vivaldi
 vscode

@@ -91,11 +91,11 @@ jobs:
           echo "✓ repos.json is valid JSON"
 
           # Validate index.txt format (one ID per line, no invalid chars)
-          if grep -E "^[a-z0-9_-]+$|^$|^#" data/third-party/index.txt | wc -l | grep -q "$(wc -l < data/third-party/index.txt)"; then
-            echo "✓ index.txt format OK"
-          else
+          if grep -vE "^[a-z0-9_-]+$|^$|^#" data/third-party/index.txt | grep -q .; then
             echo "✗ index.txt contains invalid entries"
             exit 1
+          else
+            echo "✓ index.txt format OK"
           fi
 
       - name: Check required files exist

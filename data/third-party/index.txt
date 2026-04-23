@@ -1,8 +1,10 @@
+1password
 ansible
-brave
+brave-browser
 couchdb
 docker-ce
 elasticsearch
+element-desktop
 firefox-mozillateam
 github-cli
 google-chrome
@@ -16,8 +18,11 @@ logstash
 mariadb
 microsoft-edge
 mongodb
+mozilla-thunderbird
+mullvad-browser
+mullvad-vpn
 nodesource
-openvpn3
+openvpn
 opera
 postgresql
 prometheus
@@ -28,7 +33,7 @@ spotify
 suricata
 tailscale
 timescaledb
-tor-browser
+tor-project
 vivaldi
 vscode
 wazuh

@@ -1,18 +1,97 @@
 [
   {
+    "id": "1password",
+    "name": "1Password",
+    "category": "Security / privacy",
+    "homepage": "https://support.1password.com/install-linux/",
+    "description": "1Password password manager — stores passwords, SSH keys, passkeys, secrets, and secure notes with end-to-end encryption. Integrates with the browser extension and SSH agent on Linux. amd64 only; the repo URI embeds the architecture.",
+    "supports": {
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
+    },
+    "uri": "https://downloads.1password.com/linux/debian/amd64",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64"],
+    "gpg": {
+      "url": "https://downloads.1password.com/linux/keys/1password.asc",
+      "fingerprint": "3FEF9748469ADBE15DA7CA80AC2D62742012EA22",
+      "keyring": "/etc/apt/keyrings/1password-archive-keyring.gpg"
+    }
+  },
+  {
+    "id": "ansible",
+    "name": "Ansible PPA",
+    "category": "Dev tools",
+    "homepage": "https://launchpad.net/~ansible/+archive/ubuntu/ansible",
+    "description": "Ansible IT automation platform — agentless configuration management, application deployment, and orchestration over SSH using human-readable YAML playbooks. This PPA provides current Ansible releases for Ubuntu ahead of the official universe archive. Ubuntu only.",
+    "supports": {
+      "ubuntu": ["noble", "jammy", "focal"]
+    },
+    "uri": "https://ppa.launchpadcontent.net/ansible/ansible/ubuntu",
+    "suite": "{codename}",
+    "components": ["main"],
+    "architectures": ["amd64", "arm64"],
+    "gpg": {
+      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x93C4A3FD7BB9C367",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/ansible.gpg"
+    }
+  },
+  {
+    "id": "couchdb",
+    "name": "Apache CouchDB",
+    "category": "Databases",
+    "homepage": "https://couchdb.apache.org/",
+    "description": "Apache CouchDB document-oriented NoSQL database — stores data as JSON documents accessed via a built-in HTTP/REST API, with multi-master replication and offline-first sync capabilities via CouchDB's sync protocol.",
+    "supports": {
+      "debian": ["bookworm", "bullseye"],
+      "ubuntu": ["jammy", "focal"]
+    },
+    "uri": "https://apache.jfrog.io/artifactory/couchdb-deb",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64", "arm64"],
+    "gpg": {
+      "url": "https://couchdb.apache.org/repo/keys.asc",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/couchdb.gpg"
+    }
+  },
+  {
+    "id": "brave-browser",
+    "name": "Brave Browser",
+    "category": "Browsers",
+    "homepage": "https://brave.com/linux/",
+    "description": "Privacy-focused Chromium-based browser with Shields — built-in ad and tracker blocking, fingerprinting protection, and upgrades insecure connections automatically. No usage telemetry by default. amd64 only.",
+    "supports": {
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
+    },
+    "uri": "https://brave-browser-apt-release.s3.brave.com/",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64"],
+    "gpg": {
+      "url": "https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg",
+      "fingerprint": "VERIFY",
+      "keyring": "/etc/apt/keyrings/brave-browser-archive-keyring.gpg"
+    }
+  },
+  {
     "id": "docker-ce",
     "name": "Docker CE",
     "category": "Dev tools",
     "homepage": "https://docs.docker.com/engine/install/",
-    "description": "Docker Community Edition container runtime and tooling.",
+    "description": "Docker Community Edition container runtime and tooling — provides docker-ce, docker-ce-cli, containerd.io, docker-buildx-plugin, and docker-compose-plugin. The repo URI and GPG key URL both require {distro} substitution at setup time.",
     "supports": {
-      "debian": ["trixie","bookworm","bullseye"],
-      "ubuntu": ["noble","jammy","focal"]
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
     },
     "uri": "https://download.docker.com/linux/{distro}",
     "suite": "{codename}",
     "components": ["stable"],
-    "architectures": ["amd64","arm64","armhf"],
+    "architectures": ["amd64", "arm64", "armhf"],
     "gpg": {
       "url": "https://download.docker.com/linux/{distro}/gpg",
       "fingerprint": "9DC858229FC7DD38854AE2D88D81803C0EBFCD88",
@@ -20,43 +99,62 @@
     }
   },
   {
-    "id": "nodesource",
-    "name": "NodeSource Node.js",
-    "category": "Dev tools",
-    "homepage": "https://github.com/nodesource/distributions",
-    "description": "Node.js LTS builds from NodeSource.",
+    "id": "element-desktop",
+    "name": "Element Desktop",
+    "category": "Communication",
+    "homepage": "https://element.io/download",
+    "description": "Element Matrix client — open-source, end-to-end encrypted messaging and collaboration built on the decentralised Matrix protocol. Supports direct messages, group rooms, voice and video calls, and bridges to Slack, IRC, and other networks. The default suite name is intentional; this repo is distro-agnostic.",
     "supports": {
-      "debian": ["trixie","bookworm","bullseye"],
-      "ubuntu": ["noble","jammy","focal"]
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
     },
-    "uri": "https://deb.nodesource.com/node_lts.x",
-    "suite": "nodistro",
+    "uri": "https://packages.element.io/debian/",
+    "suite": "default",
     "components": ["main"],
-    "architectures": ["amd64","arm64"],
+    "architectures": ["amd64", "arm64"],
     "gpg": {
-      "url": "https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key",
-      "fingerprint": "6F71F525282841EEDAF851B42F59B5F99B1BE0B4",
-      "keyring": "/etc/apt/keyrings/nodesource.gpg"
+      "url": "https://packages.element.io/debian/element-io-archive-keyring.gpg",
+      "fingerprint": "VERIFY",
+      "keyring": "/etc/apt/keyrings/element-io-archive-keyring.gpg"
     }
   },
   {
-    "id": "vscode",
-    "name": "Microsoft VS Code",
-    "category": "Dev tools",
-    "homepage": "https://code.visualstudio.com/",
-    "description": "Visual Studio Code editor.",
+    "id": "elasticsearch",
+    "name": "Elasticsearch",
+    "category": "Databases",
+    "homepage": "https://www.elastic.co/",
+    "description": "Elasticsearch distributed search and analytics engine — the indexing and query core of the Elastic Stack (ELK). Offers full-text search, structured queries, aggregations, and vector search. This repo also hosts Kibana and Logstash; all three share the same URI and GPG key.",
     "supports": {
-      "debian": ["trixie","bookworm","bullseye"],
-      "ubuntu": ["noble","jammy","focal"]
+      "debian": ["bookworm", "bullseye"],
+      "ubuntu": ["jammy", "focal"]
     },
-    "uri": "https://packages.microsoft.com/repos/code",
+    "uri": "https://artifacts.elastic.co/packages/8.x/apt",
     "suite": "stable",
     "components": ["main"],
-    "architectures": ["amd64","arm64"],
+    "architectures": ["amd64", "arm64"],
     "gpg": {
-      "url": "https://packages.microsoft.com/keys/microsoft.asc",
-      "fingerprint": "BC528686B50D79E339D3721CEB3E94ADBE1229CF",
-      "keyring": "/etc/apt/keyrings/packages.microsoft.gpg"
+      "url": "https://artifacts.elastic.co/GPG-KEY-elasticsearch",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/elastic.gpg"
+    }
+  },
+  {
+    "id": "firefox-mozillateam",
+    "name": "Firefox (Mozilla Team PPA)",
+    "category": "Browsers",
+    "homepage": "https://launchpad.net/~mozillateam/+archive/ubuntu/ppa",
+    "description": "Mozilla Firefox maintained as a native .deb package by the Ubuntu Mozilla Team — an alternative to Ubuntu's default Snap-packaged Firefox. Recommended for users who prefer APT-managed updates and tighter system integration. Ubuntu only.",
+    "supports": {
+      "ubuntu": ["noble", "jammy", "focal"]
+    },
+    "uri": "https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu",
+    "suite": "{codename}",
+    "components": ["main"],
+    "architectures": ["amd64", "arm64"],
+    "gpg": {
+      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x0AB215679C571D1C8325275B9BDB3D89CE49EC21",
+      "fingerprint": "0AB215679C571D1C8325275B9BDB3D89CE49EC21",
+      "keyring": "/etc/apt/keyrings/firefox.gpg"
     }
   },
   {
@@ -64,15 +162,15 @@
     "name": "GitHub CLI",
     "category": "Dev tools",
     "homepage": "https://github.com/cli/cli",
-    "description": "GitHub command-line client.",
+    "description": "GitHub official command-line client (gh) — create and manage pull requests, issues, repositories, Actions workflows, releases, and gists directly from the terminal without leaving your development environment.",
     "supports": {
-      "debian": ["trixie","bookworm","bullseye"],
-      "ubuntu": ["noble","jammy","focal"]
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
     },
     "uri": "https://cli.github.com/packages",
     "suite": "stable",
     "components": ["main"],
-    "architectures": ["amd64","arm64"],
+    "architectures": ["amd64", "arm64"],
     "gpg": {
       "url": "https://cli.github.com/packages/githubcli-archive-keyring.gpg",
       "fingerprint": "2C6106201985B60E6C7AC87323F3D4EA75716059",
@@ -80,54 +178,14 @@
     }
   },
   {
-    "id": "hashicorp",
-    "name": "HashiCorp",
-    "category": "Dev tools",
-    "homepage": "https://developer.hashicorp.com/",
-    "description": "Terraform, Vault, Consul and related tools.",
-    "supports": {
-      "debian": ["trixie","bookworm","bullseye"],
-      "ubuntu": ["noble","jammy","focal"]
-    },
-    "uri": "https://apt.releases.hashicorp.com",
-    "suite": "{codename}",
-    "components": ["main"],
-    "architectures": ["amd64","arm64"],
-    "gpg": {
-      "url": "https://apt.releases.hashicorp.com/gpg",
-      "fingerprint": "798AEC654E5C15428C8E42EEAA16FCBCA621E701",
-      "keyring": "/etc/apt/keyrings/hashicorp.gpg"
-    }
-  },
-  {
-    "id": "postgresql",
-    "name": "PostgreSQL",
-    "category": "Databases",
-    "homepage": "https://www.postgresql.org/",
-    "description": "Official PostgreSQL apt repository.",
-    "supports": {
-      "debian": ["trixie","bookworm","bullseye"],
-      "ubuntu": ["noble","jammy","focal"]
-    },
-    "uri": "https://apt.postgresql.org/pub/repos/apt",
-    "suite": "{codename}-pgdg",
-    "components": ["main"],
-    "architectures": ["amd64","arm64"],
-    "gpg": {
-      "url": "https://www.postgresql.org/media/keys/ACCC4CF8.asc",
-      "fingerprint": "B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8",
-      "keyring": "/etc/apt/keyrings/postgresql.gpg"
-    }
-  },
-  {
     "id": "google-chrome",
     "name": "Google Chrome",
     "category": "Browsers",
     "homepage": "https://www.google.com/chrome/",
-    "description": "Google Chrome browser.",
+    "description": "Google Chrome browser — Chromium-based with Google account sync, Widevine DRM support, and the full Google services stack. The repo also hosts google-chrome-beta and google-chrome-unstable. amd64 only.",
     "supports": {
-      "debian": ["trixie","bookworm","bullseye"],
-      "ubuntu": ["noble","jammy","focal"]
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
     },
     "uri": "https://dl.google.com/linux/chrome/deb",
     "suite": "stable",
@@ -140,59 +198,19 @@
     }
   },
   {
-    "id": "brave",
-    "name": "Brave Browser",
-    "category": "Browsers",
-    "homepage": "https://brave.com/",
-    "description": "Privacy-focused web browser.",
-    "supports": {
-      "debian": ["trixie","bookworm","bullseye"],
-      "ubuntu": ["noble","jammy","focal"]
-    },
-    "uri": "https://brave-browser-apt-release.s3.brave.com",
-    "suite": "stable",
-    "components": ["main"],
-    "architectures": ["amd64"],
-    "gpg": {
-      "url": "https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg",
-      "fingerprint": "D558B93F83B7B618B8BF400A0B79A0B2C3A8F13F",
-      "keyring": "/etc/apt/keyrings/brave-browser.gpg"
-    }
-  },
-  {
-    "id": "tailscale",
-    "name": "Tailscale",
-    "category": "Networking",
-    "homepage": "https://tailscale.com/",
-    "description": "Zero-config VPN based on WireGuard.",
-    "supports": {
-      "debian": ["trixie","bookworm","bullseye"],
-      "ubuntu": ["noble","jammy","focal"]
-    },
-    "uri": "https://pkgs.tailscale.com/stable/{distro}",
-    "suite": "{codename}",
-    "components": ["main"],
-    "architectures": ["amd64","arm64","armhf"],
-    "gpg": {
-      "url": "https://pkgs.tailscale.com/stable/{distro}/{codename}.noarmor.gpg",
-      "fingerprint": "2596A99EAAB33821893C0A79458CA832957F5868",
-      "keyring": "/etc/apt/keyrings/tailscale.gpg"
-    }
-  },
-  {
     "id": "grafana",
     "name": "Grafana",
     "category": "Monitoring",
     "homepage": "https://grafana.com/",
-    "description": "Metrics dashboards and observability platform.",
+    "description": "Grafana open-source observability and dashboarding platform — build, share, and alert on metrics, logs, and traces from Prometheus, Loki, Elasticsearch, InfluxDB, and dozens of other data sources. This repo also hosts Prometheus and Loki packages.",
     "supports": {
-      "debian": ["trixie","bookworm","bullseye"],
-      "ubuntu": ["noble","jammy","focal"]
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
     },
     "uri": "https://apt.grafana.com",
     "suite": "stable",
     "components": ["main"],
-    "architectures": ["amd64","arm64"],
+    "architectures": ["amd64", "arm64"],
     "gpg": {
       "url": "https://apt.grafana.com/gpg.key",
       "fingerprint": "963FA27710458545BE8E7C4F4A0CF052D6A9C5C2",
@@ -200,145 +218,23 @@
     }
   },
   {
-    "id": "microsoft-edge",
-    "name": "Microsoft Edge",
-    "category": "Browsers",
-    "homepage": "https://www.microsoft.com/edge",
-    "description": "Microsoft Edge browser.",
-    "supports": {
-      "debian": ["trixie","bookworm","bullseye"],
-      "ubuntu": ["noble","jammy","focal"]
-    },
-    "uri": "https://packages.microsoft.com/repos/edge",
-    "suite": "stable",
-    "components": ["main"],
-    "architectures": ["amd64"],
-    "gpg": {
-      "url": "https://packages.microsoft.com/keys/microsoft.asc",
-      "fingerprint": "BC528686B50D79E339D3721CEB3E94ADBE1229CF",
-      "keyring": "/etc/apt/keyrings/microsoft-edge.gpg"
-    }
-  },
-  {
-    "id": "vivaldi",
-    "name": "Vivaldi Browser",
-    "category": "Browsers",
-    "homepage": "https://vivaldi.com/",
-    "description": "Vivaldi web browser.",
-    "supports": {
-      "debian": ["bookworm","bullseye"],
-      "ubuntu": ["jammy","focal"]
-    },
-    "uri": "https://repo.vivaldi.com/stable/deb",
-    "suite": "stable",
-    "components": ["main"],
-    "architectures": ["amd64"],
-    "gpg": {
-      "url": "https://repo.vivaldi.com/stable/linux_signing_key.pub",
-      "fingerprint": "",
-      "keyring": "/etc/apt/keyrings/vivaldi.gpg"
-    }
-  },
-  {
-    "id": "opera",
-    "name": "Opera Browser",
-    "category": "Browsers",
-    "homepage": "https://www.opera.com/",
-    "description": "Opera web browser.",
-    "supports": {
-      "debian": ["bookworm","bullseye"],
-      "ubuntu": ["jammy","focal"]
-    },
-    "uri": "https://deb.opera.com/opera-stable",
-    "suite": "stable",
-    "components": ["non-free"],
-    "architectures": ["amd64"],
-    "gpg": {
-      "url": "https://deb.opera.com/archive.key",
-      "fingerprint": "",
-      "keyring": "/etc/apt/keyrings/opera.gpg"
-    }
-  },
-
-  {
-    "id": "slack",
-    "name": "Slack",
-    "category": "Desktop",
-    "homepage": "https://slack.com/",
-    "description": "Slack desktop client.",
-    "supports": {
-      "debian": ["bookworm","bullseye"],
-      "ubuntu": ["jammy","focal"]
-    },
-    "uri": "https://packagecloud.io/slacktechnologies/slack/debian",
-    "suite": "stable",
-    "components": ["main"],
-    "architectures": ["amd64"],
-    "gpg": {
-      "url": "https://packagecloud.io/slacktechnologies/slack/gpgkey",
-      "fingerprint": "",
-      "keyring": "/etc/apt/keyrings/slack.gpg"
-    }
-  },
-  {
-    "id": "signal-desktop",
-    "name": "Signal Desktop",
-    "category": "Desktop",
-    "homepage": "https://signal.org/",
-    "description": "Private messaging desktop client.",
-    "supports": {
-      "debian": ["bookworm","bullseye"],
-      "ubuntu": ["jammy","focal"]
-    },
-    "uri": "https://updates.signal.org/desktop/apt",
-    "suite": "xenial",
-    "components": ["main"],
-    "architectures": ["amd64"],
-    "gpg": {
-      "url": "https://updates.signal.org/desktop/apt/keys.asc",
-      "fingerprint": "DBA36B5181D0C816F630E889D980A17457F6FB06",
-      "keyring": "/etc/apt/keyrings/signal.gpg"
-    }
-  },
-  {
-    "id": "spotify",
-    "name": "Spotify",
-    "category": "Desktop",
-    "homepage": "https://www.spotify.com/",
-    "description": "Spotify music streaming client.",
-    "supports": {
-      "debian": ["bookworm","bullseye"],
-      "ubuntu": ["jammy","focal"]
-    },
-    "uri": "https://repository.spotify.com",
-    "suite": "stable",
-    "components": ["non-free"],
-    "architectures": ["amd64"],
-    "gpg": {
-      "url": "https://download.spotify.com/debian/pubkey.gpg",
-      "fingerprint": "",
-      "keyring": "/etc/apt/keyrings/spotify.gpg"
-    }
-  },
-
-  {
-    "id": "kubernetes",
-    "name": "Kubernetes",
+    "id": "hashicorp",
+    "name": "HashiCorp",
     "category": "Dev tools",
-    "homepage": "https://kubernetes.io/",
-    "description": "Kubernetes tools (kubectl, kubeadm, kubelet).",
+    "homepage": "https://developer.hashicorp.com/",
+    "description": "HashiCorp infrastructure tooling — a single repo providing Terraform (infrastructure-as-code), Vault (secrets management), Consul (service mesh and discovery), Nomad (workload orchestration), and Packer (image building).",
     "supports": {
-      "debian": ["bookworm","bullseye"],
-      "ubuntu": ["jammy","focal"]
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
     },
-    "uri": "https://pkgs.k8s.io/core:/stable:/v1.32/deb",
-    "suite": "/",
-    "components": [],
-    "architectures": ["amd64","arm64"],
+    "uri": "https://apt.releases.hashicorp.com",
+    "suite": "{codename}",
+    "components": ["main"],
+    "architectures": ["amd64", "arm64"],
     "gpg": {
-      "url": "https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key",
-      "fingerprint": "",
-      "keyring": "/etc/apt/keyrings/kubernetes.gpg"
+      "url": "https://apt.releases.hashicorp.com/gpg",
+      "fingerprint": "798AEC654E5C15428C8E42EEAA16FCBCA621E701",
+      "keyring": "/etc/apt/keyrings/hashicorp.gpg"
     }
   },
   {
@@ -346,10 +242,10 @@
     "name": "Helm",
     "category": "Dev tools",
     "homepage": "https://helm.sh/",
-    "description": "Kubernetes package manager.",
+    "description": "Helm Kubernetes package manager — install, upgrade, roll back, and manage applications on Kubernetes clusters using versioned, templated chart packages. The all suite name is intentional; this repo is distro-agnostic. amd64 only.",
     "supports": {
-      "debian": ["bookworm","bullseye"],
-      "ubuntu": ["jammy","focal"]
+      "debian": ["bookworm", "bullseye"],
+      "ubuntu": ["jammy", "focal"]
     },
     "uri": "https://baltocdn.com/helm/stable/debian",
     "suite": "all",
@@ -362,98 +258,19 @@
     }
   },
   {
-    "id": "wazuh",
-    "name": "Wazuh",
-    "category": "Security",
-    "homepage": "https://wazuh.com/",
-    "description": "Open-source SIEM and XDR platform.",
-    "supports": {
-      "debian": ["bookworm","bullseye"],
-      "ubuntu": ["jammy","focal"]
-    },
-    "uri": "https://packages.wazuh.com/4.x/apt",
-    "suite": "stable",
-    "components": ["main"],
-    "architectures": ["amd64","arm64"],
-    "gpg": {
-      "url": "https://packages.wazuh.com/key/GPG-KEY-WAZUH",
-      "fingerprint": "0DCFCA5547B19D2A6099506096B3EE5F29111145",
-      "keyring": "/etc/apt/keyrings/wazuh.gpg"
-    }
-  },
-  {
-    "id": "suricata",
-    "name": "Suricata",
-    "category": "Security",
-    "homepage": "https://suricata.io/",
-    "description": "Network IDS/IPS engine.",
-    "supports": {
-      "ubuntu": ["jammy","focal"]
-    },
-    "uri": "https://ppa.launchpadcontent.net/oisf/suricata-stable/ubuntu",
-    "suite": "{codename}",
-    "components": ["main"],
-    "architectures": ["amd64"],
-    "gpg": {
-      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x582E3BFF",
-      "fingerprint": "",
-      "keyring": "/etc/apt/keyrings/suricata.gpg"
-    }
-  },
-  {
-    "id": "mariadb",
-    "name": "MariaDB",
-    "category": "Databases",
-    "homepage": "https://mariadb.org/",
-    "description": "MariaDB database server.",
-    "supports": {
-      "debian": ["bookworm","bullseye"],
-      "ubuntu": ["jammy","focal"]
-    },
-    "uri": "https://mirror.mariadb.org/repo/10.11/{distro}",
-    "suite": "{codename}",
-    "components": ["main"],
-    "architectures": ["amd64","arm64"],
-    "gpg": {
-      "url": "https://mariadb.org/mariadb_release_signing_key.asc",
-      "fingerprint": "",
-      "keyring": "/etc/apt/keyrings/mariadb.gpg"
-    }
-  },
-  {
-    "id": "redis",
-    "name": "Redis",
-    "category": "Databases",
-    "homepage": "https://redis.io/",
-    "description": "Redis in-memory data store.",
-    "supports": {
-      "debian": ["bookworm","bullseye"],
-      "ubuntu": ["jammy","focal"]
-    },
-    "uri": "https://packages.redis.io/deb",
-    "suite": "{codename}",
-    "components": ["main"],
-    "architectures": ["amd64","arm64"],
-    "gpg": {
-      "url": "https://packages.redis.io/gpg",
-      "fingerprint": "",
-      "keyring": "/etc/apt/keyrings/redis.gpg"
-    }
-  },
-  {
     "id": "jenkins",
     "name": "Jenkins",
     "category": "Dev tools",
     "homepage": "https://www.jenkins.io/",
-    "description": "CI/CD automation server.",
+    "description": "Jenkins CI/CD automation server — open-source, plugin-driven build, test, and deployment pipeline engine with a large ecosystem of 1,800+ plugins. This repo tracks the Long-Term Support (LTS) release channel.",
     "supports": {
-      "debian": ["bookworm","bullseye"],
-      "ubuntu": ["jammy","focal"]
+      "debian": ["bookworm", "bullseye"],
+      "ubuntu": ["jammy", "focal"]
     },
     "uri": "https://pkg.jenkins.io/debian-stable",
     "suite": "binary/",
     "components": ["main"],
-    "architectures": ["amd64","arm64"],
+    "architectures": ["amd64", "arm64"],
     "gpg": {
       "url": "https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key",
       "fingerprint": "",
@@ -461,42 +278,43 @@
     }
   },
   {
-    "id": "ansible",
-    "name": "Ansible PPA",
-    "category": "Dev tools",
-    "homepage": "https://launchpad.net/~ansible/+archive/ubuntu/ansible",
-    "description": "Ansible automation tools.",
-    "supports": {
-      "ubuntu": ["noble","jammy","focal"]
-    },
-    "uri": "https://ppa.launchpadcontent.net/ansible/ansible/ubuntu",
-    "suite": "{codename}",
-    "components": ["main"],
-    "architectures": ["amd64","arm64"],
-    "gpg": {
-      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x93C4A3FD7BB9C367",
-      "fingerprint": "",
-      "keyring": "/etc/apt/keyrings/ansible.gpg"
-    }
-  },
-  {
-    "id": "elasticsearch",
-    "name": "Elasticsearch",
+    "id": "kibana",
+    "name": "Kibana",
     "category": "Databases",
-    "homepage": "https://www.elastic.co/",
-    "description": "Search and analytics engine.",
+    "homepage": "https://www.elastic.co/kibana/",
+    "description": "Kibana — the visualisation and management UI for the Elastic Stack. Provides dashboards, the Discover explorer, Maps, Canvas, and cluster management for Elasticsearch. Shares the same repo URI and GPG key as the elasticsearch and logstash entries.",
     "supports": {
-      "debian": ["bookworm","bullseye"],
-      "ubuntu": ["jammy","focal"]
+      "debian": ["bookworm", "bullseye"],
+      "ubuntu": ["jammy", "focal"]
     },
     "uri": "https://artifacts.elastic.co/packages/8.x/apt",
     "suite": "stable",
     "components": ["main"],
-    "architectures": ["amd64","arm64"],
+    "architectures": ["amd64", "arm64"],
     "gpg": {
       "url": "https://artifacts.elastic.co/GPG-KEY-elasticsearch",
       "fingerprint": "",
       "keyring": "/etc/apt/keyrings/elastic.gpg"
+    }
+  },
+  {
+    "id": "kubernetes",
+    "name": "Kubernetes",
+    "category": "Dev tools",
+    "homepage": "https://kubernetes.io/",
+    "description": "Kubernetes cluster tooling — provides kubectl (cluster CLI), kubeadm (cluster bootstrapper), and kubelet (node agent). Pinned to the v1.32 stable channel; update the URI minor version segment to track a newer release.",
+    "supports": {
+      "debian": ["bookworm", "bullseye"],
+      "ubuntu": ["jammy", "focal"]
+    },
+    "uri": "https://pkgs.k8s.io/core:/stable:/v1.32/deb",
+    "suite": "/",
+    "components": [],
+    "architectures": ["amd64", "arm64"],
+    "gpg": {
+      "url": "https://pkgs.k8s.io/core:/stable:/v1.32/deb/Release.key",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/kubernetes.gpg"
     }
   },
   {
@@ -504,15 +322,15 @@
     "name": "Logstash",
     "category": "Databases",
     "homepage": "https://www.elastic.co/logstash/",
-    "description": "Data processing pipeline for Elasticsearch.",
+    "description": "Logstash server-side data ingestion and transformation pipeline — collects events from dozens of input plugins, applies filter transforms (grok, mutate, GeoIP), and ships output to Elasticsearch or other destinations. Shares the same repo URI and GPG key as the elasticsearch and kibana entries.",
     "supports": {
-      "debian": ["bookworm","bullseye"],
-      "ubuntu": ["jammy","focal"]
+      "debian": ["bookworm", "bullseye"],
+      "ubuntu": ["jammy", "focal"]
     },
     "uri": "https://artifacts.elastic.co/packages/8.x/apt",
     "suite": "stable",
     "components": ["main"],
-    "architectures": ["amd64","arm64"],
+    "architectures": ["amd64", "arm64"],
     "gpg": {
       "url": "https://artifacts.elastic.co/GPG-KEY-elasticsearch",
       "fingerprint": "",
@@ -520,43 +338,63 @@
     }
   },
   {
-    "id": "kibana",
-    "name": "Kibana",
+    "id": "mariadb",
+    "name": "MariaDB",
     "category": "Databases",
-    "homepage": "https://www.elastic.co/kibana/",
-    "description": "Visualization layer for Elasticsearch.",
+    "homepage": "https://mariadb.org/",
+    "description": "MariaDB relational database server — community-developed, MySQL-compatible fork with additional storage engines, JSON functions, and Galera cluster support for synchronous multi-master replication. Pinned to the 10.11 LTS series; update the URI to track a different major version.",
     "supports": {
-      "debian": ["bookworm","bullseye"],
-      "ubuntu": ["jammy","focal"]
+      "debian": ["bookworm", "bullseye"],
+      "ubuntu": ["jammy", "focal"]
     },
-    "uri": "https://artifacts.elastic.co/packages/8.x/apt",
-    "suite": "stable",
+    "uri": "https://mirror.mariadb.org/repo/10.11/{distro}",
+    "suite": "{codename}",
     "components": ["main"],
-    "architectures": ["amd64","arm64"],
+    "architectures": ["amd64", "arm64"],
     "gpg": {
-      "url": "https://artifacts.elastic.co/GPG-KEY-elasticsearch",
+      "url": "https://mariadb.org/mariadb_release_signing_key.asc",
       "fingerprint": "",
-      "keyring": "/etc/apt/keyrings/elastic.gpg"
+      "keyring": "/etc/apt/keyrings/mariadb.gpg"
     }
   },
   {
-    "id": "prometheus",
-    "name": "Prometheus",
-    "category": "Monitoring",
-    "homepage": "https://prometheus.io/",
-    "description": "Monitoring and alerting toolkit.",
+    "id": "microsoft-edge",
+    "name": "Microsoft Edge",
+    "category": "Browsers",
+    "homepage": "https://www.microsoft.com/en-us/edge/download",
+    "description": "Microsoft Edge browser — Chromium-based with Microsoft account sync, built-in Copilot AI, Immersive Reader, and Collections. Shares the same keyring as the vscode entry. Packages available: microsoft-edge-stable, microsoft-edge-beta, microsoft-edge-dev. amd64 only.",
     "supports": {
-      "debian": ["bookworm","bullseye"],
-      "ubuntu": ["jammy","focal"]
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
     },
-    "uri": "https://packages.grafana.com/oss/deb",
+    "uri": "https://packages.microsoft.com/repos/edge",
     "suite": "stable",
     "components": ["main"],
-    "architectures": ["amd64","arm64"],
+    "architectures": ["amd64"],
     "gpg": {
-      "url": "https://packages.grafana.com/gpg.key",
-      "fingerprint": "",
-      "keyring": "/etc/apt/keyrings/grafana-prometheus.gpg"
+      "url": "https://packages.microsoft.com/keys/microsoft.asc",
+      "fingerprint": "BC528686B50D79E339D3721CEB3E94ADBE1229CF",
+      "keyring": "/etc/apt/keyrings/packages.microsoft.gpg"
+    }
+  },
+  {
+    "id": "vscode",
+    "name": "Microsoft VS Code",
+    "category": "Dev tools",
+    "homepage": "https://code.visualstudio.com/",
+    "description": "Visual Studio Code source-code editor — built-in Git integration, IntelliSense, integrated debugger, and a vast extension marketplace. Shares the same keyring as the microsoft-edge entry.",
+    "supports": {
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
+    },
+    "uri": "https://packages.microsoft.com/repos/code",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64", "arm64"],
+    "gpg": {
+      "url": "https://packages.microsoft.com/keys/microsoft.asc",
+      "fingerprint": "BC528686B50D79E339D3721CEB3E94ADBE1229CF",
+      "keyring": "/etc/apt/keyrings/packages.microsoft.gpg"
     }
   },
   {
@@ -564,10 +402,10 @@
     "name": "MongoDB",
     "category": "Databases",
     "homepage": "https://www.mongodb.com/",
-    "description": "NoSQL document database.",
+    "description": "MongoDB document-oriented NoSQL database — flexible BSON storage with a rich aggregation pipeline, change streams, transactions, and Atlas cloud integration. Pinned to the 7.0 series; update the URI suite segment to track a newer major version. amd64 only.",
     "supports": {
-      "debian": ["bookworm","bullseye"],
-      "ubuntu": ["jammy","focal"]
+      "debian": ["bookworm", "bullseye"],
+      "ubuntu": ["jammy", "focal"]
     },
     "uri": "https://repo.mongodb.org/apt/ubuntu",
     "suite": "{codename}/mongodb-org/7.0",
@@ -580,63 +418,83 @@
     }
   },
   {
-    "id": "couchdb",
-    "name": "Apache CouchDB",
-    "category": "Databases",
-    "homepage": "https://couchdb.apache.org/",
-    "description": "Document-oriented NoSQL database.",
+    "id": "mozilla-thunderbird",
+    "name": "Mozilla Thunderbird",
+    "category": "Communication",
+    "homepage": "https://www.thunderbird.net/en-US/",
+    "description": "Mozilla Thunderbird email, calendar, and contacts client — supports IMAP, POP3, SMTP, OpenPGP encryption, CardDAV/CalDAV, and Matrix chat. This repo provides the latest upstream releases ahead of Debian and Ubuntu's packaged versions, and shares the Mozilla keyring with the Firefox entries.",
     "supports": {
-      "debian": ["bookworm","bullseye"],
-      "ubuntu": ["jammy","focal"]
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
     },
-    "uri": "https://apache.jfrog.io/artifactory/couchdb-deb",
-    "suite": "stable",
+    "uri": "https://packages.mozilla.org/apt",
+    "suite": "mozilla",
     "components": ["main"],
-    "architectures": ["amd64","arm64"],
+    "architectures": ["amd64", "arm64"],
     "gpg": {
-      "url": "https://couchdb.apache.org/repo/keys.asc",
-      "fingerprint": "",
-      "keyring": "/etc/apt/keyrings/couchdb.gpg"
+      "url": "https://packages.mozilla.org/apt/repo-signing-key.gpg",
+      "fingerprint": "35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3",
+      "keyring": "/etc/apt/keyrings/mozilla.gpg"
     }
   },
   {
-    "id": "timescaledb",
-    "name": "TimescaleDB",
-    "category": "Databases",
-    "homepage": "https://www.timescale.com/",
-    "description": "Time-series extension for PostgreSQL.",
+    "id": "mullvad-browser",
+    "name": "Mullvad Browser",
+    "category": "Security / privacy",
+    "homepage": "https://mullvad.net/en/download/browser/linux",
+    "description": "Mullvad Browser — privacy browser developed jointly by Mullvad and the Tor Project. Applies Tor Browser-level fingerprinting protection and anti-tracking defaults, designed for use with a trusted VPN rather than the Tor network. Hosted in the same repo as Mullvad VPN; shares the same URI and GPG key.",
     "supports": {
-      "debian": ["bookworm","bullseye"],
-      "ubuntu": ["jammy","focal"]
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
     },
-    "uri": "https://packagecloud.io/timescale/timescaledb/debian",
+    "uri": "https://repository.mullvad.net/deb/stable",
     "suite": "stable",
     "components": ["main"],
-    "architectures": ["amd64","arm64"],
+    "architectures": ["amd64", "arm64"],
     "gpg": {
-      "url": "https://packagecloud.io/timescale/timescaledb/gpgkey",
-      "fingerprint": "",
-      "keyring": "/etc/apt/keyrings/timescaledb.gpg"
+      "url": "https://repository.mullvad.net/deb/mullvad-keyring.asc",
+      "fingerprint": "VERIFY",
+      "keyring": "/etc/apt/keyrings/mullvad-keyring.asc"
     }
   },
   {
-    "id": "wireguard",
-    "name": "WireGuard Tools",
-    "category": "Networking",
-    "homepage": "https://www.wireguard.com/",
-    "description": "Modern VPN protocol tools.",
+    "id": "mullvad-vpn",
+    "name": "Mullvad VPN",
+    "category": "Security / privacy",
+    "homepage": "https://mullvad.net/en/help/install-mullvad-app-linux",
+    "description": "Mullvad privacy VPN client — WireGuard and OpenVPN support, automatic kill switch, DNS leak protection, and account-number-only authentication requiring no email or personal data. This repo also hosts the mullvad-browser package.",
     "supports": {
-      "debian": ["bookworm","bullseye"],
-      "ubuntu": ["jammy","focal"]
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
     },
-    "uri": "https://ppa.launchpadcontent.net/wireguard/wireguard/ubuntu",
-    "suite": "{codename}",
+    "uri": "https://repository.mullvad.net/deb/stable",
+    "suite": "stable",
     "components": ["main"],
-    "architectures": ["amd64","arm64"],
+    "architectures": ["amd64", "arm64"],
     "gpg": {
-      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x04EE7237B7D453EC",
-      "fingerprint": "",
-      "keyring": "/etc/apt/keyrings/wireguard.gpg"
+      "url": "https://repository.mullvad.net/deb/mullvad-keyring.asc",
+      "fingerprint": "VERIFY",
+      "keyring": "/etc/apt/keyrings/mullvad-keyring.asc"
+    }
+  },
+  {
+    "id": "nodesource",
+    "name": "NodeSource Node.js",
+    "category": "Dev tools",
+    "homepage": "https://github.com/nodesource/distributions",
+    "description": "NodeSource Node.js LTS builds with npm included — always-current Node.js LTS release, updated ahead of distro-packaged versions. The nodistro suite name is intentional and works universally across all supported Debian and Ubuntu releases.",
+    "supports": {
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
+    },
+    "uri": "https://deb.nodesource.com/node_lts.x",
+    "suite": "nodistro",
+    "components": ["main"],
+    "architectures": ["amd64", "arm64"],
+    "gpg": {
+      "url": "https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key",
+      "fingerprint": "6F71F525282841EEDAF851B42F59B5F99B1BE0B4",
+      "keyring": "/etc/apt/keyrings/nodesource.gpg"
     }
   },
   {
@@ -644,9 +502,9 @@
     "name": "OpenVPN 3",
     "category": "Networking",
     "homepage": "https://openvpn.net/",
-    "description": "Next-generation OpenVPN client.",
+    "description": "OpenVPN 3 Linux client — next-generation OpenVPN rewritten in C++ with a D-Bus interface, per-user VPN sessions without requiring root, and support for importing and connecting to .ovpn profiles. Ubuntu only.",
     "supports": {
-      "ubuntu": ["jammy","focal"]
+      "ubuntu": ["jammy", "focal"]
     },
     "uri": "https://packages.openvpn.net/openvpn3/debian",
     "suite": "stable",
@@ -659,42 +517,282 @@
     }
   },
   {
-    "id": "firefox-mozillateam",
-    "name": "Firefox (Mozilla Team PPA)",
+    "id": "opera",
+    "name": "Opera",
     "category": "Browsers",
-    "homepage": "https://launchpad.net/~mozillateam/+archive/ubuntu/ppa",
-    "description": "Mozilla-maintained Firefox builds for Ubuntu (non-Snap packaging).",
+    "homepage": "https://www.opera.com/download",
+    "description": "Opera browser — Chromium-based with a built-in free VPN, ad blocker, battery saver, and Aria AI assistant. Hosted in the Vivaldi repository; shares the same URI and GPG key as the vivaldi entry. Install via opera-stable, opera-beta, or opera-developer.",
     "supports": {
-      "ubuntu": ["noble","jammy","focal"]
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
     },
-    "uri": "https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu",
-    "suite": "{codename}",
+    "uri": "https://repo.vivaldi.com/archive/deb",
+    "suite": "stable",
     "components": ["main"],
-    "architectures": ["amd64","arm64"],
+    "architectures": ["amd64", "arm64", "armhf"],
     "gpg": {
-      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x0AB215679C571D1C8325275B9BDB3D89CE49EC21",
-      "fingerprint": "0AB215679C571D1C8325275B9BDB3D89CE49EC21",
-      "keyring": "/etc/apt/keyrings/firefox.gpg"
+      "url": "https://repo.vivaldi.com/archive/linux_signing_key.pub",
+      "fingerprint": "VERIFY",
+      "keyring": "/etc/apt/keyrings/vivaldi.gpg"
     }
   },
   {
-    "id": "tor-browser",
-    "name": "Tor Browser",
-    "category": "Browsers",
-    "homepage": "https://www.torproject.org/",
-    "description": "Privacy-focused anonymizing browser.",
+    "id": "postgresql",
+    "name": "PostgreSQL",
+    "category": "Databases",
+    "homepage": "https://www.postgresql.org/",
+    "description": "Official PostgreSQL Global Development Group (PGDG) apt repository — provides current and legacy PostgreSQL server versions, pg_upgrade, PostGIS, and related extensions, typically ahead of distro-packaged versions.",
     "supports": {
-      "debian": ["bookworm","bullseye"],
-      "ubuntu": ["noble","jammy","focal"]
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
+    },
+    "uri": "https://apt.postgresql.org/pub/repos/apt",
+    "suite": "{codename}-pgdg",
+    "components": ["main"],
+    "architectures": ["amd64", "arm64"],
+    "gpg": {
+      "url": "https://www.postgresql.org/media/keys/ACCC4CF8.asc",
+      "fingerprint": "B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8",
+      "keyring": "/etc/apt/keyrings/postgresql.gpg"
+    }
+  },
+  {
+    "id": "prometheus",
+    "name": "Prometheus",
+    "category": "Monitoring",
+    "homepage": "https://prometheus.io/",
+    "description": "Prometheus monitoring and alerting toolkit — pull-based time-series metrics collection with a powerful query language (PromQL), built-in alerting rules, and native Grafana integration. Hosted in the Grafana apt repo; shares the same URI and GPG key as the grafana entry.",
+    "supports": {
+      "debian": ["bookworm", "bullseye"],
+      "ubuntu": ["jammy", "focal"]
+    },
+    "uri": "https://packages.grafana.com/oss/deb",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64", "arm64"],
+    "gpg": {
+      "url": "https://packages.grafana.com/gpg.key",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/grafana-prometheus.gpg"
+    }
+  },
+  {
+    "id": "redis",
+    "name": "Redis",
+    "category": "Databases",
+    "homepage": "https://redis.io/",
+    "description": "Redis in-memory data store — supports strings, hashes, lists, sets, sorted sets, streams, geospatial indexes, and pub/sub messaging. The official Redis repo provides current releases ahead of distro-packaged versions.",
+    "supports": {
+      "debian": ["bookworm", "bullseye"],
+      "ubuntu": ["jammy", "focal"]
+    },
+    "uri": "https://packages.redis.io/deb",
+    "suite": "{codename}",
+    "components": ["main"],
+    "architectures": ["amd64", "arm64"],
+    "gpg": {
+      "url": "https://packages.redis.io/gpg",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/redis.gpg"
+    }
+  },
+  {
+    "id": "signal-desktop",
+    "name": "Signal Desktop",
+    "category": "Desktop",
+    "homepage": "https://signal.org/",
+    "description": "Signal private messenger desktop client — end-to-end encrypted messages, voice calls, and video calls synced with your Signal mobile app via the Signal Protocol. The xenial suite name is intentional; Signal uses a single universal repo across all supported Debian and Ubuntu releases. amd64 only.",
+    "supports": {
+      "debian": ["bookworm", "bullseye"],
+      "ubuntu": ["jammy", "focal"]
+    },
+    "uri": "https://updates.signal.org/desktop/apt",
+    "suite": "xenial",
+    "components": ["main"],
+    "architectures": ["amd64"],
+    "gpg": {
+      "url": "https://updates.signal.org/desktop/apt/keys.asc",
+      "fingerprint": "DBA36B5181D0C816F630E889D980A17457F6FB06",
+      "keyring": "/etc/apt/keyrings/signal.gpg"
+    }
+  },
+  {
+    "id": "slack",
+    "name": "Slack",
+    "category": "Communication",
+    "homepage": "https://slack.com/downloads/linux",
+    "description": "Slack team messaging desktop client — channels, direct messages, huddles, workflow automation, and integrations with thousands of third-party services. Distributed via Packagecloud. The jessie suite name is intentional; Slack uses a single universal repo across all Debian and Ubuntu releases. amd64 only.",
+    "supports": {
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
+    },
+    "uri": "https://packagecloud.io/slacktechnologies/slack/debian/",
+    "suite": "jessie",
+    "components": ["main"],
+    "architectures": ["amd64"],
+    "gpg": {
+      "url": "https://packagecloud.io/slacktechnologies/slack/gpgkey",
+      "fingerprint": "VERIFY",
+      "keyring": "/etc/apt/keyrings/slacktechnologies-slack-archive-keyring.gpg"
+    }
+  },
+  {
+    "id": "spotify",
+    "name": "Spotify",
+    "category": "Desktop",
+    "homepage": "https://www.spotify.com/",
+    "description": "Spotify music and podcast streaming desktop client — full library playback, offline downloads (Premium), cross-device sync, and local file support. Provided as a non-free package. amd64 only.",
+    "supports": {
+      "debian": ["bookworm", "bullseye"],
+      "ubuntu": ["jammy", "focal"]
+    },
+    "uri": "https://repository.spotify.com",
+    "suite": "stable",
+    "components": ["non-free"],
+    "architectures": ["amd64"],
+    "gpg": {
+      "url": "https://download.spotify.com/debian/pubkey.gpg",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/spotify.gpg"
+    }
+  },
+  {
+    "id": "suricata",
+    "name": "Suricata",
+    "category": "Security",
+    "homepage": "https://suricata.io/",
+    "description": "Suricata network intrusion detection and prevention system (IDS/IPS) — deep packet inspection, protocol detection, TLS/HTTP analysis, file extraction, and Lua scripting. Provided via the OISF stable PPA. Ubuntu only.",
+    "supports": {
+      "ubuntu": ["jammy", "focal"]
+    },
+    "uri": "https://ppa.launchpadcontent.net/oisf/suricata-stable/ubuntu",
+    "suite": "{codename}",
+    "components": ["main"],
+    "architectures": ["amd64"],
+    "gpg": {
+      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x582E3BFF",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/suricata.gpg"
+    }
+  },
+  {
+    "id": "tailscale",
+    "name": "Tailscale",
+    "category": "Security / privacy",
+    "homepage": "https://tailscale.com/download/linux",
+    "description": "Tailscale zero-config WireGuard mesh VPN — every device gets a stable private Tailscale IP (100.x.x.x), encrypted peer-to-peer tunnels, and automatic NAT traversal with no open inbound ports required. The GPG key URL and repo URI are both per-distro and per-codename; substitute {distro} and {codename} at setup time.",
+    "supports": {
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
+    },
+    "uri": "https://pkgs.tailscale.com/stable/{distro}",
+    "suite": "{codename}",
+    "components": ["main"],
+    "architectures": ["amd64", "arm64", "armhf"],
+    "gpg": {
+      "url": "https://pkgs.tailscale.com/stable/{distro}/{codename}.noarmor.gpg",
+      "fingerprint": "2596A99EAAB33821893C0A79458CA832957F5868",
+      "keyring": "/etc/apt/keyrings/tailscale-archive-keyring.gpg"
+    }
+  },
+  {
+    "id": "timescaledb",
+    "name": "TimescaleDB",
+    "category": "Databases",
+    "homepage": "https://www.timescale.com/",
+    "description": "TimescaleDB time-series extension for PostgreSQL — automatic hypertable partitioning by time, native compression, continuous aggregates, and data tiering. Hosted via Packagecloud; requires a compatible PostgreSQL installation.",
+    "supports": {
+      "debian": ["bookworm", "bullseye"],
+      "ubuntu": ["jammy", "focal"]
+    },
+    "uri": "https://packagecloud.io/timescale/timescaledb/debian",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64", "arm64"],
+    "gpg": {
+      "url": "https://packagecloud.io/timescale/timescaledb/gpgkey",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/timescaledb.gpg"
+    }
+  },
+  {
+    "id": "tor-project",
+    "name": "Tor Project",
+    "category": "Browsers",
+    "homepage": "https://support.torproject.org/apt/tor-deb-repo/",
+    "description": "Official Tor Project apt repository — provides up-to-date tor daemon and deb.torproject.org-keyring packages, typically ahead of Debian's LTS-pinned versions. The suite uses the distro codename; substitute {codename} at setup time.",
+    "supports": {
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
     },
     "uri": "https://deb.torproject.org/torproject.org",
     "suite": "{codename}",
     "components": ["main"],
-    "architectures": ["amd64","arm64"],
+    "architectures": ["amd64", "arm64"],
     "gpg": {
       "url": "https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc",
       "fingerprint": "A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89",
-      "keyring": "/etc/apt/keyrings/tor.gpg"
+      "keyring": "/etc/apt/keyrings/deb.torproject.org-keyring.gpg"
+    }
+  },
+  {
+    "id": "vivaldi",
+    "name": "Vivaldi",
+    "category": "Browsers",
+    "homepage": "https://vivaldi.com/download/",
+    "description": "Vivaldi Chromium-based browser with advanced tab management (tab stacking and tiling), a built-in email client, RSS reader, calendar, notes, and extensive UI customisation. This repo also hosts Opera packages (opera-stable, opera-beta, opera-developer).",
+    "supports": {
+      "debian": ["trixie", "bookworm", "bullseye"],
+      "ubuntu": ["noble", "jammy", "focal"]
+    },
+    "uri": "https://repo.vivaldi.com/archive/deb",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64", "arm64", "armhf"],
+    "gpg": {
+      "url": "https://repo.vivaldi.com/archive/linux_signing_key.pub",
+      "fingerprint": "VERIFY",
+      "keyring": "/etc/apt/keyrings/vivaldi.gpg"
+    }
+  },
+  {
+    "id": "wazuh",
+    "name": "Wazuh",
+    "category": "Security",
+    "homepage": "https://wazuh.com/",
+    "description": "Wazuh open-source SIEM and XDR platform — unified security monitoring, real-time threat detection, log analysis, vulnerability assessment, file integrity monitoring, and compliance reporting. Pinned to the 4.x series.",
+    "supports": {
+      "debian": ["bookworm", "bullseye"],
+      "ubuntu": ["jammy", "focal"]
+    },
+    "uri": "https://packages.wazuh.com/4.x/apt",
+    "suite": "stable",
+    "components": ["main"],
+    "architectures": ["amd64", "arm64"],
+    "gpg": {
+      "url": "https://packages.wazuh.com/key/GPG-KEY-WAZUH",
+      "fingerprint": "0DCFCA5547B19D2A6099506096B3EE5F29111145",
+      "keyring": "/etc/apt/keyrings/wazuh.gpg"
+    }
+  },
+  {
+    "id": "wireguard",
+    "name": "WireGuard Tools",
+    "category": "Networking",
+    "homepage": "https://www.wireguard.com/",
+    "description": "WireGuard kernel module and userspace tools — modern, high-performance VPN protocol with a minimal codebase and attack surface. On recent kernels WireGuard is built-in; this PPA provides the wg and wg-quick userspace utilities for older kernels or distributions that lack them.",
+    "supports": {
+      "debian": ["bookworm", "bullseye"],
+      "ubuntu": ["jammy", "focal"]
+    },
+    "uri": "https://ppa.launchpadcontent.net/wireguard/wireguard/ubuntu",
+    "suite": "{codename}",
+    "components": ["main"],
+    "architectures": ["amd64", "arm64"],
+    "gpg": {
+      "url": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x04EE7237B7D453EC",
+      "fingerprint": "",
+      "keyring": "/etc/apt/keyrings/wireguard.gpg"
     }
   }
 ]

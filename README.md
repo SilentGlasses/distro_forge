@@ -1,3 +1,11 @@
+[![Deploy to GitHub Pages](https://github.com/SilentGlasses/distro_forge/actions/workflows/pages.yml/badge.svg)](https://github.com/SilentGlasses/distro_forge/actions/workflows/pages.yml)
+[![Validate third-party repos](https://github.com/SilentGlasses/distro_forge/actions/workflows/validate-third-party.yml/badge.svg)](https://github.com/SilentGlasses/distro_forge/actions/workflows/validate-third-party.yml)
+[![Update supported releases](https://github.com/SilentGlasses/distro_forge/actions/workflows/update-releases.yml/badge.svg)](https://github.com/SilentGlasses/distro_forge/actions/workflows/update-releases.yml)
+[![Prune unreachable mirrors](https://github.com/SilentGlasses/distro_forge/actions/workflows/update-mirrors.yml/badge.svg)](https://github.com/SilentGlasses/distro_forge/actions/workflows/update-mirrors.yml)
+[![Smoke tests](https://github.com/SilentGlasses/distro_forge/actions/workflows/smoke-tests.yml/badge.svg)](https://github.com/SilentGlasses/distro_forge/actions/workflows/smoke-tests.yml)
+
+---
+
 # DistroForge APT sources generator
 Generate clean, verifiable Debian and Ubuntu APT sources — entirely in your browser.
 <img align="right" width="100" alt="distro_forge" src="https://github.com/user-attachments/assets/83264b45-cc10-406d-91f1-5146ceadaa99" />

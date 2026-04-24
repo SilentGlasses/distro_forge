@@ -35,19 +35,6 @@ jobs:
       - name: Snyk Open Source monitor
         run: snyk monitor --all-projects
 
-      # Runs Snyk Infrastructure as Code (IaC)
-      - name: Snyk IaC test and report
-        run: snyk iac test --report || true
-
-      # Build the docker image for testing
-      # Note: Ensure "your/image-to-test" matches your project naming if needed
-      - name: Build a Docker image
-        run: docker build -t your/image-to-test .
-
-      # Runs Snyk Container analysis
-      - name: Snyk Container monitor
-        run: snyk container monitor your/image-to-test --file=Dockerfile
-
       # Push the Snyk Code results into GitHub Code Scanning tab
       - name: Upload result to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v3

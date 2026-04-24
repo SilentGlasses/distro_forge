@@ -22,7 +22,7 @@ mozilla-thunderbird
 mullvad-browser
 mullvad-vpn
 nodesource
-openvpn
+openvpn3
 opera
 postgresql
 prometheus

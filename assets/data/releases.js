@@ -75,6 +75,12 @@ export const ubuntu = {
   defaultComponents: ["main", "restricted", "universe", "multiverse"],
   releases: [
     {
+      "codename": "resolute",
+      "version": "26.04",
+      "status": "LTS",
+      "isLTS": true
+    },
+    {
       "codename": "questing",
       "version": "25.10",
       "status": "interim",

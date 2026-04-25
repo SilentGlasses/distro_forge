@@ -3,6 +3,7 @@
 [![Update supported releases](https://github.com/SilentGlasses/distro_forge/actions/workflows/update-releases.yml/badge.svg)](https://github.com/SilentGlasses/distro_forge/actions/workflows/update-releases.yml)
 [![Prune unreachable mirrors](https://github.com/SilentGlasses/distro_forge/actions/workflows/update-mirrors.yml/badge.svg)](https://github.com/SilentGlasses/distro_forge/actions/workflows/update-mirrors.yml)
 [![Smoke tests](https://github.com/SilentGlasses/distro_forge/actions/workflows/smoke-tests.yml/badge.svg)](https://github.com/SilentGlasses/distro_forge/actions/workflows/smoke-tests.yml)
+[![Snyk Security](https://github.com/SilentGlasses/distro_forge/actions/workflows/snyk-security.yml/badge.svg)](https://github.com/SilentGlasses/distro_forge/actions/workflows/snyk-security.yml)
 
 ---
 

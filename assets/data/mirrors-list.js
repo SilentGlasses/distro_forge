@@ -27,7 +27,6 @@ export const debianMirrorList = [
   { country: "CA", name: "mirror.csclub.uwaterloo.ca"            , url: "http://mirror.csclub.uwaterloo.ca/debian" },
   { country: "DE", name: "ftp.de.debian.org"                     , url: "http://ftp.de.debian.org/debian" },
   { country: "FR", name: "ftp.fr.debian.org"                     , url: "http://ftp.fr.debian.org/debian" },
-  { country: "GB", name: "ftp.uk.debian.org"                     , url: "http://ftp.uk.debian.org/debian" },
   { country: "IT", name: "ftp.it.debian.org"                     , url: "http://ftp.it.debian.org/debian" },
   { country: "NL", name: "ftp.nl.debian.org"                     , url: "http://ftp.nl.debian.org/debian" },
   { country: "SE", name: "ftp.se.debian.org"                     , url: "http://ftp.se.debian.org/debian" },

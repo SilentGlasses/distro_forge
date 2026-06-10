@@ -29,7 +29,6 @@ export const debianMirrorList = [
   { country: "FR", name: "ftp.fr.debian.org"                     , url: "http://ftp.fr.debian.org/debian" },
   { country: "IT", name: "ftp.it.debian.org"                     , url: "http://ftp.it.debian.org/debian" },
   { country: "NL", name: "ftp.nl.debian.org"                     , url: "http://ftp.nl.debian.org/debian" },
-  { country: "SE", name: "ftp.se.debian.org"                     , url: "http://ftp.se.debian.org/debian" },
   { country: "US", name: "mirrors.edge.kernel.org"               , url: "http://mirrors.edge.kernel.org/debian" },
   { country: "US", name: "debian.osuosl.org"                     , url: "http://debian.osuosl.org/debian" },
 ];
@@ -45,7 +44,6 @@ export const ubuntuMirrorList = [
   { country: "IT", name: "it.archive.ubuntu.com"                 , url: "http://it.archive.ubuntu.com/ubuntu" },
   { country: "JP", name: "jp.archive.ubuntu.com"                 , url: "http://jp.archive.ubuntu.com/ubuntu" },
   { country: "NL", name: "nl.archive.ubuntu.com"                 , url: "http://nl.archive.ubuntu.com/ubuntu" },
-  { country: "SE", name: "se.archive.ubuntu.com"                 , url: "http://se.archive.ubuntu.com/ubuntu" },
   { country: "US", name: "us.archive.ubuntu.com"                 , url: "http://us.archive.ubuntu.com/ubuntu" },
 ];
 

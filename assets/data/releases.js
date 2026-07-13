@@ -81,12 +81,6 @@ export const ubuntu = {
       "isLTS": true
     },
     {
-      "codename": "questing",
-      "version": "25.10",
-      "status": "interim",
-      "isLTS": false
-    },
-    {
       "codename": "noble",
       "version": "24.04",
       "status": "LTS",

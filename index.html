@@ -5,18 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>APT sources.list Generator — Debian &amp; Ubuntu</title>
     <meta name="description" content="Generate a Debian or Ubuntu /etc/apt/sources.list (or DEB822 .sources) file from a web form. Runs entirely in your browser." />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'" />
     <link rel="stylesheet" href="./assets/styles.css" />
-    <script>
-      // Apply the saved theme before first paint to avoid a flash.
-      (function () {
-        try {
-          var t = localStorage.getItem("theme");
-          if (t === "light" || t === "dark") {
-            document.documentElement.setAttribute("data-theme", t);
-          }
-        } catch (e) {}
-      })();
-    </script>
+    <script src="./assets/theme-init.js"></script>
   </head>
   <body>
     <header class="site-header">
@@ -147,14 +138,12 @@
       </form>
 
       <section id="output-panel" class="panel output-panel">
+        <h3>Install instructions</h3>
+        <div id="instructions" class="instructions-output empty">Instructions will appear here once you generate a file.</div>
         <div class="output-header">
           <h2>Generated <span id="output-filename">sources.list</span></h2>
-          <button type="button" id="copy-btn" class="primary" disabled>Copy</button>
         </div>
         <pre id="output" class="empty">Fill out the form above and click Generate to produce your sources file.</pre>
-
-        <h3>Install instructions</h3>
-        <pre id="instructions" class="empty">Instructions will appear here once you generate a file.</pre>
       </section>
     </main>
 

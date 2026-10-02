@@ -5,17 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Help — APT sources generator</title>
     <meta name="description" content="Answers to common questions about APT sources, DEB822, security suites, and how the generator works." />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'" />
     <link rel="stylesheet" href="../assets/styles.css" />
-    <script>
-      (function () {
-        try {
-          var t = localStorage.getItem("theme");
-          if (t === "light" || t === "dark") {
-            document.documentElement.setAttribute("data-theme", t);
-          }
-        } catch (e) {}
-      })();
-    </script>
+    <script src="../assets/theme-init.js"></script>
   </head>
   <body>
     <header class="site-header">
@@ -206,7 +198,7 @@
             <summary>Where does this site come from?</summary>
             <p>
               It's a small static site on
-              <a href="https://github.com/SilentGlasses/deb-sources"
+              <a href="https://github.com/SilentGlasses/distro_forge"
                  rel="noopener">GitHub</a>, served via GitHub Pages. All
               generation happens in your browser — nothing is sent to a
               server.
@@ -216,9 +208,6 @@
       </section>
     </main>
 
-    <script type="module">
-      import { initUi } from "../assets/lib/ui.js";
-      initUi();
-    </script>
+    <script type="module" src="./app.js"></script>
   </body>
 </html>

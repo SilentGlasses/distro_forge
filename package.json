@@ -1,5 +1,5 @@
 {
-  "name": "deb-sources",
+  "name": "distro_forge",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -18,13 +18,13 @@
     "static-site",
     "github-pages"
   ],
-  "homepage": "https://silentglasses.github.io/deb-sources/",
+  "homepage": "https://silentglasses.github.io/distro_forge/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SilentGlasses/deb-sources.git"
+    "url": "git+https://github.com/SilentGlasses/distro_forge.git"
   },
   "bugs": {
-    "url": "https://github.com/SilentGlasses/deb-sources/issues"
+    "url": "https://github.com/SilentGlasses/distro_forge/issues"
   },
   "author": "SilentGlasses",
   "license": "MIT",
@@ -33,8 +33,11 @@
   },
   "scripts": {
     "serve": "python3 -m http.server 8080",
+    "test:contracts": "node --test tests/contracts/*.test.mjs",
     "update:releases": "node scripts/update-releases.mjs",
     "update:mirrors": "node scripts/update-mirrors.mjs",
-    "validate:third-party": "node scripts/validate-third-party.mjs"
+    "validate:third-party": "node scripts/validate-third-party.mjs",
+    "check:transport-security": "node scripts/check-transport-security.mjs",
+    "check:workflow-pins": "node scripts/check-workflow-pins.mjs"
   }
 }

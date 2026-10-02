@@ -1,6 +1,8 @@
 1password
 ansible
 brave-browser
+brave-browser-beta
+brave-browser-nightly
 couchdb
 docker-ce
 elasticsearch
@@ -37,4 +39,3 @@ tor-project
 vivaldi
 vscode
 wazuh
-wireguard

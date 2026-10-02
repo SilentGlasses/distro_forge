@@ -5,17 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Variants — APT sources generator</title>
     <meta name="description" content="Build apt sources for Debian- and Ubuntu-derived Linux variants (Raspberry Pi OS, Kali, Proxmox VE, Linux Mint, Pop!_OS, elementary OS)." />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'" />
     <link rel="stylesheet" href="../assets/styles.css" />
-    <script>
-      (function () {
-        try {
-          var t = localStorage.getItem("theme");
-          if (t === "light" || t === "dark") {
-            document.documentElement.setAttribute("data-theme", t);
-          }
-        } catch (e) {}
-      })();
-    </script>
+    <script src="../assets/theme-init.js"></script>
   </head>
   <body>
     <header class="site-header">
@@ -101,14 +93,12 @@
       </section>
 
       <section id="v-output-panel" class="panel output-panel">
+        <h3>Install instructions</h3>
+        <div id="v-install" class="instructions-output empty">Installation steps will appear here after generation.</div>
         <div class="output-header">
           <h2>Generated <span id="v-output-filename">variant.sources</span></h2>
-          <button type="button" id="v-copy" class="primary" disabled>Copy</button>
         </div>
         <pre id="v-output" class="empty">Pick a variant and release, then click Generate.</pre>
-
-        <h3>Install instructions</h3>
-        <pre id="v-install" class="empty">Installation steps will appear here after generation.</pre>
       </section>
     </main>
 

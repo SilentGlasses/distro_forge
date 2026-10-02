@@ -14,7 +14,15 @@ function formatFingerprint(fp) {
   // Insert a space every 4 hex chars for readability.
   return fp.replace(/\s+/g, "").match(/.{1,4}/g)?.join(" ") ?? fp;
 }
-
+// Collapse CR/LF and other control characters so a data field can never start
+// a new line in the generated output (escaping a "#" comment, or closing the
+// install heredoc early with a bare "EOF" line).
+function oneLine(value) {
+  return String(value ?? "").replace(/[\u0000-\u001f\u007f\u2028\u2029]+/g, " ").trim();
+}
+function shellQuote(value) {
+  return `'${String(value).replace(/'/g, `'\"'\"'`)}'`;
+}
 export function filterSupported(repos, distro, codename) {
   if (!distro || !codename) return [];
   return repos.filter((r) => {
@@ -31,42 +39,80 @@ export function isSupported(repo, distro, codename) {
 function renderStanza(repo, distro, codename) {
   const vars = { distro, codename };
   const lines = [];
-  lines.push(`# ${repo.name}`);
-  lines.push(`# ${repo.homepage}`);
+  lines.push(`# ${oneLine(repo.name)}`);
+  lines.push(`# ${oneLine(repo.homepage)}`);
   lines.push(`Types: deb`);
-  lines.push(`URIs: ${substitute(repo.uri, vars)}`);
-  lines.push(`Suites: ${substitute(repo.suite, vars)}`);
-  lines.push(`Components: ${repo.components.join(" ")}`);
-  if (Array.isArray(repo.architectures) && repo.architectures.length) {
-    lines.push(`Architectures: ${repo.architectures.join(" ")}`);
+  lines.push(`URIs: ${oneLine(substitute(repo.uri, vars))}`);
+  lines.push(`Suites: ${oneLine(substitute(repo.suite, vars))}`);
+  if (Array.isArray(repo.components) && repo.components.length > 0) {
+    lines.push(`Components: ${oneLine(repo.components.join(" "))}`);
   }
-  lines.push(`Signed-By: ${repo.gpg.keyring}`);
+  if (Array.isArray(repo.architectures) && repo.architectures.length) {
+    lines.push(`Architectures: ${oneLine(repo.architectures.join(" "))}`);
+  }
+  lines.push(`Signed-By: ${oneLine(repo.gpg.keyring)}`);
   return lines.join("\n");
 }
 
-function renderKeyInstall(repo, distro) {
-  const keyringPath = repo.gpg.keyring;
-  const keyUrl = substitute(repo.gpg.url, { distro });
-  // If the keyring target ends in .asc, keep the ASCII-armored key as-is.
-  // Otherwise, dearmor into a .gpg binary keyring (traditional style).
-  const isAsc = keyringPath.endsWith(".asc");
+// Every primary-key fingerprint the downloaded key file is expected to hold:
+// the declared one plus any rotation keys the vendor ships alongside it.
+export function expectedFingerprints(repo) {
+  const declared = [repo.gpg.fingerprint, ...(repo.gpg.additionalFingerprints || [])];
+  return [...new Set(declared.map((fp) => String(fp).replace(/\s+/g, "").toUpperCase()))].sort();
+}
+
+function renderKeyInstall(repo, distro, codename) {
+  const name = oneLine(repo.name);
+  const keyringQ = shellQuote(oneLine(repo.gpg.keyring));
+  const keyUrlQ = shellQuote(oneLine(substitute(repo.gpg.url, { distro, codename })));
+  const expected = expectedFingerprints(repo);
   const lines = [];
-  lines.push(`# ${repo.name} \u2014 install the signing key`);
-  lines.push(`sudo install -d -m 0755 /etc/apt/keyrings`);
-  if (isAsc) {
-    lines.push(`sudo ${DEFAULT_TOOL} -fsSL ${keyUrl} -o ${keyringPath}`);
-  } else {
-    lines.push(`${DEFAULT_TOOL} -fsSL ${keyUrl} \\`);
-    lines.push(`  | sudo gpg --dearmor -o ${keyringPath}`);
+  lines.push(`# ${name} — install the signing key`);
+  lines.push(`# Expected key fingerprint(s): ${expected.map(formatFingerprint).join(", ")}`);
+  if (!expected.every((fp) => /^[A-F0-9]{40}$/.test(fp))) {
+    // Never emit an install path we can't verify.
+    lines.push(`echo ${shellQuote(`ERROR: ${name} has no valid fingerprint on record; key NOT installed.`)} >&2`);
+    return lines.join("\n");
   }
-  lines.push(`sudo chmod 0644 ${keyringPath}`);
-  lines.push(`# Verify the fingerprint matches: ${formatFingerprint(repo.gpg.fingerprint)}`);
-  lines.push(`gpg --show-keys --with-fingerprint ${keyringPath}`);
+  // The key is only installed when the set of primary-key fingerprints in the
+  // downloaded file exactly matches the expected set. An extra key smuggled
+  // into the file fails the check just like a wrong one. if/else (not `exit`)
+  // keeps a failure from closing the user's terminal when pasted.
+  lines.push(`TMP_KEY="$(mktemp)"`);
+  lines.push(`if ${DEFAULT_TOOL} -fsSL ${keyUrlQ} -o "$TMP_KEY"; then`);
+  lines.push(`  KEY_FPRS="$(gpg --show-keys --with-colons "$TMP_KEY" 2>/dev/null | awk -F: '$1=="pub"{p=1} $1=="fpr"&&p{print $10;p=0}' | LC_ALL=C sort | tr '\\n' ' ')"`);
+  lines.push(`  if [ "$KEY_FPRS" = ${shellQuote(expected.join(" ") + " ")} ]; then`);
+  lines.push(`    sudo install -d -m 0755 /etc/apt/keyrings`);
+  if (repo.gpg.keyring.endsWith(".asc")) {
+    // .asc keyrings keep the ASCII-armored key as-is.
+    lines.push(`    sudo install -m 0644 "$TMP_KEY" ${keyringQ}`);
+  } else {
+    // .gpg keyrings are binary; --dearmor passes already-binary keys through unchanged.
+    lines.push(`    gpg --dearmor < "$TMP_KEY" | sudo tee ${keyringQ} > /dev/null`);
+    lines.push(`    sudo chmod 0644 ${keyringQ}`);
+  }
+  lines.push(`    echo ${shellQuote(`OK: ${name} signing key verified and installed.`)}`);
+  lines.push(`  else`);
+  lines.push(`    echo ${shellQuote(`ERROR: ${name} key fingerprint mismatch; key NOT installed. Got:`)} "$KEY_FPRS" >&2`);
+  lines.push(`  fi`);
+  lines.push(`else`);
+  lines.push(`  echo ${shellQuote(`ERROR: could not download the ${name} key; nothing installed.`)} >&2`);
+  lines.push(`fi`);
+  lines.push(`rm -f "$TMP_KEY"`);
   return lines.join("\n");
 }
 
 function sanitiseFilename(name) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "third-party";
+}
+function appendHereDoc(lines, targetPath, generatedContents) {
+  const body = String(generatedContents || "")
+    .replace(/\r\n?/g, "\n")
+    .replace(/\n$/, "")
+    .split("\n");
+  lines.push(`  sudo tee ${targetPath} > /dev/null <<-'EOF'`);
+  for (const line of body) lines.push(`\t${line}`);
+  lines.push("\tEOF");
 }
 
 export function build({ repos, distro, codename }) {
@@ -82,7 +128,7 @@ export function build({ repos, distro, codename }) {
   }
 
   const stanzas = supported.map((r) => renderStanza(r, distro, codename));
-  const keyBlocks = supported.map((r) => renderKeyInstall(r, distro));
+  const keyBlocks = supported.map((r) => renderKeyInstall(r, distro, codename));
 
   const filename = supported.length === 1
     ? `${sanitiseFilename(supported[0].id)}.sources`
@@ -94,15 +140,41 @@ export function build({ repos, distro, codename }) {
 
   const keyInstall = keyBlocks.join("\n\n") + "\n";
 
-  const install = [
-    `Save the generated content as /etc/apt/sources.list.d/${filename}`,
+  const installLines = [
+    "Follow these steps to install the selected third-party repositories:",
     "",
-    "Then install each signing key with the commands in the \u201cKey install\u201d",
-    "block below, verifying every fingerprint against the vendor\u2019s docs.",
-    "Finally run:",
+    "Step 1: Run the commands in `Key install`. Each key is installed only if its fingerprint matches the one on record; look for an `OK:` line per repository and stop if you see `ERROR:`. For extra assurance, compare the fingerprints against the vendor's official documentation.",
     "",
-    "  sudo apt update",
-  ].join("\n");
+    `Step 2: Generate the new \`${filename}\` file (your existing apt sources are left untouched):`,
+    "",
+  ];
+  appendHereDoc(installLines, `/etc/apt/sources.list.d/${filename}`, sources);
+  installLines.push("");
+  installLines.push("Step 3: Set ownership and mode.");
+  installLines.push("");
+  installLines.push("- Set ownership:");
+  installLines.push("");
+  installLines.push(`  sudo chown root:root /etc/apt/sources.list.d/${filename}`);
+  installLines.push("");
+  installLines.push("- Set mode:");
+  installLines.push("");
+  installLines.push(`  sudo chmod 644 /etc/apt/sources.list.d/${filename}`);
+  installLines.push("");
+  installLines.push("Step 4: Refresh package metadata, then choose an upgrade path.");
+  installLines.push("");
+  installLines.push("- Run update:");
+  installLines.push("");
+  installLines.push("  sudo apt update");
+  installLines.push("");
+  installLines.push("- Base upgrade:");
+  installLines.push("");
+  installLines.push("  sudo apt upgrade");
+  installLines.push("");
+  installLines.push("- Full dist-upgrade:");
+  installLines.push("");
+  installLines.push("  sudo apt full-upgrade");
+
+  const install = installLines.join("\n");
 
   return { filename, sources, keyInstall, install, selected: supported };
 }

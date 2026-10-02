@@ -38,6 +38,10 @@
   --gap:           1rem;
 }
 
+.output-header-tight {
+  margin: 0.55rem 0 0;
+}
+
 :root[data-theme="dark"] {
   --bg:            #1b212a;
   --bg-raised:     #252d38;
@@ -158,6 +162,78 @@ pre.empty {
   color: var(--code-muted);
   font-style: italic;
   background: color-mix(in srgb, var(--code-bg) 85%, transparent);
+}
+
+.copyable-pre {
+  position: relative;
+}
+
+.copyable-pre > pre {
+  padding-top: 2rem;
+}
+
+.code-copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 1.65rem;
+  height: 1.65rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--code-fg) 22%, transparent);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--code-bg) 75%, transparent);
+  color: var(--code-fg);
+  cursor: pointer;
+  padding: 0;
+}
+
+.code-copy-btn:hover {
+  border-color: color-mix(in srgb, var(--code-fg) 50%, transparent);
+}
+
+.code-copy-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.code-copy-btn.copied {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.instructions-output {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin: 0;
+}
+
+.instructions-output p {
+  margin: 0;
+  color: var(--text-muted);
+}
+.instructions-output ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--text-muted);
+}
+
+.instructions-output li + li {
+  margin-top: 0.25rem;
+}
+
+.instructions-output pre {
+  margin: 0;
+}
+
+.instructions-output.empty {
+  background: color-mix(in srgb, var(--code-bg) 85%, transparent);
+  color: var(--code-muted);
+  font-style: italic;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
 }
 
 /* ---------------------------------------------------------------
@@ -357,20 +433,78 @@ pre.empty {
 .faq > details > :not(summary):first-of-type { padding-top: 0.25rem; }
 
 /* Repo card (used on /third-party/ and /variants/). */
+.repo-section {
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-sm);
+  background: var(--fieldset-bg);
+  margin: 0 0 0.8rem;
+  overflow: hidden;
+}
+
+.repo-section:last-child {
+  margin-bottom: 0;
+}
+
+.repo-section > summary {
+  cursor: pointer;
+  padding: 0.7rem 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.repo-section > summary::-webkit-details-marker { display: none; }
+
+.repo-section > summary::after {
+  content: "+";
+  font-weight: 400;
+  font-size: 1.15rem;
+  color: var(--text-muted);
+}
+
+.repo-section[open] > summary::after {
+  content: "−";
+}
+
+.repo-section-icon {
+  width: 1.2rem;
+  text-align: center;
+}
+
+.repo-section-title {
+  color: var(--text);
+}
+
+.repo-section-count {
+  margin-left: auto;
+  margin-right: 0.35rem;
+  color: var(--text-subtle);
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.repo-section > .card-grid {
+  padding: 0.75rem 0.85rem 0.9rem;
+  border-top: 1px solid var(--panel-border);
+}
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
   gap: 0.9rem;
+  width: 100%;
 }
 
 .repo-card {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
-  padding: 0.9rem 1rem;
+  gap: 0.55rem;
+  padding: 0.78rem 0.9rem;
   border: 1px solid var(--panel-border);
   border-radius: var(--radius-sm);
-  background: var(--fieldset-bg);
+  background: var(--panel-bg);
   transition: border-color 0.15s ease, background 0.15s ease;
 }
 
@@ -381,37 +515,87 @@ pre.empty {
 
 .repo-card header {
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 0.5rem;
+  gap: 0.65rem;
+}
+.repo-title {
+  min-width: 0;
 }
 
 .repo-card h3 {
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.98rem;
+  line-height: 1.25;
 }
 
-.repo-card p {
+.repo-source {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: lowercase;
+  color: var(--text-muted);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.repo-source:hover {
+  color: var(--accent);
+}
+.repo-summary {
   margin: 0;
   color: var(--text-muted);
-  font-size: 0.9rem;
-  line-height: 1.45;
+  font-size: 0.84rem;
+  line-height: 1.4;
 }
 
-.repo-card .meta {
+.repo-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.repo-field-label {
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.repo-pill-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem 0.75rem;
-  font-size: 0.8rem;
-  color: var(--text-subtle);
-  margin-top: 0.15rem;
+  gap: 0.35rem;
 }
 
-.repo-card .meta code { font-size: 0.78rem; }
+.repo-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: 1px solid var(--panel-border);
+  border-radius: 999px;
+  background: var(--fieldset-bg);
+  color: var(--text-subtle);
+  padding: 0.1rem 0.42rem;
+  font-size: 0.76rem;
+}
+
+.repo-fingerprint {
+  margin: 0;
+  padding: 0.5rem 0.62rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.repo-card .check {
+  margin-top: 0.05rem;
+}
 
 .repo-card label.check {
-  margin-top: 0.25rem;
-  font-size: 0.88rem;
+  font-size: 0.84rem;
   color: var(--text-muted);
 }
 
@@ -575,9 +759,16 @@ main.app-stack {
 /* Vertical checkbox stack (Components + Suites). */
 .check-stack {
   display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  align-items: center;
   min-height: 2rem;
+}
+
+.check-stack .check {
+  margin: 0;
+  white-space: nowrap;
 }
 
 .check-empty {
@@ -587,14 +778,8 @@ main.app-stack {
   margin: 0.15rem 0 0;
 }
 
-/* Suite codename chip: hidden when a release hasn't been chosen. */
-.suite-code {
-  font-size: 0.82em;
-  padding: 0.05em 0.4em;
-  margin-left: 0.25em;
-}
-
-.suite-code:empty { display: none; }
+/* Keep suite selector labels concise; hide codename chips entirely. */
+.suite-code { display: none; }
 
 /* Tone down disabled inputs so it's obvious they're waiting on a prior choice. */
 select:disabled {
@@ -739,7 +924,7 @@ button.secondary { color: var(--text-muted); }
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  margin: -0.25rem 0 0.85rem;
+  margin: 0 0 0.85rem;
 }
 
 .output-header h2 {

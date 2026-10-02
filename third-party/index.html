@@ -5,17 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Third-party repos — APT sources generator</title>
     <meta name="description" content="Build DEB822 apt sources for common third-party repositories (Docker, Node.js, VS Code, HashiCorp, PostgreSQL, ...)." />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'" />
     <link rel="stylesheet" href="../assets/styles.css" />
-    <script>
-      (function () {
-        try {
-          var t = localStorage.getItem("theme");
-          if (t === "light" || t === "dark") {
-            document.documentElement.setAttribute("data-theme", t);
-          }
-        } catch (e) {}
-      })();
-    </script>
+    <script src="../assets/theme-init.js"></script>
   </head>
   <body>
     <header class="site-header">
@@ -112,21 +104,15 @@
       </section>
 
       <section id="tp-output-panel" class="panel output-panel">
+        <h3>Install instructions</h3>
+        <div id="tp-output-install" class="instructions-output empty">Short guidance to drop the sources in place will appear here.</div>
         <div class="output-header">
           <h2>Generated <span id="tp-output-filename">third-party.sources</span></h2>
-          <button type="button" id="tp-copy-sources" class="primary" disabled>Copy sources</button>
         </div>
         <pre id="tp-output-sources" class="empty">Pick a distribution and release, select one or more repos, then click Generate.</pre>
 
         <h3>Key install</h3>
         <pre id="tp-output-keys" class="empty">Shell commands to install the signing keys will appear here.</pre>
-        <div class="output-header">
-          <span></span>
-          <button type="button" id="tp-copy-keys" class="secondary" disabled>Copy key install</button>
-        </div>
-
-        <h3>Install instructions</h3>
-        <pre id="tp-output-install" class="empty">Short guidance to drop the sources in place will appear here.</pre>
       </section>
     </main>
 

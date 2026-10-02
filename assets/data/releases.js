@@ -9,17 +9,17 @@
 
 export const mirrors = {
   debian: {
-    primary: "http://deb.debian.org/debian",
-    security: "http://security.debian.org/debian-security",
+    primary: "https://deb.debian.org/debian",
+    security: "https://security.debian.org/debian-security",
     keyring: "/usr/share/keyrings/debian-archive-keyring.gpg",
   },
   ubuntu: {
     // Used for amd64 / i386.
-    primary: "http://archive.ubuntu.com/ubuntu",
+    primary: "https://archive.ubuntu.com/ubuntu",
     // Used for non-primary archs (arm64, armhf, ppc64el, riscv64, s390x).
-    ports: "http://ports.ubuntu.com/ubuntu-ports",
+    ports: "https://ports.ubuntu.com/ubuntu-ports",
     // Ubuntu security lives on the same host, different suite.
-    security: "http://security.ubuntu.com/ubuntu",
+    security: "https://security.ubuntu.com/ubuntu",
     keyring: "/usr/share/keyrings/ubuntu-archive-keyring.gpg",
   },
 };

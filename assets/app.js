@@ -1,6 +1,8 @@
 import { distros, architectures, mirrors } from "./data/releases.js";
 import { generate } from "./lib/generate.js";
 import { initUi } from "./lib/ui.js";
+import { renderInstructionContent } from "./lib/instructions.js";
+import { makePreCopyable } from "./lib/copyable-code.js";
 import { debianMirrorList, ubuntuMirrorList, groupByCountry } from "./data/mirrors-list.js";
 
 const $ = (sel) => document.querySelector(sel);
@@ -18,8 +20,7 @@ const errorEl = $("#form-error");
 const outputPanel = $("#output-panel");
 const outputEl = $("#output");
 const outputFilename = $("#output-filename");
-const instructionsEl = $("#instructions");
-const copyBtn = $("#copy-btn");
+let instructionsEl = $("#instructions");
 const generateBtn = form.querySelector('button[type="submit"]');
 const resetBtn = $("#reset-btn");
 
@@ -35,6 +36,7 @@ const updatesCheckbox = form.querySelector('input[name="suite-updates"]');
 const backportsCheckbox = form.querySelector('input[name="suite-backports"]');
 const securityCheckbox = form.querySelector('input[name="suite-security"]');
 const suiteCheckboxes = [releaseCheckbox, updatesCheckbox, backportsCheckbox, securityCheckbox];
+const INSTRUCTIONS_PLACEHOLDER = "Instructions will appear here once you generate a file.";
 
 const COMPONENTS_EMPTY_HTML =
   '<p class="check-empty">Pick a distribution to see components.</p>';
@@ -88,10 +90,16 @@ function renderComponents(distroKey) {
     const id = `comp-${c}`;
     const wrap = document.createElement("label");
     wrap.className = "check";
-    wrap.innerHTML = `
-      <input type="checkbox" id="${id}" name="component" value="${c}" />
-      <span><code>${c}</code></span>
-    `;
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.id = id;
+    input.name = "component";
+    input.value = c;
+    const code = document.createElement("code");
+    code.textContent = c;
+    const label = document.createElement("span");
+    label.appendChild(code);
+    wrap.append(input, label);
     componentsList.appendChild(wrap);
   }
 }
@@ -296,9 +304,7 @@ form.addEventListener("submit", (e) => {
     outputFilename.textContent = filename;
     outputEl.textContent = contents;
     outputEl.classList.remove("empty");
-    instructionsEl.textContent = instructions;
-    instructionsEl.classList.remove("empty");
-    copyBtn.disabled = false;
+    instructionsEl = renderInstructionContent(instructionsEl, instructions, INSTRUCTIONS_PLACEHOLDER);
     outputPanel.scrollIntoView({ behavior: "smooth", block: "start" });
   } catch (err) {
     showError(err.message || String(err));
@@ -317,10 +323,7 @@ function resetAll() {
   outputEl.textContent =
     "Fill out the form above and click Generate to produce your sources file.";
   outputEl.classList.add("empty");
-  instructionsEl.textContent = "Instructions will appear here once you generate a file.";
-  instructionsEl.classList.add("empty");
-  copyBtn.disabled = true;
-  copyBtn.textContent = "Copy";
+  instructionsEl = renderInstructionContent(instructionsEl, "", INSTRUCTIONS_PLACEHOLDER);
 
   updateGenerateEnabled();
   distroSelect.focus();
@@ -328,28 +331,11 @@ function resetAll() {
 
 resetBtn.addEventListener("click", resetAll);
 
-copyBtn.addEventListener("click", async () => {
-  const text = outputEl.textContent;
-  if (!text) return;
-  try {
-    await navigator.clipboard.writeText(text);
-    const original = copyBtn.textContent;
-    copyBtn.textContent = "Copied!";
-    setTimeout(() => (copyBtn.textContent = original), 1500);
-  } catch {
-    // Fallback: select the pre so the user can Ctrl-C manually.
-    const range = document.createRange();
-    range.selectNodeContents(outputEl);
-    const sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(range);
-    copyBtn.textContent = "Select & copy manually";
-  }
-});
-
 // --- boot -----------------------------------------------------------------
 
 initUi();                    // shared theme toggle + active-nav highlighting
 renderArchitectures();
 applyDistroSelection("");    // initial empty state — no defaults picked
 updateGenerateEnabled();
+instructionsEl = renderInstructionContent(instructionsEl, "", INSTRUCTIONS_PLACEHOLDER);
+makePreCopyable(outputEl);

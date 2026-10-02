@@ -90,9 +90,12 @@ Three datasets are tracked in the repo and refreshed automatically via scheduled
 node scripts/update-releases.mjs
 node scripts/update-mirrors.mjs
 node scripts/validate-third-party.mjs
+node scripts/check-transport-security.mjs
+node scripts/check-workflow-pins.mjs
+node --test tests/contracts/*.test.mjs
 ```
 
-All scripts need Node 18+ (for global `fetch`). The validator also shells out to `gpg` for fingerprint verification.
+All scripts and tests require Node 24.x. The validator also shells out to `gpg` for fingerprint verification.
 
 ## Deploying
 
@@ -101,7 +104,7 @@ All scripts need Node 18+ (for global `fetch`). The validator also shells out to
 ## Project layout
 
 ```
-deb_sources/
+distro_forge/
 ├── index.html
 ├── help/index.html
 ├── third-party/
@@ -128,13 +131,16 @@ deb_sources/
 ├── scripts/
 │   ├── update-releases.mjs
 │   ├── update-mirrors.mjs
-│   └── validate-third-party.mjs
+│   ├── validate-third-party.mjs
+│   ├── check-transport-security.mjs
+│   └── check-workflow-pins.mjs
 ├── .github/
 │   ├── workflows/
 │   │   ├── pages.yml
 │   │   ├── update-releases.yml
 │   │   ├── update-mirrors.yml
-│   │   └── validate-third-party.yml
+│   │   ├── validate-third-party.yml
+│   │   └── smoke-tests.yml
 │   ├── ISSUE_TEMPLATE/
 │   │   ├── bug_report.yml
 │   │   ├── feature_request.yml

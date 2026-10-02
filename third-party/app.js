@@ -1,6 +1,8 @@
 import { distros } from "../assets/data/releases.js";
 import { initUi } from "../assets/lib/ui.js";
 import { build, isSupported, uniqueCategories } from "../assets/lib/third-party.js";
+import { renderInstructionContent } from "../assets/lib/instructions.js";
+import { makePreCopyable } from "../assets/lib/copyable-code.js";
 
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => Array.from(document.querySelectorAll(s));
@@ -18,15 +20,51 @@ const outputPanel = $("#tp-output-panel");
 const outputFilename = $("#tp-output-filename");
 const sourcesEl = $("#tp-output-sources");
 const keysEl = $("#tp-output-keys");
-const installEl = $("#tp-output-install");
-const copySourcesBtn = $("#tp-copy-sources");
-const copyKeysBtn = $("#tp-copy-keys");
+let installEl = $("#tp-output-install");
+const INSTALL_PLACEHOLDER = "Short guidance to drop the sources in place will appear here.";
 
 // --- state --------------------------------------------------------------
 
 let allRepos = [];        // every repo listed in repos.json
 let enabledIds = new Set(); // IDs referenced by index.txt
 let visibleRepos = [];    // repos after enabled-filter
+let openCategories = new Set();
+let selectedRepoState = new Set();
+
+const CATEGORY_ICONS = {
+  Browsers: "🌐",
+  "Dev tools": "🛠️",
+  Databases: "🗄️",
+  Monitoring: "📈",
+  Communication: "💬",
+  Desktop: "🖥️",
+  Networking: "🔌",
+  Security: "🛡️",
+  "Security / privacy": "🔐",
+  Other: "📦",
+};
+
+const REPO_BADGES = {
+  "firefox-mozillateam": [
+    "Firefox",
+    "Beta",
+    "Nightly",
+    "ESR",
+  ],
+  "google-chrome": [
+    "Stable",
+    "Beta",
+    "Unstable",
+  ],
+  "microsoft-edge": [
+    "Stable",
+    "Beta",
+    "Dev",
+  ],
+};
+const SOURCE_URL_OVERRIDES = {
+  "firefox-mozillateam": "https://www.firefox.com/en-US/",
+};
 
 // --- loading -----------------------------------------------------------
 
@@ -53,17 +91,16 @@ function renderReleases(distroKey) {
   releaseSelect.innerHTML = '<option value="" disabled selected hidden>—</option>';
   if (!distroKey) { releaseSelect.disabled = true; return; }
   for (const r of distros[distroKey].releases) {
-    // Only offer releases where at least one repo declares support.
-    const anySupport = visibleRepos.some((repo) => {
+    const supportedCount = visibleRepos.filter((repo) => {
       const list = repo.supports?.[distroKey];
       return Array.isArray(list) && list.includes(r.codename);
-    });
-    if (!anySupport) continue;
+    }).length;
     const opt = document.createElement("option");
     opt.value = r.codename;
     const versionLabel = r.version ? ` ${r.version}` : "";
     const lts = r.isLTS ? " LTS" : "";
-    opt.textContent = `${r.codename}${versionLabel} \u2014 ${r.status}${lts}`;
+    const supportNote = supportedCount > 0 ? "" : " (no listed repo support)";
+    opt.textContent = `${r.codename}${versionLabel} — ${r.status}${lts}${supportNote}`;
     releaseSelect.appendChild(opt);
   }
   releaseSelect.disabled = false;
@@ -74,6 +111,13 @@ function renderList() {
   const q = search.value.trim().toLowerCase();
   const distro = distroSelect.value;
   const codename = releaseSelect.value;
+  if (!q) {
+    openCategories = new Set(
+      $$("#tp-list details.repo-section[open]")
+        .map((el) => el.dataset.category || "")
+        .filter(Boolean)
+    );
+  }
 
   const matchSearch = (r) => {
     if (!q) return true;
@@ -91,39 +135,66 @@ function renderList() {
       .filter(matchSearch)
       .sort((a, b) => a.name.localeCompare(b.name));
     if (members.length === 0) continue;
+    const section = document.createElement("details");
+    section.className = "repo-section";
+    section.dataset.category = cat;
+    section.open = q ? true : openCategories.has(cat);
 
-    const h = document.createElement("h3");
-    h.className = "category-heading";
-    h.textContent = cat;
-    list.appendChild(h);
+    const summary = document.createElement("summary");
+    summary.className = "repo-section-summary";
+    summary.append(
+      el("span", { className: "repo-section-icon", "aria-hidden": "true" }, categoryIcon(cat)),
+      el("span", { className: "repo-section-title" }, cat),
+      el("span", { className: "repo-section-count" }, `${members.length} repo${members.length === 1 ? "" : "s"}`),
+    );
+    section.appendChild(summary);
 
     const grid = document.createElement("div");
     grid.className = "card-grid";
     for (const r of members) {
       anyVisible = true;
-      const card = document.createElement("label");
+      const card = document.createElement("article");
       card.className = "repo-card";
       const supported = distro && codename ? isSupported(r, distro, codename) : true;
+      if (!supported) selectedRepoState.delete(r.id);
+      const unavailable = unavailableLabel(distro, codename);
       const checkboxId = `tp-${r.id}`;
-      card.innerHTML = `
-        <header>
-          <h3>${escapeHtml(r.name)}</h3>
-          <a href="${escapeAttr(r.homepage)}" rel="noopener" target="_blank">docs</a>
-        </header>
-        <p>${escapeHtml(r.description || "")}</p>
-        <div class="meta">
-          <span><code>${escapeHtml(r.id)}</code></span>
-          <span>fp: <code>${escapeHtml(prettyFp(r.gpg.fingerprint))}</code></span>
-        </div>
-        <label class="check">
-          <input type="checkbox" id="${checkboxId}" value="${escapeAttr(r.id)}"
-                 ${supported ? "" : "disabled"} />
-          <span>${supported ? "Include" : `Not available on ${distro || "this release"}`}</span>
-        </label>
-      `;
+      const suiteValues = suitePills(r, distro, codename);
+      const archValues = Array.isArray(r.architectures) && r.architectures.length
+        ? r.architectures
+        : ["all"];
+      const selected = supported && selectedRepoState.has(r.id);
+      const sourceHref = safeHttpsUrl(sourceUrl(r));
+
+      const header = el("header", {},
+        el("div", { className: "repo-title" }, el("h3", {}, r.name)),
+      );
+      if (sourceHref) {
+        header.appendChild(el("a", {
+          className: "repo-source", href: sourceHref, rel: "noopener", target: "_blank",
+        }, "source"));
+      }
+
+      const checkbox = el("input", {
+        type: "checkbox", id: checkboxId, value: r.id,
+        disabled: !supported, checked: selected,
+      });
+
+      card.append(
+        header,
+        el("p", { className: "repo-summary" }, oneSentence(r.description || "")),
+        repoField("Suite", el("div", { className: "repo-pill-row" }, ...renderPills(suiteValues))),
+        repoField("Arch", el("div", { className: "repo-pill-row" }, ...renderPills(archValues))),
+        repoField("Fingerprint", el("pre", { className: "repo-fingerprint" }, prettyFp(r.gpg.fingerprint))),
+        el("label", { className: "check" },
+          checkbox,
+          el("span", {}, supported ? "Include repository" : `Unavailable for ${unavailable}`),
+        ),
+      );
       grid.appendChild(card);
     }
-    list.appendChild(grid);
+    section.appendChild(grid);
+    list.appendChild(section);
   }
 
   if (!anyVisible) {
@@ -141,18 +212,81 @@ function renderList() {
 function prettyFp(fp) {
   return fp.replace(/\s+/g, "").match(/.{1,4}/g)?.join(" ") ?? fp;
 }
-
-function escapeHtml(s) {
-  return String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+function resolveTemplate(value, distro, codename) {
+  return String(value || "")
+    .replace(/\{distro\}/g, distro || "{distro}")
+    .replace(/\{codename\}/g, codename || "{codename}");
 }
-function escapeAttr(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+function categoryIcon(category) {
+  return CATEGORY_ICONS[category] || CATEGORY_ICONS.Other;
+}
+function sourceUrl(repo) {
+  return SOURCE_URL_OVERRIDES[repo.id] || repo.homepage;
+}
+function oneSentence(text) {
+  const compact = String(text || "").replace(/\s+/g, " ").trim();
+  if (!compact) return "Repository packages for this app.";
+  const match = compact.match(/^(.+?[.!?])(?:\s|$)/);
+  return match ? match[1] : compact;
+}
+function suitePills(repo, distro, codename) {
+  const badges = REPO_BADGES[repo.id];
+  if (Array.isArray(badges) && badges.length > 0) {
+    return badges;
+  }
+  const suite = resolveTemplate(repo.suite, distro, codename).trim();
+  return suite.split(/\s+/).filter(Boolean);
+}
+function renderPills(values) {
+  const pills = Array.isArray(values) ? values.filter(Boolean) : [];
+  if (pills.length === 0) return [el("span", { className: "repo-pill" }, "—")];
+  return pills.map((value) => el("span", { className: "repo-pill" }, value));
+}
+function repoField(label, valueNode) {
+  return el("div", { className: "repo-field" },
+    el("span", { className: "repo-field-label" }, label),
+    valueNode,
+  );
+}
+
+// Build an element without parsing HTML. Strings become text nodes, so data
+// from repos.json or form controls can never be interpreted as markup.
+function el(tag, props = {}, ...children) {
+  const node = document.createElement(tag);
+  for (const [key, value] of Object.entries(props)) {
+    if (key in node && !key.includes("-")) node[key] = value;
+    else node.setAttribute(key, value);
+  }
+  for (const child of children) {
+    node.append(child instanceof Node ? child : String(child));
+  }
+  return node;
+}
+// Only allow absolute https links; anything else (javascript:, data:, ...) is dropped.
+function safeHttpsUrl(value) {
+  try {
+    const url = new URL(String(value));
+    return url.protocol === "https:" ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+
+function unavailableLabel(distro, codename) {
+  if (distro && codename) return `${distro} ${codename}`;
+  if (distro) return distro;
+  return "this release";
 }
 
 // --- state helpers -----------------------------------------------------
 
 function selectedRepoIds() {
-  return $$("#tp-list input[type=checkbox]:checked:not(:disabled)").map((el) => el.value);
+  const distro = distroSelect.value;
+  const codename = releaseSelect.value;
+  return Array.from(selectedRepoState).filter((id) => {
+    const repo = visibleRepos.find((r) => r.id === id);
+    return !!repo && (!distro || !codename || isSupported(repo, distro, codename));
+  });
 }
 
 function updateGenerateEnabled() {
@@ -183,26 +317,34 @@ search.addEventListener("input", renderList);
 
 list.addEventListener("change", (e) => {
   if (e.target && e.target.matches('input[type="checkbox"]')) {
+    if (e.target.checked) selectedRepoState.add(e.target.value);
+    else selectedRepoState.delete(e.target.value);
     updateGenerateEnabled();
   }
 });
+list.addEventListener("toggle", (e) => {
+  if (!e.target || !e.target.matches || !e.target.matches("details.repo-section")) return;
+  const category = e.target.dataset.category;
+  if (!category) return;
+  if (e.target.open) openCategories.add(category);
+  else openCategories.delete(category);
+}, true);
 
 resetBtn.addEventListener("click", () => {
   distroSelect.value = "";
   releaseSelect.disabled = true;
   releaseSelect.innerHTML = '<option value="" disabled selected hidden>—</option>';
   search.value = "";
+  selectedRepoState.clear();
+  openCategories.clear();
   clearError();
   renderList();
   sourcesEl.textContent = "Pick a distribution and release, select one or more repos, then click Generate.";
   sourcesEl.classList.add("empty");
   keysEl.textContent = "Shell commands to install the signing keys will appear here.";
   keysEl.classList.add("empty");
-  installEl.textContent = "Short guidance to drop the sources in place will appear here.";
-  installEl.classList.add("empty");
+  installEl = renderInstructionContent(installEl, "", INSTALL_PLACEHOLDER);
   outputFilename.textContent = "third-party.sources";
-  copySourcesBtn.disabled = true;
-  copyKeysBtn.disabled = true;
 });
 
 form.addEventListener("submit", (e) => {
@@ -221,42 +363,19 @@ form.addEventListener("submit", (e) => {
     sourcesEl.classList.remove("empty");
     keysEl.textContent = out.keyInstall;
     keysEl.classList.remove("empty");
-    installEl.textContent = out.install;
-    installEl.classList.remove("empty");
-    copySourcesBtn.disabled = false;
-    copyKeysBtn.disabled = false;
+    installEl = renderInstructionContent(installEl, out.install, INSTALL_PLACEHOLDER);
     outputPanel.scrollIntoView({ behavior: "smooth", block: "start" });
   } catch (err) {
     showError(err.message || String(err));
   }
 });
 
-function wireCopy(button, sourceEl) {
-  button.addEventListener("click", async () => {
-    const text = sourceEl.textContent;
-    if (!text) return;
-    try {
-      await navigator.clipboard.writeText(text);
-      const original = button.textContent;
-      button.textContent = "Copied!";
-      setTimeout(() => (button.textContent = original), 1500);
-    } catch {
-      // Fallback: select the pre.
-      const range = document.createRange();
-      range.selectNodeContents(sourceEl);
-      const sel = window.getSelection();
-      sel.removeAllRanges();
-      sel.addRange(range);
-      button.textContent = "Select & copy manually";
-    }
-  });
-}
-wireCopy(copySourcesBtn, sourcesEl);
-wireCopy(copyKeysBtn, keysEl);
-
 // --- boot --------------------------------------------------------------
 
 initUi();
+installEl = renderInstructionContent(installEl, "", INSTALL_PLACEHOLDER);
+makePreCopyable(sourcesEl);
+makePreCopyable(keysEl);
 loadData()
   .then(() => renderList())
   .catch((err) => {

@@ -6,11 +6,10 @@ on:
       - "data/third-party/**"
       - "scripts/validate-third-party.mjs"
       - ".github/workflows/validate-third-party.yml"
+  # No `paths:` filter on pull_request: a required check from a workflow that a
+  # path filter skips stays "Pending" forever and blocks the merge. The
+  # `changes` job below decides instead; a job skipped by `if:` reports Success.
   pull_request:
-    paths:
-      - "data/third-party/**"
-      - "scripts/validate-third-party.mjs"
-      - ".github/workflows/validate-third-party.yml"
   schedule:
     - cron: "0 6 * * 4"
   workflow_dispatch:
@@ -24,7 +23,41 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # ── PRs only: did this PR touch anything the validator covers? ─────────────
+  changes:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      relevant: ${{ steps.diff.outputs.relevant }}
+    steps:
+      - name: Checkout with history
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Check changed paths
+        id: diff
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if git diff --name-only "$BASE_SHA...$HEAD_SHA" \
+              | grep -qE '^(data/third-party/|scripts/validate-third-party\.mjs$|\.github/workflows/validate-third-party\.yml$)'; then
+            echo "relevant=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "relevant=false" >> "$GITHUB_OUTPUT"
+          fi
+
   validate:
+    needs: changes
+    # Always run outside PRs.
+    if: >-
+      !cancelled() && (github.event_name != 'pull_request' ||
+      needs.changes.result != 'success' ||
+      needs.changes.outputs.relevant == 'true')
     runs-on: ubuntu-latest
 
     # ── Timeout guard: kill the job if it hangs beyond 30 min ──────────────────
@@ -49,21 +82,16 @@ jobs:
 
       # ── 1. Checkout ─────────────────────────────────────────────────────────
       - name: "📥 Checkout repository"
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
       # ── 2. Node setup ───────────────────────────────────────────────────────
       - name: "⚙️  Set up Node.js"
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
         with:
           node-version-file: .nvmrc
           #cache: npm
 
       # ── 3. Install unbuffer (forces Node stdout to flush per-line) ────────────
-      # stdbuf has no effect on Node.js because Node manages its own I/O
-      # buffering independently of the C library. unbuffer allocates a real
-      # pseudo-TTY so Node believes it is writing to a terminal and flushes
-      # stdout after every line — making every repo visible in the log stream
-      # the instant it is processed.
       - name: "📦 Install unbuffer (line-flush tool)"
         run: |
           echo "$LOG_TAG Installing expect (provides unbuffer)..."
@@ -194,10 +222,12 @@ jobs:
       # ── 9. Upload report artifact ───────────────────────────────────────────
       - name: "📤 Upload validation report"
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: third-party-report
-          path: .third-party-report.txt
+          path: |
+            .third-party-report.txt
+            .third-party-report.json
           if-no-files-found: ignore
 
       # ── 10. Append outcome to job summary ───────────────────────────────────
@@ -230,7 +260,7 @@ jobs:
       # ── 11. Open / update tracking issue on scheduled failure ───────────────
       - name: "🐛 Open / update tracking issue on scheduled failure"
         if: github.event_name == 'schedule' && steps.validate.outcome == 'failure'
-        uses: actions/github-script@v9
+        uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
         with:
           script: |
             const fs = require("fs");

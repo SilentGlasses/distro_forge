@@ -6,8 +6,8 @@ repo is a small static site, so contributing should be painless.
 ## Quick setup
 
 ```bash
-git clone https://github.com/SilentGlasses/deb-sources.git
-cd deb-sources
+git clone https://github.com/SilentGlasses/distro_forge.git
+cd distro_forge
 npm run serve       # or: python3 -m http.server 8080
 # open http://localhost:8080
 ```
@@ -33,7 +33,7 @@ from that protocol.
 - `data/third-party/`: curated third-party repo data.
   - `repos.json`: one JSON array of all known repos.
   - `index.txt`: plain list of enabled repo IDs (one per line).
-- `scripts/`: Node ≥ 18 scripts used by the update workflows.
+- `scripts/`: Node 24.x scripts used by automation and policy checks.
 - `.github/workflows/`: Pages deploy + data-refresh workflows.
 
 ## Coding conventions
@@ -58,10 +58,20 @@ from that protocol.
    - `supports`: `{ debian: ["codename", ...], ubuntu: [...] }`
    - `uri`: archive URL, optionally with `{distro}` / `{codename}`
      placeholders
-   - `suite` and `components`
+   - `suite` and `components`. For a flat repository (a `suite` that
+     ends in `/`, such as `/` or `binary/`), `components` must be `[]`;
+     apt rejects a flat suite that has components.
    - `gpg`: `{ url, fingerprint, keyring }`: the fingerprint must be
-     the full 40-hex-char form and the keyring should live under
-     `/etc/apt/keyrings/`.
+     the full 40-hex-char form of a **primary** key (not a subkey) and
+     the keyring should live under `/etc/apt/keyrings/`.
+   - `gpg.additionalFingerprints` (optional): if the vendor's key file
+     ships more than one primary key (for example during a key
+     rotation), list the other primary fingerprints here. The key file
+     must contain exactly `fingerprint` plus these, and nothing else.
+     Both CI and the generated install commands reject any extra or
+     missing key.
+   - Only list releases in `supports` that the vendor still publishes
+     signed packages for.
 2. Add the `id` to `data/third-party/index.txt` to enable it in the UI.
 3. Open a PR and link the vendor's official install docs.
    `validate-third-party` will check that the JSON is well-formed, the
@@ -90,7 +100,7 @@ npm run update:mirrors          # node scripts/update-mirrors.mjs
 npm run validate:third-party    # node scripts/validate-third-party.mjs
 ```
 
-Each requires Node 18+ (for global `fetch`). The third-party validator
+Each requires Node 24.x. The third-party validator
 also shells out to `gpg` for fingerprint verification.
 
 Two transient artifacts are ignored in git:
@@ -99,6 +109,8 @@ Two transient artifacts are ignored in git:
   of the auto-opened PR.
 - `.third-party-report.txt`: validator report; attached to the
   tracking issue on scheduled failures.
+- `.third-party-report.json`: machine-readable validator output with
+  warnings/failures for automation.
 
 ## Commit style
 
@@ -120,6 +132,40 @@ collaborators.
   your PR anyway, but it's quicker to catch issues here.
 - Update `README.md` if you add, rename, or remove a page, data file,
   script, or workflow.
+
+## Maintainer acceptance criteria (source of truth)
+
+Maintainers should only merge PRs that satisfy all relevant criteria below.
+
+### Third-party repository changes
+
+- Entry passes `npm run validate:third-party`.
+- Entry provides:
+  - canonical `id` (kebab-case),
+  - HTTPS `homepage` / `uri` / `gpg.url`,
+  - keyring path under `/etc/apt/keyrings/*.gpg|*.asc`,
+  - full 40-hex primary-key fingerprint (no placeholders), plus
+    `additionalFingerprints` for any other keys in the same key file,
+  - fingerprints taken from the vendor's official docs, not just from
+    whatever the key URL currently serves.
+- Upstream install docs are linked in the PR description.
+- ID is present in `data/third-party/index.txt` only if validation passes.
+
+### Variant and mirror/release data changes
+
+- `npm run check:transport-security` passes (no non-allowlisted HTTP URLs).
+- Variant stanzas render correctly in the UI (manual smoke check).
+- Changes do not remove existing generated capabilities unless explicitly intended.
+
+### CI/workflow changes
+
+- `npm run check:workflow-pins` passes (actions pinned by SHA).
+- Workflow permissions remain least-privilege for their job purpose.
+
+### Regression safety
+
+- `npm run test:contracts` passes to preserve existing feature behavior.
+- Smoke checks remain green (or are updated with justified expectations).
 
 ## Reporting bugs / requesting features
 

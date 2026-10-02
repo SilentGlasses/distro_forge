@@ -1,6 +1,8 @@
 import { variants } from "../assets/data/variants.js";
 import { initUi } from "../assets/lib/ui.js";
 import { build } from "../assets/lib/variant.js";
+import { renderInstructionContent } from "../assets/lib/instructions.js";
+import { makePreCopyable } from "../assets/lib/copyable-code.js";
 
 const $ = (s) => document.querySelector(s);
 
@@ -15,8 +17,8 @@ const errorEl = $("#v-error");
 const outputPanel = $("#v-output-panel");
 const outputFilename = $("#v-output-filename");
 const outputEl = $("#v-output");
-const installEl = $("#v-install");
-const copyBtn = $("#v-copy");
+let installEl = $("#v-install");
+const INSTALL_PLACEHOLDER = "Installation steps will appear here after generation.";
 
 function renderVariants() {
   // Group by family for readability.
@@ -66,8 +68,16 @@ function renderReleases() {
 function updateInfo() {
   const v = currentVariant();
   if (!v) { infoEl.hidden = true; return; }
-  infoEl.innerHTML = `${escapeHtml(v.description)} ` +
-    `<a href="${escapeAttr(v.homepage)}" rel="noopener" target="_blank">upstream docs</a>`;
+  infoEl.textContent = `${v.description} `;
+  const href = safeHttpsUrl(v.homepage);
+  if (href) {
+    const link = document.createElement("a");
+    link.href = href;
+    link.rel = "noopener";
+    link.target = "_blank";
+    link.textContent = "upstream docs";
+    infoEl.appendChild(link);
+  }
   infoEl.hidden = false;
 }
 
@@ -78,11 +88,14 @@ function updateGenerateEnabled() {
 function showError(msg) { errorEl.textContent = msg; errorEl.hidden = false; }
 function clearError() { errorEl.textContent = ""; errorEl.hidden = true; }
 
-function escapeHtml(s) {
-  return String(s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
-}
-function escapeAttr(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+// Only allow absolute https links; anything else (javascript:, data:, ...) is dropped.
+function safeHttpsUrl(value) {
+  try {
+    const url = new URL(String(value));
+    return url.protocol === "https:" ? url.href : "";
+  } catch {
+    return "";
+  }
 }
 
 variantSelect.addEventListener("change", () => {
@@ -105,9 +118,7 @@ resetBtn.addEventListener("click", () => {
   outputFilename.textContent = "variant.sources";
   outputEl.textContent = "Pick a variant and release, then click Generate.";
   outputEl.classList.add("empty");
-  installEl.textContent = "Installation steps will appear here after generation.";
-  installEl.classList.add("empty");
-  copyBtn.disabled = true;
+  installEl = renderInstructionContent(installEl, "", INSTALL_PLACEHOLDER);
 });
 
 form.addEventListener("submit", (e) => {
@@ -121,30 +132,10 @@ form.addEventListener("submit", (e) => {
     outputFilename.textContent = filename;
     outputEl.textContent = contents;
     outputEl.classList.remove("empty");
-    installEl.textContent = install;
-    installEl.classList.remove("empty");
-    copyBtn.disabled = false;
+    installEl = renderInstructionContent(installEl, install, INSTALL_PLACEHOLDER);
     outputPanel.scrollIntoView({ behavior: "smooth", block: "start" });
   } catch (err) {
     showError(err.message || String(err));
-  }
-});
-
-copyBtn.addEventListener("click", async () => {
-  const text = outputEl.textContent;
-  if (!text) return;
-  try {
-    await navigator.clipboard.writeText(text);
-    const original = copyBtn.textContent;
-    copyBtn.textContent = "Copied!";
-    setTimeout(() => (copyBtn.textContent = original), 1500);
-  } catch {
-    const range = document.createRange();
-    range.selectNodeContents(outputEl);
-    const sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(range);
-    copyBtn.textContent = "Select & copy manually";
   }
 });
 
@@ -152,3 +143,5 @@ copyBtn.addEventListener("click", async () => {
 initUi();
 renderVariants();
 updateGenerateEnabled();
+installEl = renderInstructionContent(installEl, "", INSTALL_PLACEHOLDER);
+makePreCopyable(outputEl);

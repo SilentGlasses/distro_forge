@@ -28,6 +28,7 @@ export const variants = [
     sources: [
       {
         name: "Raspberry Pi OS base",
+        // Upstream endpoint does not currently serve HTTPS.
         uri: "http://raspbian.raspberrypi.org/raspbian",
         suites: ["{codename}"],
         components: ["main", "contrib", "non-free", "rpi"],
@@ -35,7 +36,7 @@ export const variants = [
       },
       {
         name: "Raspberry Pi archive (kernel, userland)",
-        uri: "http://archive.raspberrypi.org/debian",
+        uri: "https://archive.raspberrypi.org/debian",
         suites: ["{codename}"],
         components: ["main"],
         signedBy: "/usr/share/keyrings/raspberrypi-archive-keyring.gpg",
@@ -57,7 +58,7 @@ export const variants = [
     sources: [
       {
         name: "Kali Linux rolling",
-        uri: "http://http.kali.org/kali",
+        uri: "https://http.kali.org/kali",
         suites: ["{codename}"],
         components: ["main", "contrib", "non-free", "non-free-firmware"],
         signedBy: "/usr/share/keyrings/kali-archive-keyring.gpg",
@@ -78,6 +79,7 @@ export const variants = [
     sources: [
       {
         name: "Proxmox VE no-subscription repository",
+        // Upstream endpoint does not currently serve HTTPS.
         uri: "http://download.proxmox.com/debian/pve",
         suites: ["{codename}"],
         components: ["pve-no-subscription"],
@@ -100,6 +102,7 @@ export const variants = [
     sources: [
       {
         name: "Linux Mint packages",
+        // Upstream endpoint does not currently serve HTTPS.
         uri: "http://packages.linuxmint.com",
         suites: ["{codename}"],
         components: ["main", "upstream", "import", "backport"],
@@ -107,14 +110,14 @@ export const variants = [
       },
       {
         name: "Ubuntu base",
-        uri: "http://archive.ubuntu.com/ubuntu",
+        uri: "https://archive.ubuntu.com/ubuntu",
         suites: ["{ubuntuCodename}", "{ubuntuCodename}-updates", "{ubuntuCodename}-backports"],
         components: ["main", "restricted", "universe", "multiverse"],
         signedBy: "/usr/share/keyrings/ubuntu-archive-keyring.gpg",
       },
       {
         name: "Ubuntu security",
-        uri: "http://security.ubuntu.com/ubuntu",
+        uri: "https://security.ubuntu.com/ubuntu",
         suites: ["{ubuntuCodename}-security"],
         components: ["main", "restricted", "universe", "multiverse"],
         signedBy: "/usr/share/keyrings/ubuntu-archive-keyring.gpg",
@@ -134,21 +137,21 @@ export const variants = [
     sources: [
       {
         name: "Pop!_OS release",
-        uri: "http://apt.pop-os.org/release",
+        uri: "https://apt.pop-os.org/release",
         suites: ["{codename}"],
         components: ["main"],
         signedBy: "/usr/share/keyrings/pop-archive-keyring.gpg",
       },
       {
         name: "Ubuntu base",
-        uri: "http://archive.ubuntu.com/ubuntu",
+        uri: "https://archive.ubuntu.com/ubuntu",
         suites: ["{ubuntuCodename}", "{ubuntuCodename}-updates", "{ubuntuCodename}-backports"],
         components: ["main", "restricted", "universe", "multiverse"],
         signedBy: "/usr/share/keyrings/ubuntu-archive-keyring.gpg",
       },
       {
         name: "Ubuntu security",
-        uri: "http://security.ubuntu.com/ubuntu",
+        uri: "https://security.ubuntu.com/ubuntu",
         suites: ["{ubuntuCodename}-security"],
         components: ["main", "restricted", "universe", "multiverse"],
         signedBy: "/usr/share/keyrings/ubuntu-archive-keyring.gpg",
@@ -168,21 +171,21 @@ export const variants = [
     sources: [
       {
         name: "elementary OS stable",
-        uri: "http://ppa.launchpadcontent.net/elementary-os/stable/ubuntu",
+        uri: "https://ppa.launchpadcontent.net/elementary-os/stable/ubuntu",
         suites: ["{ubuntuCodename}"],
         components: ["main"],
         signedBy: "/usr/share/keyrings/elementary-archive-keyring.gpg",
       },
       {
         name: "Ubuntu base",
-        uri: "http://archive.ubuntu.com/ubuntu",
+        uri: "https://archive.ubuntu.com/ubuntu",
         suites: ["{ubuntuCodename}", "{ubuntuCodename}-updates", "{ubuntuCodename}-backports"],
         components: ["main", "restricted", "universe", "multiverse"],
         signedBy: "/usr/share/keyrings/ubuntu-archive-keyring.gpg",
       },
       {
         name: "Ubuntu security",
-        uri: "http://security.ubuntu.com/ubuntu",
+        uri: "https://security.ubuntu.com/ubuntu",
         suites: ["{ubuntuCodename}-security"],
         components: ["main", "restricted", "universe", "multiverse"],
         signedBy: "/usr/share/keyrings/ubuntu-archive-keyring.gpg",

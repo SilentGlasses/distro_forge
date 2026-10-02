@@ -167,33 +167,96 @@ function renderDeb822(cfg) {
 
 // --- Instructions ---------------------------------------------------------
 
-function buildInstructions(cfg, filename) {
+// Copy (never move) so the system keeps working if a later step fails, and use
+// a timestamped name so re-running never overwrites an earlier backup.
+const BACKUP_SOURCES_LIST =
+  '[ -f /etc/apt/sources.list ] && sudo cp -a /etc/apt/sources.list "/etc/apt/sources.list.bak.$(date +%Y%m%d%H%M%S)"';
+function addHereDocBlock(lines, targetPath, generatedContents) {
+  const body = String(generatedContents || "")
+    .replace(/\r\n?/g, "\n")
+    .replace(/\n$/, "")
+    .split("\n");
+  lines.push(`  sudo tee ${targetPath} > /dev/null <<-'EOF'`);
+  for (const line of body) lines.push(`\t${line}`);
+  lines.push("\tEOF");
+}
+
+function buildInstructions(cfg, filename, contents) {
   const note = [];
   if (cfg.format === "oneline") {
-    note.push("Save the generated content as /etc/apt/sources.list (root-owned, mode 644).");
+    note.push("Follow these steps to install your generated sources file:");
     note.push("");
-    note.push("Quick install (backs up any existing file first):");
-    note.push("```");
-    note.push("sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak 2>/dev/null || true");
-    note.push(`sudo tee /etc/apt/sources.list > /dev/null <<'EOF'`);
-    note.push("# (paste the generated content here)");
-    note.push("EOF");
-    note.push("sudo apt update");
-    note.push("```");
+    note.push("Step 1: Make a backup of your current apt sources file:");
+    note.push("");
+    note.push(`  ${BACKUP_SOURCES_LIST}`);
+    note.push("");
+    note.push("Step 2: Generate the new `/etc/apt/sources.list` file:");
+    note.push("");
+    addHereDocBlock(note, "/etc/apt/sources.list", contents);
+    note.push("");
+    note.push("Step 3: Set ownership and mode.");
+    note.push("");
+    note.push("- Set ownership:");
+    note.push("");
+    note.push("  sudo chown root:root /etc/apt/sources.list");
+    note.push("");
+    note.push("- Set mode:");
+    note.push("");
+    note.push("  sudo chmod 644 /etc/apt/sources.list");
+    note.push("");
+    note.push("Step 4: Refresh package metadata, then choose an upgrade path.");
+    note.push("");
+    note.push("- Run update:");
+    note.push("");
+    note.push("  sudo apt update");
+    note.push("");
+    note.push("- Base upgrade:");
+    note.push("");
+    note.push("  sudo apt upgrade");
+    note.push("");
+    note.push("- Full dist-upgrade:");
+    note.push("");
+    note.push("  sudo apt full-upgrade");
   } else {
-    note.push(`Save the generated content as /etc/apt/sources.list.d/${filename} (root-owned, mode 644).`);
+    note.push("Follow these steps to install your generated DEB822 source file:");
     note.push("");
-    note.push("If /etc/apt/sources.list still contains legacy entries for the same suites, comment them out");
-    note.push("or delete that file to avoid duplicate-sources warnings from apt.");
+    note.push("Step 1: Make a backup of your current apt sources file:");
     note.push("");
-    note.push("Quick install:");
-    note.push("```");
-    note.push(`sudo tee /etc/apt/sources.list.d/${filename} > /dev/null <<'EOF'`);
-    note.push("# (paste the generated content here)");
-    note.push("EOF");
-    note.push(`sudo chmod 644 /etc/apt/sources.list.d/${filename}`);
-    note.push("sudo apt update");
-    note.push("```");
+    note.push(`  ${BACKUP_SOURCES_LIST}`);
+    note.push("");
+    note.push(`Step 2: Generate the new \`${filename}\` file:`);
+    note.push("");
+    addHereDocBlock(note, `/etc/apt/sources.list.d/${filename}`, contents);
+    note.push("");
+    note.push("- Then retire the legacy `/etc/apt/sources.list` so apt doesn't see duplicate entries (it was backed up in Step 1):");
+    note.push("");
+    note.push("  [ -f /etc/apt/sources.list ] && sudo rm /etc/apt/sources.list");
+    note.push("");
+    note.push("- If `/etc/apt/sources.list.d/` also has a distro-provided `debian.sources` or `ubuntu.sources` covering the same suites, back it up and remove it too.");
+    note.push("");
+    note.push("Step 3: Set ownership and mode.");
+    note.push("");
+    note.push("- Set ownership:");
+    note.push("");
+    note.push(`  sudo chown root:root /etc/apt/sources.list.d/${filename}`);
+    note.push("");
+    note.push("- Set mode:");
+    note.push("");
+    note.push(`  sudo chmod 644 /etc/apt/sources.list.d/${filename}`);
+    note.push("");
+    note.push("Step 4: Refresh package metadata, then choose an upgrade path.");
+    note.push("");
+    note.push("- Run update:");
+    note.push("");
+    note.push("  sudo apt update");
+    note.push("");
+    note.push("- Base upgrade:");
+    note.push("");
+    note.push("  sudo apt upgrade");
+    note.push("");
+    note.push("- Full dist-upgrade:");
+    note.push("");
+    note.push("  sudo apt full-upgrade");
   }
   return note.join("\n");
 }
@@ -221,6 +284,6 @@ export function generate(cfg) {
     : `sources.list`;
 
   const contents = cfg.format === "deb822" ? renderDeb822(cfg) : renderOneLine(cfg);
-  const instructions = buildInstructions(cfg, filename);
+  const instructions = buildInstructions(cfg, filename, contents);
   return { filename, contents, instructions };
 }

@@ -16,8 +16,11 @@ for (const page of PAGES) {
 
   test(`${page}: has no inline scripts or event handlers`, () => {
     // Every <script> must load a file; inline code would be blocked by the CSP.
-    for (const tag of html.match(/<script\b[^>]*>/g) || []) {
-      assert.match(tag, /\ssrc="/, `inline script found: ${tag}`);
+    // Case-insensitive: HTML tag and attribute names are, so <SCRIPT> counts too.
+    const scriptTags = html.match(/<script\b[^>]*>/gi) || [];
+    assert.ok(scriptTags.length > 0, "expected at least one <script> tag");
+    for (const tag of scriptTags) {
+      assert.match(tag, /\ssrc\s*=\s*["']?[^\s"'>]+/i, `inline script found: ${tag}`);
     }
     assert.doesNotMatch(html, /\son[a-z]+\s*=/i, "inline event handler found");
   });

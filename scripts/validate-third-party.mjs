@@ -314,7 +314,9 @@ async function checkSignedRelease({ dir, keyringFile, components }) {
       const signers = [...status.matchAll(/^\[GNUPG:\] (?:ERRSIG|NO_PUBKEY) (\S+)/gm)].map((m) => m[1]);
       return `release is not signed by the declared key${signers.length ? ` (signed by ${[...new Set(signers)].join(", ")})` : ""}`;
     }
-    const available = releaseText.match(/^Components: (.*)$/m)?.[1]?.trim().split(/\s+/);
+    // Some repos prefix each component with the suite ("trixie/main"); apt strips it.
+    const available = releaseText.match(/^Components: (.*)$/m)?.[1]?.trim().split(/\s+/)
+      .map((c) => c.replace(/^[^/]+\//, ""));
     if (available && components.length) {
       const missing = components.filter((c) => !available.includes(c));
       if (missing.length) return `components ${missing.join(", ")} not in repo (has ${available.join(", ")})`;

@@ -1,0 +1,67 @@
+name: Dependabot review
+
+# Posts a risk report on Dependabot PRs while the required checks run. It never
+# merges or approves anything. Merging stays manual.
+#
+# Security notes:
+# - `pull_request_target` runs with the base repo's token. This job checks out
+#   the BASE branch only (never the PR head) and never executes PR code. The
+#   report script is read from main, so a PR cannot change it.
+# - Only the dependabot[bot] author triggers it.
+# - Token permissions: contents read, pull-requests write (comment only).
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+permissions: {}
+
+concurrency:
+  group: dependabot-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout base branch (not the PR head)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
+        with:
+          persist-credentials: false
+
+      - name: Fetch Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Build risk report
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          ECOSYSTEM: ${{ steps.metadata.outputs.package-ecosystem }}
+          DEP: ${{ steps.metadata.outputs.dependency-names }}
+          PREV: ${{ steps.metadata.outputs.previous-version }}
+          NEW: ${{ steps.metadata.outputs.new-version }}
+          REPORT_FILE: ${{ runner.temp }}/risk-report.md
+        run: bash scripts/dependabot-risk-report.sh
+
+      - name: Post or update the PR comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPORT_FILE: ${{ runner.temp }}/risk-report.md
+        run: |
+          existing=$(gh api "repos/$REPO/issues/$PR_NUMBER/comments" --paginate \
+            --jq '.[] | select(.body | startswith("<!-- dependabot-risk-report -->")) | .id' | head -n 1)
+          if [ -n "$existing" ]; then
+            gh api -X PATCH "repos/$REPO/issues/comments/$existing" -F body=@"$REPORT_FILE" >/dev/null
+          else
+            gh pr comment "$PR_NUMBER" --repo "$REPO" --body-file "$REPORT_FILE"
+          fi
+          cat "$REPORT_FILE" >> "$GITHUB_STEP_SUMMARY"

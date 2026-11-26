@@ -1323,5 +1323,464 @@
       "fingerprint": "E1CF20DDFFE4B89E802658F1E0B11894F66AEC98",
       "keyring": "/etc/apt/keyrings/wireguard.gpg"
     }
+  },
+  {
+    "id": "sublime-text",
+    "name": "Sublime Text / Sublime Merge",
+    "category": "Dev tools",
+    "homepage": "https://www.sublimetext.com/docs/linux_repositories.html",
+    "description": "Sublime Text editor and Sublime Merge Git client from Sublime HQ. Flat repository (stable channel); the key file ships three primary keys, all of which are listed.",
+    "supports": {
+      "debian": [
+        "trixie",
+        "bookworm",
+        "bullseye"
+      ],
+      "ubuntu": [
+        "noble",
+        "jammy",
+        "focal"
+      ]
+    },
+    "uri": "https://download.sublimetext.com/apt/stable",
+    "suite": "/",
+    "components": [],
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "gpg": {
+      "url": "https://download.sublimetext.com/sublimehq-pub.gpg",
+      "fingerprint": "1EDDE2CDFC025D17F6DA9EC0ADAE6AD28A8F901A",
+      "keyring": "/etc/apt/keyrings/sublimehq-archive-keyring.gpg",
+      "additionalFingerprints": [
+        "1B64279675A4299DCFC70858CA464A9A222D23D0",
+        "EBC733B78AAB352DC773BF857FE2FA12CF6E38F2"
+      ]
+    }
+  },
+  {
+    "id": "google-cloud-cli",
+    "name": "Google Cloud CLI",
+    "category": "Dev tools",
+    "homepage": "https://cloud.google.com/sdk/docs/install#deb",
+    "description": "Google Cloud CLI (gcloud, gsutil, bq) plus optional components such as kubectl and the Cloud SDK emulators. A single universal suite (cloud-sdk) serves all Debian and Ubuntu releases.",
+    "supports": {
+      "debian": [
+        "trixie",
+        "bookworm",
+        "bullseye"
+      ],
+      "ubuntu": [
+        "noble",
+        "jammy",
+        "focal"
+      ]
+    },
+    "uri": "https://packages.cloud.google.com/apt",
+    "suite": "cloud-sdk",
+    "components": [
+      "main"
+    ],
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "gpg": {
+      "url": "https://packages.cloud.google.com/apt/doc/apt-key.gpg",
+      "fingerprint": "35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3",
+      "keyring": "/etc/apt/keyrings/cloud.google.gpg"
+    }
+  },
+  {
+    "id": "influxdata",
+    "name": "InfluxData",
+    "category": "Monitoring",
+    "homepage": "https://docs.influxdata.com/telegraf/latest/install/",
+    "description": "InfluxData packages — InfluxDB time-series database, Telegraf metrics agent, Kapacitor, and Chronograf. A single universal suite (stable) serves all Debian and Ubuntu releases.",
+    "supports": {
+      "debian": [
+        "trixie",
+        "bookworm",
+        "bullseye"
+      ],
+      "ubuntu": [
+        "noble",
+        "jammy",
+        "focal"
+      ]
+    },
+    "uri": "https://repos.influxdata.com/debian",
+    "suite": "stable",
+    "components": [
+      "main"
+    ],
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "gpg": {
+      "url": "https://repos.influxdata.com/influxdata-archive.key",
+      "fingerprint": "24C975CBA61A024EE1B631787C3D57159FC2F927",
+      "keyring": "/etc/apt/keyrings/influxdata-archive.gpg"
+    }
+  },
+  {
+    "id": "nvidia-container-toolkit",
+    "name": "NVIDIA Container Toolkit",
+    "category": "Dev tools",
+    "homepage": "https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html",
+    "description": "NVIDIA Container Toolkit — lets Docker, containerd, and Podman containers use NVIDIA GPUs. Flat repository; the repo URI embeds the architecture, so this entry is amd64 only (arm64 hosts replace amd64 with arm64 in the URI).",
+    "supports": {
+      "debian": [
+        "trixie",
+        "bookworm",
+        "bullseye"
+      ],
+      "ubuntu": [
+        "noble",
+        "jammy",
+        "focal"
+      ]
+    },
+    "uri": "https://nvidia.github.io/libnvidia-container/stable/deb/amd64",
+    "suite": "/",
+    "components": [],
+    "architectures": [
+      "amd64"
+    ],
+    "gpg": {
+      "url": "https://nvidia.github.io/libnvidia-container/gpgkey",
+      "fingerprint": "C95B321B61E88C1809C4F759DDCAE044F796ECB0",
+      "keyring": "/etc/apt/keyrings/nvidia-container-toolkit-keyring.gpg"
+    }
+  },
+  {
+    "id": "plex-media-server",
+    "name": "Plex Media Server",
+    "category": "Desktop",
+    "homepage": "https://support.plex.tv/articles/235974187-enable-repository-updating-for-supported-linux-server-distributions/",
+    "description": "Plex Media Server — organize and stream personal video, music, and photo libraries. A single universal suite (public) serves all Debian and Ubuntu releases.",
+    "supports": {
+      "debian": [
+        "trixie",
+        "bookworm",
+        "bullseye"
+      ],
+      "ubuntu": [
+        "noble",
+        "jammy",
+        "focal"
+      ]
+    },
+    "uri": "https://repo.plex.tv/deb",
+    "suite": "public",
+    "components": [
+      "main"
+    ],
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "gpg": {
+      "url": "https://downloads.plex.tv/plex-keys/PlexSign.v2.key",
+      "fingerprint": "6EFFEB478A6559D75C7C4FE706C521790B9CFFDE",
+      "keyring": "/etc/apt/keyrings/plexmediaserver.gpg"
+    }
+  },
+  {
+    "id": "jellyfin",
+    "name": "Jellyfin",
+    "category": "Desktop",
+    "homepage": "https://jellyfin.org/docs/general/installation/linux/",
+    "description": "Jellyfin free and open-source media server — stream movies, shows, music, and live TV with no tracking or licensing. The repo URI embeds the distro name; substitute {distro} and {codename} at setup time.",
+    "supports": {
+      "debian": [
+        "trixie",
+        "bookworm",
+        "bullseye"
+      ],
+      "ubuntu": [
+        "noble",
+        "jammy",
+        "focal"
+      ]
+    },
+    "uri": "https://repo.jellyfin.org/{distro}",
+    "suite": "{codename}",
+    "components": [
+      "main"
+    ],
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "gpg": {
+      "url": "https://repo.jellyfin.org/jellyfin_team.gpg.key",
+      "fingerprint": "4918AABC486CA052358D778D49023CD01DE21A7B",
+      "keyring": "/etc/apt/keyrings/jellyfin.gpg"
+    }
+  },
+  {
+    "id": "cloudflare-warp",
+    "name": "Cloudflare WARP",
+    "category": "Security / privacy",
+    "homepage": "https://pkg.cloudflareclient.com/",
+    "description": "Cloudflare WARP client (warp-cli) — routes device traffic through Cloudflare's network with optional Zero Trust enforcement. amd64 only; the repo suite is the release codename.",
+    "supports": {
+      "debian": [
+        "trixie",
+        "bookworm",
+        "bullseye"
+      ],
+      "ubuntu": [
+        "noble",
+        "jammy",
+        "focal"
+      ]
+    },
+    "uri": "https://pkg.cloudflareclient.com/",
+    "suite": "{codename}",
+    "components": [
+      "main"
+    ],
+    "architectures": [
+      "amd64"
+    ],
+    "gpg": {
+      "url": "https://pkg.cloudflareclient.com/pubkey.gpg",
+      "fingerprint": "C068A2B5771775193CBE1F2F6E2DD2174FA1C3BA",
+      "keyring": "/etc/apt/keyrings/cloudflare-warp-archive-keyring.gpg"
+    }
+  },
+  {
+    "id": "clickhouse",
+    "name": "ClickHouse",
+    "category": "Databases",
+    "homepage": "https://clickhouse.com/docs/install#install-from-deb-packages",
+    "description": "ClickHouse column-oriented analytical database — real-time SQL queries over billions of rows. Provides clickhouse-server and clickhouse-client from the stable channel.",
+    "supports": {
+      "debian": [
+        "trixie",
+        "bookworm",
+        "bullseye"
+      ],
+      "ubuntu": [
+        "noble",
+        "jammy",
+        "focal"
+      ]
+    },
+    "uri": "https://packages.clickhouse.com/deb",
+    "suite": "stable",
+    "components": [
+      "main"
+    ],
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "gpg": {
+      "url": "https://packages.clickhouse.com/rpm/lts/repodata/repomd.xml.key",
+      "fingerprint": "3A9EA1193A97B548BE1457D48919F6BD2B48D754",
+      "keyring": "/etc/apt/keyrings/clickhouse-keyring.gpg"
+    }
+  },
+  {
+    "id": "fluent-bit",
+    "name": "Fluent Bit",
+    "category": "Monitoring",
+    "homepage": "https://docs.fluentbit.io/manual/installation/getting-started-with-fluent-bit",
+    "description": "Fluent Bit lightweight log, metric, and trace processor and forwarder. The repo URI embeds both the distro name and codename; substitute {distro} and {codename} at setup time.",
+    "supports": {
+      "debian": [
+        "trixie",
+        "bookworm",
+        "bullseye"
+      ],
+      "ubuntu": [
+        "noble",
+        "jammy",
+        "focal"
+      ]
+    },
+    "uri": "https://packages.fluentbit.io/{distro}/{codename}",
+    "suite": "{codename}",
+    "components": [
+      "main"
+    ],
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "gpg": {
+      "url": "https://packages.fluentbit.io/fluentbit.key",
+      "fingerprint": "C3C0A28534B9293EAF51FABD9F9DDC083888C1CD",
+      "keyring": "/etc/apt/keyrings/fluentbit.gpg"
+    }
+  },
+  {
+    "id": "trivy",
+    "name": "Trivy",
+    "category": "Security",
+    "homepage": "https://trivy.dev/docs/latest/getting-started/installation/",
+    "description": "Trivy vulnerability, misconfiguration, secret, and SBOM scanner for containers, filesystems, and Git repos. The generic suite name is intentional; Trivy uses a single universal suite across all Debian and Ubuntu releases.",
+    "supports": {
+      "debian": [
+        "trixie",
+        "bookworm",
+        "bullseye"
+      ],
+      "ubuntu": [
+        "noble",
+        "jammy",
+        "focal"
+      ]
+    },
+    "uri": "https://aquasecurity.github.io/trivy-repo/deb",
+    "suite": "generic",
+    "components": [
+      "main"
+    ],
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "gpg": {
+      "url": "https://aquasecurity.github.io/trivy-repo/deb/public.key",
+      "fingerprint": "825AD9036F7C850E6A6FED4935B8ACA44FD9CA9F",
+      "keyring": "/etc/apt/keyrings/trivy.gpg"
+    }
+  },
+  {
+    "id": "datadog-agent",
+    "name": "Datadog Agent",
+    "category": "Monitoring",
+    "homepage": "https://docs.datadoghq.com/agent/",
+    "description": "Datadog Agent 7 — collects metrics, logs, and traces and ships them to Datadog. A single universal suite (stable) serves all Debian and Ubuntu releases.",
+    "supports": {
+      "debian": [
+        "trixie",
+        "bookworm",
+        "bullseye"
+      ],
+      "ubuntu": [
+        "noble",
+        "jammy",
+        "focal"
+      ]
+    },
+    "uri": "https://apt.datadoghq.com",
+    "suite": "stable",
+    "components": [
+      "7"
+    ],
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "gpg": {
+      "url": "https://keys.datadoghq.com/DATADOG_APT_KEY_CURRENT.public",
+      "fingerprint": "5F1E256061D813B125E156E8E6266D4AC0962C7D",
+      "keyring": "/etc/apt/keyrings/datadog-archive-keyring.gpg"
+    }
+  },
+  {
+    "id": "osquery",
+    "name": "osquery",
+    "category": "Security",
+    "homepage": "https://osquery.io/",
+    "description": "osquery — expose the operating system as a relational database, queryable with SQL for endpoint monitoring, forensics, and compliance. The deb suite name is intentional; osquery uses a single universal suite.",
+    "supports": {
+      "debian": [
+        "trixie",
+        "bookworm",
+        "bullseye"
+      ],
+      "ubuntu": [
+        "noble",
+        "jammy",
+        "focal"
+      ]
+    },
+    "uri": "https://pkg.osquery.io/deb",
+    "suite": "deb",
+    "components": [
+      "main"
+    ],
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "gpg": {
+      "url": "https://pkg.osquery.io/deb/pubkey.gpg",
+      "fingerprint": "1484120AC4E9F8A1A577AEEE97A80C63C9D8B80B",
+      "keyring": "/etc/apt/keyrings/osquery.gpg"
+    }
+  },
+  {
+    "id": "protonvpn",
+    "name": "Proton VPN",
+    "category": "Security / privacy",
+    "homepage": "https://protonvpn.com/support/official-linux-vpn-debian",
+    "description": "Proton VPN official Linux client — no-logs VPN with Secure Core, NetShield, and a kill switch. A single universal suite (stable) serves all Debian and Ubuntu releases.",
+    "supports": {
+      "debian": [
+        "trixie",
+        "bookworm",
+        "bullseye"
+      ],
+      "ubuntu": [
+        "noble",
+        "jammy",
+        "focal"
+      ]
+    },
+    "uri": "https://repo.protonvpn.com/debian",
+    "suite": "stable",
+    "components": [
+      "main"
+    ],
+    "architectures": [
+      "all",
+      "amd64"
+    ],
+    "gpg": {
+      "url": "https://repo.protonvpn.com/debian/public_key.asc",
+      "fingerprint": "84B0D3492C76C9C6F5873C18EDA3E22630349F1C",
+      "keyring": "/etc/apt/keyrings/protonvpn-stable-archive-keyring.gpg"
+    }
+  },
+  {
+    "id": "azure-cli",
+    "name": "Azure CLI",
+    "category": "Dev tools",
+    "homepage": "https://learn.microsoft.com/cli/azure/install-azure-cli-linux",
+    "description": "Microsoft Azure command-line interface (az). Shares the Microsoft signing key with the vscode and microsoft-edge entries; the suite is the release codename.",
+    "supports": {
+      "debian": [
+        "bookworm",
+        "bullseye"
+      ],
+      "ubuntu": [
+        "noble",
+        "jammy",
+        "focal"
+      ]
+    },
+    "uri": "https://packages.microsoft.com/repos/azure-cli",
+    "suite": "{codename}",
+    "components": [
+      "main"
+    ],
+    "architectures": [
+      "amd64",
+      "arm64"
+    ],
+    "gpg": {
+      "url": "https://packages.microsoft.com/keys/microsoft.asc",
+      "fingerprint": "BC528686B50D79E339D3721CEB3E94ADBE1229CF",
+      "keyring": "/etc/apt/keyrings/packages.microsoft.gpg"
+    }
   }
 ]
